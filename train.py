@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# kurucz_train.py - Training script for Kurucz atmospheric models
+# train.py - Training script for Kurucz atmospheric models
 
 import torch
 from torch.utils.data import Dataset, DataLoader
@@ -7,158 +7,10 @@ import os
 import argparse
 import time
 import logging
+import math
 from datetime import datetime
-
-# =============================================================================
-# Model Architecture
-# =============================================================================
-class AtmosphereNet(torch.nn.Module):
-    def __init__(self, input_size=4, hidden_size=256, output_size=6, depth_points=80):
-        super(AtmosphereNet, self).__init__()
-        self.input_size = input_size
-        self.hidden_size = hidden_size
-        self.output_size = output_size
-        self.depth_points = depth_points
-        
-        # MLP architecture
-        self.layers = torch.nn.Sequential(
-            # Input layer
-            torch.nn.Linear(input_size, hidden_size),
-            torch.nn.ReLU(),
-            torch.nn.Dropout(0.1),
-            
-            # Hidden layers
-            torch.nn.Linear(hidden_size, hidden_size*2),
-            torch.nn.ReLU(),
-            torch.nn.Dropout(0.1),
-            
-            torch.nn.Linear(hidden_size*2, hidden_size*2),
-            torch.nn.ReLU(),
-            torch.nn.Dropout(0.1),
-            
-            # Output layer - maps to all depth points and parameters
-            torch.nn.Linear(hidden_size*2, depth_points * output_size)
-        )
-        
-    def forward(self, x):
-        # Input shape: (batch_size, input_size)
-        batch_size = x.size(0)
-        
-        # Pass through MLP
-        x = self.layers(x)
-        
-        # Reshape to (batch_size, depth_points, output_size)
-        x = x.view(batch_size, self.depth_points, self.output_size)
-        
-        return x
-
-
-# =============================================================================
-# Dataset Loader
-# =============================================================================
-class KuruczDataset(Dataset):
-    def __init__(self, saved_data=None, device='cpu'):
-        """Initialize dataset from saved data dictionary"""
-        if saved_data is not None:
-            self.device = device
-            self.norm_params = saved_data['norm_params']
-            self.max_depth_points = saved_data['max_depth_points']
-            
-            # Load all tensors to device
-            for key, value in saved_data['data'].items():
-                if key == 'original' and isinstance(value, dict):
-                    original_dict = {}
-                    for k, v in value.items():
-                        if isinstance(v, torch.Tensor):
-                            original_dict[k] = v.to(device)
-                        else:
-                            original_dict[k] = v
-                    setattr(self, key, original_dict)
-                else:
-                    setattr(self, key, value.to(device))
-                    
-            # Initialize empty models list
-            self.models = []
-    
-    def __len__(self):
-        return len(self.teff)
-    
-    def __getitem__(self, idx):
-        """Return normalized input features and output features"""
-        # Input features (already normalized)
-        input_features = torch.cat([
-            self.teff[idx],
-            self.gravity[idx],
-            self.feh[idx],
-            self.afe[idx]
-        ], dim=0)
-        
-        # Output features (already normalized)
-        output_features = torch.stack([
-            self.RHOX[idx],
-            self.T[idx],
-            self.P[idx],
-            self.XNE[idx],
-            self.ABROSS[idx],
-            self.ACCRAD[idx]
-        ], dim=1)
-        
-        return input_features, output_features
-    
-    def denormalize(self, param_name, normalized_data):
-        """Denormalize data using stored parameters"""
-        params = self.norm_params[param_name]
-        
-        if param_name == 'teff':
-            # Reverse the min-max normalization on log scale
-            log_data = normalized_data * (params['max'] - params['min']) + params['min']
-            # Convert back from log scale
-            denormalized_data = torch.pow(10.0, log_data) - 1e-30
-        
-        elif param_name == 'T':
-            # Reverse linear scaling for temperature
-            denormalized_data = normalized_data * params['scale']
-        
-        elif params.get('scale_type') == 'min_max':
-            # Reverse Min-Max scaling
-            denormalized_data = normalized_data * (params['max'] - params['min']) + params['min']
-        
-        elif params.get('log_scale', False):
-            # Reverse min-max scaling of log values
-            log_data = normalized_data * (params['max'] - params['min']) + params['min']
-            # Convert back from log scale
-            denormalized_data = torch.pow(10.0, log_data) - 1e-30
-        
-        else:
-            raise ValueError(f"Unknown denormalization approach for parameter: {param_name}")
-        
-        return denormalized_data
-    
-    def inverse_transform_outputs(self, outputs):
-        """Transform normalized outputs back to physical units"""
-        batch_size, depth_points, num_features = outputs.shape
-        
-        # Initialize containers for denormalized data
-        result = {
-            'RHOX': None,
-            'T': None,
-            'P': None,
-            'XNE': None,
-            'ABROSS': None,
-            'ACCRAD': None
-        }
-        
-        # Get column names
-        columns = list(result.keys())
-        
-        # Denormalize each feature
-        for i, param_name in enumerate(columns):
-            # Extract the i-th feature for all samples and depths
-            feature_data = outputs[:, :, i]
-            # Denormalize
-            result[param_name] = self.denormalize(param_name, feature_data)
-        
-        return result
+from torch.utils.tensorboard import SummaryWriter
+from model import AtmosphereNet, KuruczDataset
 
 # =============================================================================
 # Training Functions
@@ -168,17 +20,18 @@ def custom_loss(pred, target, weights=None):
     if weights is None:
         # Default weights prioritize temperature and pressure
         weights = {
-            'RHOX': 1.0,
+            'RHOX': 2.0,
             'T': 2.0,
-            'P': 1.5,
+            'P': 2.0,
             'XNE': 1.0,
-            'ABROSS': 1.0,
+            'ABROSS': 2.0,
             'ACCRAD': 1.0
         }
     
     # Compute MSE loss for each output feature
     mse_loss = torch.nn.MSELoss(reduction='none')
     
+    # Updated param_map to match the new output structure (without TAU)
     param_map = {0: 'RHOX', 1: 'T', 2: 'P', 3: 'XNE', 4: 'ABROSS', 5: 'ACCRAD'}
     
     total_loss = 0
@@ -202,32 +55,164 @@ def custom_loss(pred, target, weights=None):
     
     return total_loss, param_losses
 
-def save_checkpoint(model, optimizer, epoch, loss, filepath, logger):
+def save_checkpoint(model, optimizer, scheduler, epoch, loss, filepath, logger):
     """Save model checkpoint"""
     torch.save({
         'epoch': epoch,
         'model_state_dict': model.state_dict(),
         'optimizer_state_dict': optimizer.state_dict(),
+        'scheduler_state_dict': scheduler.state_dict() if scheduler else None,
         'loss': loss,
     }, filepath)
     logger.info(f"Checkpoint saved to {filepath}")
 
-def load_checkpoint(model, optimizer, checkpoint_path, device, logger):
-    """Load model checkpoint"""
+def load_checkpoint(model, optimizer, scheduler, checkpoint_path, device, logger, strict=True):
+    """Load model checkpoint with validation and error handling"""
     if not os.path.isfile(checkpoint_path):
         logger.warning(f"Checkpoint {checkpoint_path} not found, starting from scratch")
         return 0, float('inf')
     
-    logger.info(f"Loading checkpoint from {checkpoint_path}")
-    checkpoint = torch.load(checkpoint_path, map_location=device)
-    model.load_state_dict(checkpoint['model_state_dict'])
-    optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+    try:
+        logger.info(f"Loading checkpoint from {checkpoint_path}")
+        checkpoint = torch.load(checkpoint_path, map_location=device)
+        
+        # Validate checkpoint structure
+        required_keys = ['model_state_dict', 'optimizer_state_dict', 'epoch']
+        if not all(key in checkpoint for key in required_keys):
+            missing_keys = [key for key in required_keys if key not in checkpoint]
+            raise KeyError(f"Checkpoint missing required keys: {missing_keys}")
+        
+        # Load model weights with validation
+        try:
+            model.load_state_dict(checkpoint['model_state_dict'], strict=strict)
+        except RuntimeError as e:
+            if 'size mismatch' in str(e) or 'Missing key(s)' in str(e):
+                logger.error(f"Model architecture mismatch: {str(e)}")
+                raise
+            raise
+        
+        # Load optimizer state
+        try:
+            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        except ValueError as e:
+            logger.error(f"Failed to load optimizer state: {str(e)}")
+            raise
+        
+        # Load scheduler state if it exists in the checkpoint and scheduler is provided
+        if scheduler and 'scheduler_state_dict' in checkpoint and checkpoint['scheduler_state_dict']:
+            try:
+                scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
+                logger.info("Scheduler state loaded successfully")
+            except ValueError as e:
+                logger.error(f"Failed to load scheduler state: {str(e)}")
+                raise
+        elif scheduler:
+            logger.warning("No scheduler state found in checkpoint")
+        
+        start_epoch = checkpoint['epoch']
+        best_loss = checkpoint.get('loss', float('inf'))
+        logger.info(f"Successfully loaded checkpoint from epoch {start_epoch}, best loss: {best_loss}")
+        
+        return start_epoch, best_loss
+        
+    except Exception as e:
+        logger.error(f"Error loading checkpoint: {str(e)}")
+        raise
+
+def validate(model, dataloader, device):
+    """Validation loop for model evaluation"""
+    model.eval()
+    total_loss = 0
+    param_losses = {'RHOX': 0.0, 'T': 0.0, 'P': 0.0, 
+                   'XNE': 0.0, 'ABROSS': 0.0, 'ACCRAD': 0.0}
     
-    start_epoch = checkpoint['epoch']
-    best_loss = checkpoint.get('loss', float('inf'))
-    logger.info(f"Resuming from epoch {start_epoch}, best loss: {best_loss}")
+    with torch.no_grad():
+        for inputs, targets in dataloader:
+            inputs, targets = inputs.to(device), targets.to(device)
+            outputs = model(inputs)
+            loss, batch_param_losses = custom_loss(outputs, targets)
+            
+            total_loss += loss.item()
+            for param, param_loss in batch_param_losses.items():
+                param_losses[param] += param_loss.item()
     
-    return start_epoch, best_loss
+    avg_loss = total_loss / len(dataloader)
+    avg_param_losses = {k: v / len(dataloader) for k, v in param_losses.items()}
+    
+    return avg_loss, avg_param_losses
+
+# =============================================================================
+# Learning Rate Schedulers
+# =============================================================================
+def get_scheduler(scheduler_type, optimizer, args):
+    """Create a learning rate scheduler based on specified type"""
+    if scheduler_type == 'step':
+        # Step decay: lr = lr * gamma^(epoch // step_size)
+        scheduler = torch.optim.lr_scheduler.StepLR(
+            optimizer,
+            step_size=args.lr_step_size,
+            gamma=args.lr_gamma
+        )
+    elif scheduler_type == 'multistep':
+        # Multi-step decay: lr decays by gamma at specified milestones
+        milestones = [int(m) for m in args.lr_milestones.split(',')]
+        scheduler = torch.optim.lr_scheduler.MultiStepLR(
+            optimizer,
+            milestones=milestones,
+            gamma=args.lr_gamma
+        )
+    elif scheduler_type == 'exponential':
+        # Exponential decay: lr = lr * gamma^epoch
+        scheduler = torch.optim.lr_scheduler.ExponentialLR(
+            optimizer,
+            gamma=args.lr_gamma
+        )
+    elif scheduler_type == 'cosine':
+        # Cosine annealing: cosine function from initial lr to eta_min
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer,
+            T_max=args.epochs,
+            eta_min=args.lr_min
+        )
+    elif scheduler_type == 'plateau':
+        # Reduce on plateau: reduce lr when metric plateaus
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode='min',
+            factor=args.lr_gamma,
+            patience=args.lr_patience,
+            verbose=True,
+            min_lr=args.lr_min
+        )
+    elif scheduler_type == 'cyclic':
+        # Cyclic LR: cycles between base_lr and max_lr
+        step_size_up = int(args.epochs * len(args.train_loader) / args.lr_cycles / 2)
+        scheduler = torch.optim.lr_scheduler.CyclicLR(
+            optimizer,
+            base_lr=args.lr_min,
+            max_lr=args.lr,
+            step_size_up=step_size_up,
+            mode=args.lr_cycle_mode,
+            cycle_momentum=False
+        )
+    elif scheduler_type == 'onecycle':
+        # One Cycle LR: one cycle with cosine annealing
+        steps_per_epoch = len(args.train_loader)
+        scheduler = torch.optim.lr_scheduler.OneCycleLR(
+            optimizer,
+            max_lr=args.lr,
+            epochs=args.epochs,
+            steps_per_epoch=steps_per_epoch,
+            pct_start=args.lr_warmup_pct,
+            anneal_strategy='cos',
+            div_factor=args.lr_div_factor,
+            final_div_factor=args.lr_final_div_factor
+        )
+    else:
+        # No scheduler
+        scheduler = None
+        
+    return scheduler
 
 # =============================================================================
 # Logging
@@ -271,12 +256,24 @@ def setup_logger(log_dir):
 # =============================================================================
 # Main Training Script
 # =============================================================================
-def train(model, dataloader, optimizer, device, start_epoch, args, logger):
-    """Main training loop"""
+def train(model, train_loader, val_loader, optimizer, scheduler, device, start_epoch, args, logger):
+    """Main training loop with validation and learning rate scheduling"""
     best_loss = float('inf')
+    patience_counter = 0
+    
+    # Set train_loader attribute for scheduler creation
+    args.train_loader = train_loader
+    
+    # Initialize TensorBoard writer
+    writer = SummaryWriter(os.path.join(args.log_dir, 'tensorboard'))
+    
+    # Log model graph
+    example_input = next(iter(train_loader))[0][:1].to(device)
+    writer.add_graph(model, example_input)
     
     logger.info(f"Starting training for {args.epochs} epochs")
     for epoch in range(start_epoch, args.epochs):
+        # Training phase
         model.train()
         running_loss = 0.0
         epoch_start_time = time.time()
@@ -285,7 +282,10 @@ def train(model, dataloader, optimizer, device, start_epoch, args, logger):
         param_running_losses = {'RHOX': 0.0, 'T': 0.0, 'P': 0.0, 
                                'XNE': 0.0, 'ABROSS': 0.0, 'ACCRAD': 0.0}
         
-        for batch_idx, (inputs, targets) in enumerate(dataloader):
+        for batch_idx, (inputs, targets) in enumerate(train_loader):
+            # Move data to device
+            inputs, targets = inputs.to(device), targets.to(device)
+            
             # Forward pass and loss calculation
             optimizer.zero_grad()
             outputs = model(inputs)
@@ -295,6 +295,10 @@ def train(model, dataloader, optimizer, device, start_epoch, args, logger):
             loss.backward()
             optimizer.step()
             
+            # Step for batch-based schedulers (like CyclicLR and OneCycleLR)
+            if args.scheduler in ['cyclic', 'onecycle']:
+                scheduler.step()
+            
             # Update statistics
             running_loss += loss.item()
             for param, param_loss in param_losses.items():
@@ -302,36 +306,80 @@ def train(model, dataloader, optimizer, device, start_epoch, args, logger):
             
             # Log batch progress periodically
             if (batch_idx + 1) % args.log_freq == 0:
-                logger.info(f'Epoch: {epoch+1}/{args.epochs}, Batch: {batch_idx+1}/{len(dataloader)}, '
-                           f'Loss: {loss.item():.6f}')
+                logger.info(f'Epoch: {epoch+1}/{args.epochs}, Batch: {batch_idx+1}/{len(train_loader)}, '
+                           f'Loss: {loss.item():.6f}, LR: {optimizer.param_groups[0]["lr"]:.6e}')
+                # Log to TensorBoard
+                global_step = epoch * len(train_loader) + batch_idx
+                writer.add_scalar('Loss/batch', loss.item(), global_step)
+                writer.add_scalar('LearningRate/batch', optimizer.param_groups[0]['lr'], global_step)
+                for param, param_loss in param_losses.items():
+                    writer.add_scalar(f'Loss/{param}', param_loss.item(), global_step)
         
-        # Calculate epoch statistics
-        epoch_loss = running_loss / len(dataloader)
+        # Calculate training epoch statistics
+        train_epoch_loss = running_loss / len(train_loader)
         epoch_time = time.time() - epoch_start_time
         
-        # Calculate average parameter losses
-        avg_param_losses = {k: v / len(dataloader) for k, v in param_running_losses.items()}
-        param_loss_str = ', '.join([f"{k}: {v:.6f}" for k, v in avg_param_losses.items()])
+        # Calculate average parameter losses for training
+        train_avg_param_losses = {k: v / len(train_loader) for k, v in param_running_losses.items()}
+        train_param_loss_str = ', '.join([f"{k}: {v:.6f}" for k, v in train_avg_param_losses.items()])
         
-        logger.info(f'Epoch {epoch+1} completed in {epoch_time:.2f}s, Avg Loss: {epoch_loss:.6f}')
-        logger.info(f'Parameter losses: {param_loss_str}')
+        # Validation phase
+        val_loss, val_param_losses = validate(model, val_loader, device)
+        val_param_loss_str = ', '.join([f"{k}: {v:.6f}" for k, v in val_param_losses.items()])
         
-        # Save checkpoint if improvement or checkpoint frequency reached
-        if epoch_loss < best_loss:
-            best_loss = epoch_loss
-            logger.info(f'New best loss: {best_loss:.6f}')
-            save_checkpoint(model, optimizer, epoch+1, epoch_loss, 
+        # Step for epoch-based schedulers
+        current_lr = optimizer.param_groups[0]['lr']
+        if args.scheduler == 'plateau':
+            scheduler.step(val_loss)
+        elif args.scheduler not in ['none', 'cyclic', 'onecycle']:
+            scheduler.step()
+        
+        # Get updated learning rate
+        new_lr = optimizer.param_groups[0]['lr']
+        if current_lr != new_lr:
+            logger.info(f'Learning rate changed from {current_lr:.6e} to {new_lr:.6e}')
+        
+        # Logging
+        logger.info(f'Epoch {epoch+1} completed in {epoch_time:.2f}s')
+        logger.info(f'Train Loss: {train_epoch_loss:.6f}, Val Loss: {val_loss:.6f}')
+        logger.info(f'Train Parameter losses: {train_param_loss_str}')
+        logger.info(f'Val Parameter losses: {val_param_loss_str}')
+        
+        # Log epoch metrics to TensorBoard
+        writer.add_scalar('Loss/train', train_epoch_loss, epoch)
+        writer.add_scalar('Loss/val', val_loss, epoch)
+        writer.add_scalar('Time/epoch', epoch_time, epoch)
+        writer.add_scalar('LearningRate/epoch', optimizer.param_groups[0]['lr'], epoch)
+        for param, loss_val in train_avg_param_losses.items():
+            writer.add_scalar(f'Loss_train/{param}', loss_val, epoch)
+        for param, loss_val in val_param_losses.items():
+            writer.add_scalar(f'Loss_val/{param}', loss_val, epoch)
+        
+        # Save checkpoint if validation loss improves
+        if val_loss < best_loss:
+            best_loss = val_loss
+            patience_counter = 0
+            logger.info(f'New best validation loss: {best_loss:.6f}')
+            save_checkpoint(model, optimizer, scheduler, epoch+1, val_loss, 
                            os.path.join(args.output_dir, 'best_model.pt'), logger)
+        else:
+            patience_counter += 1
+            
+        # Early stopping check
+        if patience_counter >= args.patience:
+            logger.info(f'Early stopping triggered after {epoch+1} epochs')
+            break
         
         if (epoch + 1) % args.checkpoint_freq == 0:
-            save_checkpoint(model, optimizer, epoch+1, epoch_loss,
+            save_checkpoint(model, optimizer, scheduler, epoch+1, val_loss,
                            os.path.join(args.output_dir, f'checkpoint_epoch_{epoch+1}.pt'), logger)
     
     # Save final model
-    save_checkpoint(model, optimizer, args.epochs, epoch_loss,
+    save_checkpoint(model, optimizer, scheduler, args.epochs, train_epoch_loss,
                    os.path.join(args.output_dir, 'final_model.pt'), logger)
     
     logger.info("Training completed!")
+    writer.close()
     return best_loss
 
 def load_dataset_file(filepath, device):
@@ -379,76 +427,87 @@ def load_dataset_file(filepath, device):
 # =============================================================================
 # Main Function
 # =============================================================================
-def create_dataloader_from_saved(filepath, batch_size=32, num_workers=4, device='cpu'):
-    """
-    Create a DataLoader from a saved dataset.
-    
-    Parameters:
-        filepath (str): Path to the saved dataset
-        batch_size (int): Batch size for the DataLoader
-        num_workers (int): Number of worker processes
-        device (str): Device to load the data to ('cpu' or 'cuda')
-        
-    Returns:
-        tuple: (DataLoader, Dataset)
-    """
-    # Load the dataset
+def create_dataloader_from_saved(filepath, batch_size=32, num_workers=4, device='cpu', validation_split=0.1):
+    """Create train and validation DataLoaders from a saved dataset."""
     dataset = load_dataset_file(filepath, device)
     
-    # Create DataLoader
-    dataloader = DataLoader(
-        dataset,
+    # Calculate split sizes
+    dataset_size = len(dataset)
+    val_size = int(dataset_size * validation_split)
+    train_size = dataset_size - val_size
+    
+    # Split dataset
+    train_dataset, val_dataset = torch.utils.data.random_split(
+        dataset, [train_size, val_size]
+    )
+    
+    # Create DataLoaders
+    train_loader = DataLoader(
+        train_dataset,
         batch_size=batch_size,
         shuffle=True,
         num_workers=num_workers,
-        pin_memory=True if device=='cuda' else False,
+        pin_memory=True if device.type == 'cuda' else False
     )
     
-    return dataloader, dataset
-
-def create_dataloader_from_saved(filepath, batch_size=32, num_workers=4, device='cpu'):
-    """
-    Create a DataLoader from a saved dataset.
-    
-    Parameters:
-        filepath (str): Path to the saved dataset
-        batch_size (int): Batch size for the DataLoader
-        num_workers (int): Number of worker processes
-        device (str): Device to load the data to ('cpu' or 'cuda')
-        
-    Returns:
-        tuple: (DataLoader, Dataset)
-    """
-    # Load the dataset
-    dataset = load_dataset_file(filepath, device)
-    
-    # Create DataLoader
-    dataloader = DataLoader(
-        dataset,
+    val_loader = DataLoader(
+        val_dataset,
         batch_size=batch_size,
-        shuffle=True,
+        shuffle=False,
         num_workers=num_workers,
-        pin_memory=True if device=='cuda' else False,
+        pin_memory=True if device.type == 'cuda' else False
     )
     
-    return dataloader, dataset
+    return train_loader, val_loader, dataset
 
 def main():
-    # Parse command line arguments
     parser = argparse.ArgumentParser(description='Train Kurucz Atmospheric Model')
-    parser.add_argument('--dataset', type=str, default="/Users/jdli/Desktop/AI4astro/kurucz1/data/kurucz_dataset.pt", 
-                        required=True, help='load dataset file')
+    # Dataset and model parameters
+    parser.add_argument('--dataset', type=str, required=True, 
+                        help='Path to the saved dataset file')
     parser.add_argument('--output_dir', type=str, default='./checkpoints', help='Directory to save checkpoints')
     parser.add_argument('--log_dir', type=str, default='./logs', help='Directory to save logs')
-    parser.add_argument('--batch_size', type=int, default=32, help='Batch size')
-    parser.add_argument('--epochs', type=int, default=100, help='Number of epochs')
-    parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
-    parser.add_argument('--hidden_size', type=int, default=128, help='Hidden size of the model')
-    parser.add_argument('--checkpoint_freq', type=int, default=10, help='Checkpoint frequency (epochs)')
+    parser.add_argument('--hidden_size', type=int, default=256, help='Hidden size of the model')
+    
+    # Training parameters
+    parser.add_argument('--batch_size', type=int, default=64, help='Batch size')
+    parser.add_argument('--epochs', type=int, default=1000, help='Number of epochs')
+    parser.add_argument('--lr', type=float, default=1e-4, help='Initial learning rate')
+    parser.add_argument('--checkpoint_freq', type=int, default=100, help='Checkpoint frequency (epochs)')
     parser.add_argument('--log_freq', type=int, default=10, help='Logging frequency (batches)')
     parser.add_argument('--resume', type=str, default=None, help='Path to checkpoint to resume from')
+    parser.add_argument('--patience', type=int, default=20, help='Early stopping patience')
+    parser.add_argument('--validation_split', type=float, default=0.1, help='Validation set split ratio')
+    
+    # Hardware parameters
     parser.add_argument('--gpu', action='store_true', help='Use GPU if available')
     parser.add_argument('--num_workers', type=int, default=4, help='Number of worker processes for data loading')
+    
+    # Learning rate scheduler parameters
+    parser.add_argument('--scheduler', type=str, default='plateau', 
+                        choices=['none', 'step', 'multistep', 'exponential', 'cosine', 'plateau', 'cyclic', 'onecycle'],
+                        help='Learning rate scheduler type')
+    parser.add_argument('--lr_gamma', type=float, default=0.1, 
+                        help='Multiplicative factor of learning rate decay')
+    parser.add_argument('--lr_step_size', type=int, default=100, 
+                        help='Period of learning rate decay (epochs)')
+    parser.add_argument('--lr_milestones', type=str, default='200,400,600', 
+                        help='Epochs at which to decay learning rate (comma-separated)')
+    parser.add_argument('--lr_min', type=float, default=1e-6, 
+                        help='Minimum learning rate')
+    parser.add_argument('--lr_patience', type=int, default=5, 
+                        help='Epochs with no improvement after which learning rate will be reduced')
+    parser.add_argument('--lr_cycles', type=int, default=4, 
+                        help='Number of cycles for cyclic LR scheduler')
+    parser.add_argument('--lr_cycle_mode', type=str, default='triangular2', 
+                        choices=['triangular', 'triangular2', 'exp_range'],
+                        help='Mode for cyclic LR scheduler')
+    parser.add_argument('--lr_warmup_pct', type=float, default=0.3, 
+                        help='Percentage of total iterations for warmup in OneCycleLR')
+    parser.add_argument('--lr_div_factor', type=float, default=25.0, 
+                        help='Initial learning rate division factor for OneCycleLR')
+    parser.add_argument('--lr_final_div_factor', type=float, default=1e4, 
+                        help='Final learning rate division factor for OneCycleLR')
     
     args = parser.parse_args()
     
@@ -459,7 +518,12 @@ def main():
     logger = setup_logger(args.log_dir)
     
     # Set device
-    device = torch.device('mps' if torch.cuda.is_available() and args.gpu else 'cpu')
+    if args.gpu:
+        device = torch.device('cuda' if torch.cuda.is_available() else 
+                             ('mps' if hasattr(torch, 'backends') and hasattr(torch.backends, 'mps') and 
+                              torch.backends.mps.is_available() else 'cpu'))
+    else:
+        device = torch.device('cpu')
     logger.info(f"Using device: {device}")
     
     # Log training configuration
@@ -467,19 +531,29 @@ def main():
     for arg in vars(args):
         logger.info(f"  {arg}: {getattr(args, arg)}")
     
-    # Load dataset and create dataloader
+    # Load dataset and create dataloaders
     logger.info(f"Loading dataset from {args.dataset}")
-    dataloader, dataset = create_dataloader_from_saved(
+    train_loader, val_loader, dataset = create_dataloader_from_saved(
         filepath=args.dataset,
         batch_size=args.batch_size,
-        num_workers=args.num_workers if device.type == 'cuda:1' else 0,
-        device=device
+        num_workers=args.num_workers if device.type == 'cuda' else 0,
+        device=device,
+        validation_split=args.validation_split
     )
-    logger.info(f"Dataset loaded, {len(dataset)} samples")
+    logger.info(f"Dataset loaded, {len(dataset)} total samples, "
+               f"{len(train_loader.dataset)} training, {len(val_loader.dataset)} validation")
     
+    # Get the input shape from the first batch
+    sample_batch = next(iter(train_loader))
+    input_shape = sample_batch[0].shape
+    
+    # The input now includes tau at each depth point (5 features per depth point)
+    # The last dimension of the input tensor is the number of features per depth point
+    input_features_per_point = input_shape[-1]
+
     # Create model
     model = AtmosphereNet(
-        input_size=4,
+        input_size=input_features_per_point,
         hidden_size=args.hidden_size,
         output_size=6,
         depth_points=dataset.max_depth_points
@@ -487,15 +561,30 @@ def main():
     logger.info(f"Model created with {sum(p.numel() for p in model.parameters())} parameters")
     
     # Create optimizer
+    # optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
+    logger.info(f"Using SGD optimizer with initial learning rate {args.lr}")
+    
+    # Create scheduler
+    scheduler = get_scheduler(args.scheduler, optimizer, args)
+    if scheduler:
+        logger.info(f"Using {args.scheduler} learning rate scheduler")
+    else:
+        logger.info("No learning rate scheduler selected")
     
     # Load checkpoint if resuming
     start_epoch = 0
     if args.resume:
-        start_epoch, _ = load_checkpoint(model, optimizer, args.resume, device, logger)
+        try:
+            _, _ = load_checkpoint(model, optimizer, scheduler, args.resume, device, logger)
+        except Exception as e:
+            logger.error(f"Failed to load checkpoint: {str(e)}. Starting from scratch.")
+            start_epoch = 0
     
     # Train the model
-    train(model, dataloader, optimizer, device, start_epoch, args, logger)
+    train(model, train_loader, val_loader, optimizer, scheduler, device, start_epoch, args, logger)
 
 if __name__ == "__main__":
     main()
+    # Example usage:
+    # python train.py --dataset data/kurucz_dataset.pt --gpu --scheduler cosine --epochs 500 --lr 0.001 --batch_size 128
