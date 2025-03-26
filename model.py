@@ -2,7 +2,8 @@
 
 import torch
 from torch.utils.data import Dataset, DataLoader
-
+import torch.nn as nn
+import torch.nn.functional as F
 
 # =============================================================================
 # Model Architecture
@@ -19,18 +20,18 @@ class AtmosphereNet(torch.nn.Module):
         self.feature_extractor = torch.nn.Sequential(
             torch.nn.Linear(input_size, hidden_size),
             torch.nn.ReLU(),
-            torch.nn.Dropout(0.1),
+            torch.nn.Dropout(0.01),
             
             torch.nn.Linear(hidden_size, hidden_size),
             torch.nn.ReLU(),
-            torch.nn.Dropout(0.1)
+            torch.nn.Dropout(0.01)
         )
         
         # Final prediction layers
         self.output_layers = torch.nn.Sequential(
             torch.nn.Linear(hidden_size, hidden_size),
             torch.nn.ReLU(),
-            torch.nn.Dropout(0.1),
+            torch.nn.Dropout(0.01),
             
             torch.nn.Linear(hidden_size, output_size)
         )
@@ -53,6 +54,319 @@ class AtmosphereNet(torch.nn.Module):
         outputs = outputs.view(batch_size, depth_points, self.output_size)
         
         return outputs
+
+class AtmosphereNetMLP(torch.nn.Module):
+    def __init__(self, input_size=5, hidden_size=256, output_size=6, depth_points=80):
+        super(AtmosphereNetMLP, self).__init__()
+        self.input_size = input_size
+        self.output_size = output_size
+        self.depth_points = depth_points
+        self.flattened_input_size = input_size * depth_points
+        self.flattened_output_size = output_size * depth_points
+        
+        # MLP architecture
+        self.layers = torch.nn.Sequential(
+            # Input layer
+            torch.nn.Linear(self.flattened_input_size, hidden_size),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.01),
+            
+            # Hidden layers
+            torch.nn.Linear(hidden_size, hidden_size*2),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.01),
+            
+            torch.nn.Linear(hidden_size*2, hidden_size*2),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.01),
+            
+            # Output layer
+            torch.nn.Linear(hidden_size*2, self.flattened_output_size)
+        )
+        
+    def forward(self, x):
+        # Input shape: (batch_size, depth_points, input_size)
+        batch_size = x.size(0)
+        
+        # Flatten input
+        x_flat = x.view(batch_size, -1)
+        
+        # Pass through MLP
+        output_flat = self.layers(x_flat)
+        
+        # Reshape to (batch_size, depth_points, output_size)
+        outputs = output_flat.view(batch_size, self.depth_points, self.output_size)
+        
+        return outputs
+
+
+class AtmosphereNetMLPtau(torch.nn.Module):
+    def __init__(self, input_size=5, hidden_size=256, output_size=6, depth_points=80):
+        super(AtmosphereNetMLPtau, self).__init__()
+        self.input_size = input_size
+        self.output_size = output_size
+        self.depth_points = depth_points
+        self.flattened_input_size = input_size * depth_points
+        self.flattened_output_size = output_size * depth_points
+        
+        # 新增：tau特征增强层
+        self.tau_encoder = torch.nn.Sequential(
+            torch.nn.Linear(1, 32),  # 单独处理tau特征
+            torch.nn.ReLU(),
+            torch.nn.Linear(32, 32)
+        )
+        
+        # 主网络架构
+        self.layers = torch.nn.Sequential(
+            # 输入层
+            torch.nn.Linear(self.flattened_input_size + 32 * depth_points, hidden_size),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.01),
+            
+            # 隐藏层，增加深度以捕捉连续变化
+            torch.nn.Linear(hidden_size, hidden_size*2),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.01),
+            
+            torch.nn.Linear(hidden_size*2, hidden_size*2),
+            torch.nn.ReLU(),
+            torch.nn.Dropout(0.01),
+            
+            # 输出层
+            torch.nn.Linear(hidden_size*2, self.flattened_output_size)
+        )
+        
+    def forward(self, x):
+        # Input shape: (batch_size, depth_points, input_size)
+        batch_size = x.size(0)
+        
+        # 提取tau特征
+        tau = x[..., 4:5]  # 假设tau是第5个特征
+        tau_features = self.tau_encoder(tau.view(-1, 1))  # 处理每个tau值
+        tau_features = tau_features.view(batch_size, self.depth_points, -1)
+        
+        # 拼接原始输入和tau特征
+        x_flat = x.view(batch_size, -1)
+        tau_flat = tau_features.view(batch_size, -1)
+        combined = torch.cat([x_flat, tau_flat], dim=1)
+        
+        # 通过MLP
+        output_flat = self.layers(combined)
+        
+        # Reshape to (batch_size, depth_points, output_size)
+        outputs = output_flat.view(batch_size, self.depth_points, self.output_size)
+        
+        # 对P和kappa应用连续性约束
+        P = outputs[..., 2]  # P是第3个输出
+        kappa = outputs[..., 4]  # kappa是第5个输出
+        
+        # 确保P和kappa随tau单调变化
+        P = self.apply_monotonic_constraint(P, tau)
+        kappa = self.apply_monotonic_constraint(kappa, tau)
+        
+        # 将约束后的值放回输出
+        outputs[..., 2] = P
+        outputs[..., 4] = kappa
+        
+        return outputs
+    
+    def apply_monotonic_constraint(self, y, x):
+        """
+        应用单调性约束，确保y随x单调变化
+        """
+        # 计算差分
+        diff = y[:, 1:] - y[:, :-1]
+        
+        # 应用ReLU约束
+        constrained_diff = torch.nn.functional.relu(diff)
+        
+        # 重建y值
+        y_constrained = torch.cat([
+            y[:, :1],  # 保持第一个值不变
+            y[:, :1] + torch.cumsum(constrained_diff, dim=1)
+        ], dim=1)
+        
+        return y_constrained
+
+# class ResidualBlock(nn.Module):
+#     def __init__(self, in_channels, out_channels, kernel_size=3, dilation=1):
+#         super(ResidualBlock, self).__init__()
+#         self.conv_block = nn.Sequential(
+#             nn.Conv1d(in_channels, out_channels, kernel_size, 
+#                      padding=kernel_size//2 + (kernel_size//2)*(dilation-1), 
+#                      dilation=dilation),
+#             nn.BatchNorm1d(out_channels),
+#             nn.ReLU(),
+#             nn.Conv1d(out_channels, out_channels, kernel_size=3, padding=1),
+#             nn.BatchNorm1d(out_channels)
+#         )
+        
+#         # 1x1 conv for matching dimensions in skip connection if needed
+#         self.skip_connection = nn.Sequential(
+#             nn.Conv1d(in_channels, out_channels, kernel_size=1),
+#             nn.BatchNorm1d(out_channels)
+#         ) if in_channels != out_channels else None
+        
+#         self.relu = nn.ReLU()
+        
+#     def forward(self, x):
+#         identity = x
+#         out = self.conv_block(x)
+        
+#         if self.skip_connection:
+#             identity = self.skip_connection(identity)
+            
+#         out += identity
+#         out = self.relu(out)
+#         return out
+
+
+# class AtmosphereConvNet(nn.Module):
+#     def __init__(self, input_size=5, hidden_size=128, output_size=6, depth_points=80):
+#         super(AtmosphereConvNet, self).__init__()
+#         self.depth_points = depth_points
+#         self.input_size = input_size
+        
+#         # Position encoding layer
+#         self.position_emb = nn.Sequential(
+#             nn.Embedding(depth_points, hidden_size//2),  # Reduced embedding size
+#             nn.LayerNorm(hidden_size//2)
+#         )
+        
+#         # Input projection layer
+#         self.input_proj = nn.Sequential(
+#             nn.Conv1d(input_size, hidden_size//2, kernel_size=1),
+#             nn.BatchNorm1d(hidden_size//2),
+#             nn.ReLU()
+#         )
+        
+#         # Combined input size after concatenation
+#         combined_size = hidden_size  # hidden_size//2 + hidden_size//2
+        
+#         # Convolutional blocks with residual connections
+#         self.conv_blocks = nn.Sequential(
+#             ResidualBlock(combined_size, hidden_size, dilation=1),
+#             ResidualBlock(hidden_size, hidden_size, dilation=2),
+#             ResidualBlock(hidden_size, hidden_size, dilation=4),
+#             ResidualBlock(hidden_size, hidden_size, dilation=8)
+#         )
+        
+#         # Output projection
+#         self.output_proj = nn.Sequential(
+#             nn.Conv1d(hidden_size, hidden_size, kernel_size=1),
+#             nn.BatchNorm1d(hidden_size),
+#             nn.ReLU(),
+#             nn.Conv1d(hidden_size, output_size, kernel_size=1)
+#         )
+        
+#         # Skip connection directly from input to output
+#         self.global_skip = nn.Conv1d(input_size, output_size, kernel_size=1)
+        
+#         # Initialize weights properly
+#         self._init_weights()
+        
+#     def _init_weights(self):
+#         """Initialize weights using Kaiming initialization"""
+#         for m in self.modules():
+#             if isinstance(m, nn.Conv1d):
+#                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+#                 if m.bias is not None:
+#                     nn.init.constant_(m.bias, 0)
+#             elif isinstance(m, nn.BatchNorm1d):
+#                 nn.init.constant_(m.weight, 1)
+#                 nn.init.constant_(m.bias, 0)
+#             elif isinstance(m, nn.Linear):
+#                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+#                 if m.bias is not None:
+#                     nn.init.constant_(m.bias, 0)
+
+#     def forward(self, x):
+#         batch_size = x.size(0)
+        
+#         # Save original input for global skip connection
+#         x_orig = x.transpose(1, 2)  # (batch_size, input_size, depth_points)
+        
+#         # Generate position embeddings
+#         positions = torch.arange(self.depth_points, device=x.device).unsqueeze(0)
+#         pos_emb = self.position_emb(positions)  # (1, depth_points, hidden_size//2)
+#         pos_emb = pos_emb.expand(batch_size, -1, -1)  # (batch_size, depth_points, hidden_size//2)
+#         pos_emb = pos_emb.transpose(1, 2)  # (batch_size, hidden_size//2, depth_points)
+        
+#         # Project input features
+#         x_proj = self.input_proj(x_orig)  # (batch_size, hidden_size//2, depth_points)
+        
+#         # Concatenate projected input with position embeddings
+#         x_combined = torch.cat([x_proj, pos_emb], dim=1)  # (batch_size, hidden_size, depth_points)
+        
+#         # Process through convolutional blocks
+#         features = self.conv_blocks(x_combined)
+        
+#         # Project to output dimensions
+#         out = self.output_proj(features)
+        
+#         # Apply global skip connection
+#         global_skip = self.global_skip(x_orig)
+#         out = out + global_skip
+        
+#         # Return in the expected format (batch_size, depth_points, output_size)
+#         return out.transpose(1, 2)
+
+
+class AtmosphereConvNet(nn.Module):
+    """
+    A basic CNN model with minimal components but enough expressivity to learn:
+    1. Uses a few convolutional layers
+    2. Includes batch normalization for stability
+    3. Uses ReLU activations for non-linearity
+    4. Includes proper initialization
+    """
+    def __init__(self, input_size=5, hidden_size=32, output_size=6, depth_points=80):
+        super(AtmosphereConvNet, self).__init__()
+        
+        # First layer projects to hidden dimension
+        self.layer1 = nn.Sequential(
+            nn.Conv1d(input_size, hidden_size, kernel_size=3, padding=1),
+            nn.BatchNorm1d(hidden_size),
+            nn.ReLU()
+        )
+        
+        # Second layer maintains hidden dimension
+        self.layer2 = nn.Sequential(
+            nn.Conv1d(hidden_size, hidden_size, kernel_size=3, padding=1),
+            nn.BatchNorm1d(hidden_size),
+            nn.ReLU()
+        )
+        
+        # Output projection
+        self.output = nn.Conv1d(hidden_size, output_size, kernel_size=1)
+        
+        # Initialize weights
+        self._init_weights()
+    
+    def _init_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Conv1d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm1d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+    
+    def forward(self, x):
+        # Input comes as [batch_size, depth_points, input_size]
+        # Convert to [batch_size, input_size, depth_points] for Conv1d
+        x = x.transpose(1, 2)
+        
+        # Apply layers
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.output(x)
+        
+        # Convert back to [batch_size, depth_points, output_size]
+        x = x.transpose(1, 2)
+        
+        return x
 
 # =============================================================================
 # Dataset Loader
@@ -185,31 +499,29 @@ class KuruczDataset(Dataset):
 
     def setup_normalization(self):
         """Calculate normalization parameters for each feature"""
-        # Parameters that require log transformation before normalization
         log_params = ['teff', 'RHOX', 'P', 'XNE', 'ABROSS', 'ACCRAD', 'TAU']
         
         for param_name, data in self.original.items():
-            # Apply log transformation first if needed
             if param_name in log_params:
-                # Add small epsilon to avoid log(0)
                 transformed_data = torch.log10(data + 1e-30)
                 log_scale = True
             else:
                 transformed_data = data
                 log_scale = False
             
-            # Calculate statistics based on data dimensionality
-            if transformed_data.dim() > 2:  # For multi-dimensional data
+            # 新增 scale 计算
+            if transformed_data.dim() > 2:
                 param_min = transformed_data.min(dim=0).values
                 param_max = transformed_data.max(dim=0).values
-            else:  # For 1D or 2D data
+            else:
                 param_min = transformed_data.min()
                 param_max = transformed_data.max()
             
-            # Store normalization parameters
+            # 显式存储 scale = (max - min)/2
             self.norm_params[param_name] = {
                 'min': param_min,
                 'max': param_max,
+                'scale': (param_max - param_min) / 2.0,  # 新增关键字段
                 'log_scale': log_scale
             }
 
