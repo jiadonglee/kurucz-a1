@@ -7,52 +7,15 @@ import os
 import argparse
 import time
 import logging
-import math
 from datetime import datetime
 from torch.utils.tensorboard import SummaryWriter
-from model import AtmosphereNet, AtmosphereNetMLP, AtmosphereConvNet, KuruczDataset
-from physics import hydrostatic_equilibrium_loss, simplified_hydrostatic_equilibrium_loss
-from train import get_scheduler
-
+from model import AtmosphereNet, AtmosphereNetMLP, AtmosphereNetMLPtau
+from physics import hydro_equilibrium_loss
+from train import get_scheduler, setup_logger
+from dataset import KuruczDataset, load_dataset_file, create_dataloader_from_saved
 # =============================================================================
 # Training Functions
 # =============================================================================
-
-def setup_logger(log_dir):
-    """Set up logger to write to file and console"""
-    os.makedirs(log_dir, exist_ok=True)
-    
-    # Create timestamp for the log file
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file = os.path.join(log_dir, f"training_{timestamp}.log")
-    
-    # Configure logger
-    logger = logging.getLogger("AtmosphereModel")
-    logger.setLevel(logging.INFO)
-    
-    # Remove any existing handlers
-    for handler in logger.handlers[:]:
-        logger.removeHandler(handler)
-    
-    # Create file handler
-    file_handler = logging.FileHandler(log_file)
-    file_handler.setLevel(logging.INFO)
-    
-    # Create console handler
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.INFO)
-    
-    # Create formatter and add it to the handlers
-    formatter = logging.Formatter('[%(asctime)s][%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-    file_handler.setFormatter(formatter)
-    console_handler.setFormatter(formatter)
-    
-    # Add handlers to logger
-    logger.addHandler(file_handler)
-    logger.addHandler(console_handler)
-    
-    logger.info(f"Logging to {log_file}")
-    return logger
 # Modify custom_loss to incorporate hydrostatic equilibrium
 # 在custom_loss函数中
 def custom_loss(pred, target, dataset, model, inputs, use_physics=True, physics_weight=1e-2, weights=None, is_training=True):
@@ -94,10 +57,9 @@ def custom_loss(pred, target, dataset, model, inputs, use_physics=True, physics_
         total_data_loss += weighted_loss
     
     # Add physics-informed loss component if requested
-    # 添加物理信息损失组件（如果需要）
     if use_physics:
             param_indices = {param: i for i, param in param_map.items()}
-            physics_loss = hydrostatic_equilibrium_loss(pred, inputs, dataset, model)  # 使用简化版本
+            physics_loss = hydro_equilibrium_loss(pred, inputs, dataset, model)  
             total_loss = (1.0 - physics_weight) * total_data_loss + physics_weight * physics_loss
             param_losses['physics'] = physics_loss
     else:
@@ -168,7 +130,7 @@ def load_checkpoint(model, optimizer, scheduler, checkpoint_path, device, logger
     except Exception as e:
         logger.error(f"Error loading checkpoint: {str(e)}")
         raise
-    
+   
 def validate(model, dataloader, device, dataset, args, logger=None):
     """Validation loop for model evaluation"""
     model.eval()
@@ -344,83 +306,9 @@ def train(model, train_loader, val_loader, optimizer, scheduler, device, start_e
     writer.close()
     return best_loss
 
-def load_dataset_file(filepath, device):
-    """
-    Load a saved dataset.
-    
-    Parameters:
-        filepath (str): Path to the saved dataset
-        device (str): Device to load the data to ('cpu' or 'cuda')
-        
-    Returns:
-        KuruczDataset: Loaded dataset
-    """
-    # Create an empty dataset
-    dataset = KuruczDataset.__new__(KuruczDataset)
-    
-    # Load the saved data
-    save_dict = torch.load(filepath, map_location=device)
-    
-    # Restore attributes
-    dataset.norm_params = save_dict['norm_params']
-    dataset.max_depth_points = save_dict['max_depth_points']
-    dataset.device = device
-    
-    # Move data to the specified device
-    for key, value in save_dict['data'].items():
-        if key == 'original':
-            # Handle the 'original' dictionary specially
-            original_dict = {}
-            for k, v in value.items():
-                if isinstance(v, torch.Tensor):
-                    original_dict[k] = v.to(device)
-                else:
-                    original_dict[k] = v
-            setattr(dataset, key, original_dict)
-        else:
-            # Normal tensor values
-            setattr(dataset, key, value.to(device))
-    
-    # Initialize empty models list (not needed after loading)
-    dataset.models = []
-    
-    return dataset
-
 # =============================================================================
 # Main Function
 # =============================================================================
-def create_dataloader_from_saved(filepath, batch_size=32, num_workers=4, device='cpu', validation_split=0.1):
-    """Create train and validation DataLoaders from a saved dataset."""
-    dataset = load_dataset_file(filepath, device)
-    
-    # Calculate split sizes
-    dataset_size = len(dataset)
-    val_size = int(dataset_size * validation_split)
-    train_size = dataset_size - val_size
-    
-    # Split dataset
-    train_dataset, val_dataset = torch.utils.data.random_split(
-        dataset, [train_size, val_size]
-    )
-    
-    # Create DataLoaders
-    train_loader = DataLoader(
-        train_dataset,
-        batch_size=batch_size,
-        shuffle=True,
-        num_workers=num_workers if device.type in ['cuda'] else 0,
-        pin_memory=device.type in ['cuda', 'mps']
-    )
-    
-    val_loader = DataLoader(
-        val_dataset,
-        batch_size=batch_size,
-        shuffle=False,
-        num_workers=num_workers if device.type in ['cuda'] else 0,
-        pin_memory=device.type in ['cuda', 'mps']
-    )
-    
-    return train_loader, val_loader, dataset
 
 def main():
     parser = argparse.ArgumentParser(description='Train Kurucz Atmospheric Model')
@@ -443,10 +331,10 @@ def main():
     
     # Hardware parameters
     parser.add_argument('--gpu', action='store_true', help='Use GPU if available')
-    parser.add_argument('--num_workers', type=int, default=4, help='Number of worker processes for data loading')
+    parser.add_argument('--num_workers', type=int, default=0, help='Number of worker processes for data loading')
     
     # Physics-informed loss parameters
-    parser.add_argument('--physics_weight', type=float, default=1e-9, help='Weight for physics-informed loss component')
+    parser.add_argument('--physics_weight', type=float, default=1e-3, help='Weight for physics-informed loss component')
     
     # Learning rate scheduler parameters
     parser.add_argument('--scheduler', type=str, default='plateau', 
@@ -458,7 +346,7 @@ def main():
                         help='Period of learning rate decay (epochs)')
     parser.add_argument('--lr_milestones', type=str, default='200,400,600', 
                         help='Epochs at which to decay learning rate (comma-separated)')
-    parser.add_argument('--lr_min', type=float, default=1e-6, 
+    parser.add_argument('--lr_min', type=float, default=1e-7, 
                         help='Minimum learning rate')
     parser.add_argument('--lr_patience', type=int, default=5, 
                         help='Epochs with no improvement after which learning rate will be reduced')
@@ -484,7 +372,7 @@ def main():
     
     # Set device
     if args.gpu:
-        device = torch.device('cuda' if torch.cuda.is_available() else 
+        device = torch.device('cuda:1' if torch.cuda.is_available() else 
                              ('mps' if hasattr(torch, 'backends') and hasattr(torch.backends, 'mps') and 
                               torch.backends.mps.is_available() else 'cpu'))
     else:
@@ -501,7 +389,7 @@ def main():
     train_loader, val_loader, dataset = create_dataloader_from_saved(
         filepath=args.dataset,
         batch_size=args.batch_size,
-        num_workers=args.num_workers if device.type == 'cuda' else 0,
+        num_workers=0,
         device=device,
         validation_split=args.validation_split
     )
@@ -516,25 +404,17 @@ def main():
     # The last dimension of the input tensor is the number of features per depth point
     input_features_per_point = input_shape[-1]
 
-    # Create model
-    # model = AtmosphereNet(
-    #     input_size=input_features_per_point,
-    #     hidden_size=args.hidden_size,
-    #     output_size=6,
-    #     depth_points=dataset.max_depth_points
-    # ).to(device)
-    model = AtmosphereNetMLP(
-        input_size=input_features_per_point,
-        hidden_size=args.hidden_size,
-        output_size=6,
-        depth_points=dataset.max_depth_points,
-    ).to(device)
+    model = AtmosphereNetMLPtau(
+            stellar_embed_dim=128, tau_embed_dim=64
+            ).to(device)
+            
+    logger.info("Created AtmosphereNetMLPtau model")
     logger.info(f"Model created with {sum(p.numel() for p in model.parameters())} parameters")
     
     # Create optimizer
-    # optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
-    logger.info(f"Using SGD optimizer with initial learning rate {args.lr}")
+    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+    # optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
+    logger.info(f"Using Adam optimizer with initial learning rate {args.lr}")
     
     # Create scheduler
     scheduler = get_scheduler(args.scheduler, optimizer, args, logger)
@@ -548,7 +428,7 @@ def main():
     best_loss = float('inf')
     if args.resume:
         try:
-            start_epoch, best_loss = load_checkpoint(model, optimizer, scheduler, args.resume, device, logger)
+            _, best_loss = load_checkpoint(model, optimizer, scheduler, args.resume, device, logger)
             logger.info(f"Resuming training from epoch {start_epoch} with best loss {best_loss}")
         except Exception as e:
             logger.error(f"Failed to load checkpoint: {str(e)}. Starting from scratch.")
@@ -560,4 +440,4 @@ def main():
 if __name__ == "__main__":
     main()
     # Example usage:
-    # python train.py --dataset data/kurucz_dataset.pt --gpu --scheduler cosine --epochs 500 --lr 0.001 --batch_size 128
+    # python train_hydro.py --dataset data/kurucz_vturb_0p5_tau_v3.pt --gpu --epochs 1000 --lr 1e-4 --batch_size 256 --output_dir ./checkpoints_v0327enc_hydro --physics_weight 1e-1 --scheduler plateau --lr_patience 10 --patience 50 --checkpoint_freq 50 --log_freq 10 --hidden_size 128 --validation_split 0.1 --num_workers 4 --log_dir ./logs_v0327enc_hydro

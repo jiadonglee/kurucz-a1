@@ -10,7 +10,8 @@ import logging
 import math
 from datetime import datetime
 from torch.utils.tensorboard import SummaryWriter
-from model import AtmosphereNet, AtmosphereNetMLP, AtmosphereConvNet, AtmosphereNetMLPtau, KuruczDataset
+from model import AtmosphereNet, AtmosphereNetMLP, AtmosphereNetMLPtau
+from dataset import KuruczDataset, load_dataset_file, create_dataloader_from_saved
 
 # =============================================================================
 # Training Functions
@@ -144,6 +145,7 @@ def load_checkpoint(model, optimizer, scheduler, checkpoint_path, device, logger
     except Exception as e:
         logger.error(f"Error loading checkpoint: {str(e)}")
         raise
+
 def validate(model, dataloader, device, permute_inputs=False):
     """Validation loop for model evaluation with input permutation support"""
     model.eval()
@@ -160,6 +162,10 @@ def validate(model, dataloader, device, permute_inputs=False):
             # Apply permutation if needed
             if permute_inputs:
                 inputs = inputs.permute(0, 2, 1)
+            
+            # Ensure tensors are contiguous before passing to the model
+            inputs = inputs.reshape(inputs.shape)
+            targets = targets.reshape(targets.shape)
             
             try:
                 outputs = model(inputs)
@@ -374,6 +380,10 @@ def train(model, train_loader, val_loader, optimizer, scheduler, device, start_e
             if permute_inputs:
                 inputs = inputs.permute(0, 2, 1)
             
+            # Ensure tensors are contiguous before passing to the model
+            inputs = inputs.reshape(inputs.shape)
+            targets = targets.reshape(targets.shape)
+            
             # Forward pass and loss calculation
             optimizer.zero_grad()
             
@@ -507,83 +517,10 @@ def train(model, train_loader, val_loader, optimizer, scheduler, device, start_e
     writer.close()
     return best_loss
 
-def load_dataset_file(filepath, device):
-    """
-    Load a saved dataset.
-    
-    Parameters:
-        filepath (str): Path to the saved dataset
-        device (str): Device to load the data to ('cpu' or 'cuda')
-        
-    Returns:
-        KuruczDataset: Loaded dataset
-    """
-    # Create an empty dataset
-    dataset = KuruczDataset.__new__(KuruczDataset)
-    
-    # Load the saved data
-    save_dict = torch.load(filepath, map_location=device)
-    
-    # Restore attributes
-    dataset.norm_params = save_dict['norm_params']
-    dataset.max_depth_points = save_dict['max_depth_points']
-    dataset.device = device
-    
-    # Move data to the specified device
-    for key, value in save_dict['data'].items():
-        if key == 'original':
-            # Handle the 'original' dictionary specially
-            original_dict = {}
-            for k, v in value.items():
-                if isinstance(v, torch.Tensor):
-                    original_dict[k] = v.to(device)
-                else:
-                    original_dict[k] = v
-            setattr(dataset, key, original_dict)
-        else:
-            # Normal tensor values
-            setattr(dataset, key, value.to(device))
-    
-    # Initialize empty models list (not needed after loading)
-    dataset.models = []
-    
-    return dataset
 
 # =============================================================================
 # Main Function
 # =============================================================================
-def create_dataloader_from_saved(filepath, batch_size=32, num_workers=4, device='cpu', validation_split=0.1):
-    """Create train and validation DataLoaders from a saved dataset."""
-    dataset = load_dataset_file(filepath, device)
-    
-    # Calculate split sizes
-    dataset_size = len(dataset)
-    val_size = int(dataset_size * validation_split)
-    train_size = dataset_size - val_size
-    
-    # Split dataset
-    train_dataset, val_dataset = torch.utils.data.random_split(
-        dataset, [train_size, val_size]
-    )
-    
-    # Create DataLoaders
-    train_loader = DataLoader(
-        train_dataset,
-        batch_size=batch_size,
-        shuffle=True,
-        num_workers=num_workers if device.type in ['cuda'] else 0,
-        pin_memory=device.type in ['cuda', 'mps']
-    )
-    
-    val_loader = DataLoader(
-        val_dataset,
-        batch_size=batch_size,
-        shuffle=False,
-        num_workers=num_workers if device.type in ['cuda'] else 0,
-        pin_memory=device.type in ['cuda', 'mps']
-    )
-    
-    return train_loader, val_loader, dataset
 def main():
     parser = argparse.ArgumentParser(description='Train Kurucz Atmospheric Model')
     # Dataset and model parameters
@@ -592,8 +529,7 @@ def main():
     parser.add_argument('--output_dir', type=str, default='./checkpoints', help='Directory to save checkpoints')
     parser.add_argument('--log_dir', type=str, default='./logs', help='Directory to save logs')
     parser.add_argument('--hidden_size', type=int, default=128, help='Hidden size of the model')
-    parser.add_argument('--model', type=str, default='tau', choices=['mlp', 'atm', 'conv', 'tau'],
-                        help='Model architecture to use')
+    parser.add_argument('--model', type=str, default='tau', choices=['mlp', 'atm', 'conv', 'tau'], help='Model architecture to use')
     
     # Training parameters
     parser.add_argument('--batch_size', type=int, default=16, help='Batch size')
@@ -608,7 +544,7 @@ def main():
     
     # Hardware parameters
     parser.add_argument('--gpu', action='store_true', help='Use GPU if available')
-    parser.add_argument('--num_workers', type=int, default=4, help='Number of worker processes for data loading')
+    parser.add_argument('--num_workers', type=int, default=0, help='Number of worker processes for data loading')
     
     # Learning rate scheduler parameters
     parser.add_argument('--scheduler', type=str, default='plateau', 
@@ -648,7 +584,7 @@ def main():
     
     # Set device
     if args.gpu:
-        device = torch.device('cuda' if torch.cuda.is_available() else 
+        device = torch.device('cuda:1' if torch.cuda.is_available() else 
                              ('mps' if hasattr(torch, 'backends') and hasattr(torch.backends, 'mps') and 
                               torch.backends.mps.is_available() else 'cpu'))
     else:
@@ -666,7 +602,7 @@ def main():
         train_loader, val_loader, dataset = create_dataloader_from_saved(
             filepath=args.dataset,
             batch_size=args.batch_size,
-            num_workers=args.num_workers if device.type == 'cuda' else 0,
+            num_workers=0,
             device=device,
             validation_split=args.validation_split
         )
@@ -695,6 +631,7 @@ def main():
             depth_points=dataset.max_depth_points
         ).to(device)
         logger.info("Created AtmosphereNet model")
+
     elif args.model == 'mlp':
         model = AtmosphereNetMLP(
             input_size=input_features_per_point,
@@ -703,21 +640,11 @@ def main():
             depth_points=dataset.max_depth_points,
         ).to(device)
         logger.info("Created AtmosphereNetMLP model")
-    elif args.model == 'conv':  # conv
-        model = AtmosphereConvNet(
-            input_size=input_features_per_point,
-            hidden_size=args.hidden_size,
-            output_size=6,
-            depth_points=dataset.max_depth_points,
-        ).to(device)
-        logger.info("Created AtmosphereConvNet model")
+        
     else:
         model = AtmosphereNetMLPtau(
-            input_size=input_features_per_point,
-            hidden_size=args.hidden_size,
-            output_size=6,
-            depth_points=dataset.max_depth_points,
-        ).to(device)
+            stellar_embed_dim=128, tau_embed_dim=64
+            ).to(device)
         logger.info("Created AtmosphereNetMLPtau model")
     
     logger.info(f"Model created with {sum(p.numel() for p in model.parameters())} parameters")
@@ -751,7 +678,7 @@ def main():
     best_loss = float('inf')
     if args.resume:
         try:
-            start_epoch, best_loss = load_checkpoint(model, optimizer, scheduler, args.resume, device, logger)
+            _, best_loss = load_checkpoint(model, optimizer, scheduler, args.resume, device, logger)
             logger.info(f"Resuming training from epoch {start_epoch} with best loss {best_loss}")
         except Exception as e:
             logger.error(f"Failed to load checkpoint: {str(e)}. Starting from scratch.")

@@ -1,0 +1,1566 @@
+[2025-03-27 20:48:24][INFO] Logging to ./logs/training_20250327_204824.log
+[2025-03-27 20:48:24][INFO] Using device: cuda:1
+[2025-03-27 20:48:24][INFO] Training configuration:
+[2025-03-27 20:48:24][INFO]   dataset: data/kurucz_vturb_0p5_tau_v3.pt
+[2025-03-27 20:48:24][INFO]   output_dir: ./checkpoints_v0327enc/
+[2025-03-27 20:48:24][INFO]   log_dir: ./logs
+[2025-03-27 20:48:24][INFO]   hidden_size: 128
+[2025-03-27 20:48:24][INFO]   model: tau
+[2025-03-27 20:48:24][INFO]   batch_size: 1024
+[2025-03-27 20:48:24][INFO]   epochs: 1000
+[2025-03-27 20:48:24][INFO]   lr: 1e-05
+[2025-03-27 20:48:24][INFO]   checkpoint_freq: 100
+[2025-03-27 20:48:24][INFO]   log_freq: 10
+[2025-03-27 20:48:24][INFO]   resume: ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:48:24][INFO]   patience: 20
+[2025-03-27 20:48:24][INFO]   validation_split: 0.1
+[2025-03-27 20:48:24][INFO]   weight_decay: 0.0001
+[2025-03-27 20:48:24][INFO]   gpu: True
+[2025-03-27 20:48:24][INFO]   num_workers: 0
+[2025-03-27 20:48:24][INFO]   scheduler: plateau
+[2025-03-27 20:48:24][INFO]   lr_gamma: 0.1
+[2025-03-27 20:48:24][INFO]   lr_step_size: 100
+[2025-03-27 20:48:24][INFO]   lr_milestones: 200,400,600
+[2025-03-27 20:48:25][INFO]   lr_min: 1e-06
+[2025-03-27 20:48:25][INFO]   lr_patience: 5
+[2025-03-27 20:48:25][INFO]   lr_cycles: 4
+[2025-03-27 20:48:25][INFO]   lr_cycle_mode: triangular2
+[2025-03-27 20:48:25][INFO]   lr_warmup_pct: 0.3
+[2025-03-27 20:48:25][INFO]   lr_div_factor: 25.0
+[2025-03-27 20:48:25][INFO]   lr_final_div_factor: 10000.0
+[2025-03-27 20:48:25][INFO]   optimizer: adam
+[2025-03-27 20:48:25][INFO] Loading dataset from data/kurucz_vturb_0p5_tau_v3.pt
+[2025-03-27 20:48:25][INFO] Dataset loaded, 42696 total samples, 38427 training, 4269 validation
+[2025-03-27 20:48:25][INFO] Input shape: torch.Size([1024, 84])
+[2025-03-27 20:48:25][INFO] Input features per point: 84
+[2025-03-27 20:48:25][INFO] Created AtmosphereNetMLPtau model
+[2025-03-27 20:48:25][INFO] Model created with 244102 parameters
+[2025-03-27 20:48:25][INFO] Using Adam optimizer with lr=1e-05, weight_decay=0.0001
+[2025-03-27 20:48:25][INFO] Created ReduceLROnPlateau scheduler with mode='min', factor=0.1, patience=5, min_lr=1e-06
+[2025-03-27 20:48:25][INFO] Using plateau learning rate scheduler
+[2025-03-27 20:48:25][INFO] Loading checkpoint from ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:48:25][INFO] Scheduler state loaded successfully
+[2025-03-27 20:48:25][INFO] Successfully loaded checkpoint from epoch 999, best loss: 0.002825315250083804
+[2025-03-27 20:48:25][INFO] Resuming training from epoch 0 with best loss 0.002825315250083804
+[2025-03-27 20:48:25][INFO] Model accepts unpermuted inputs
+[2025-03-27 20:48:25][INFO] Starting training for 1000 epochs
+[2025-03-27 20:48:29][INFO] Epoch 1, Train Loss: 0.005047, Val Loss: 0.002825
+[2025-03-27 20:48:29][INFO] New best validation loss: 0.002825
+[2025-03-27 20:48:29][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:48:32][INFO] Epoch 2, Train Loss: 0.005045, Val Loss: 0.002825
+[2025-03-27 20:48:32][INFO] New best validation loss: 0.002825
+[2025-03-27 20:48:32][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:48:36][INFO] Epoch 3, Train Loss: 0.005052, Val Loss: 0.002825
+[2025-03-27 20:48:39][INFO] Epoch 4, Train Loss: 0.005051, Val Loss: 0.002824
+[2025-03-27 20:48:39][INFO] New best validation loss: 0.002824
+[2025-03-27 20:48:39][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:48:42][INFO] Epoch 5, Train Loss: 0.005047, Val Loss: 0.002825
+[2025-03-27 20:48:45][INFO] Epoch 6, Train Loss: 0.005051, Val Loss: 0.002825
+[2025-03-27 20:48:49][INFO] Epoch 7, Train Loss: 0.005047, Val Loss: 0.002824
+[2025-03-27 20:48:49][INFO] New best validation loss: 0.002824
+[2025-03-27 20:48:49][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:48:52][INFO] Epoch 8, Train Loss: 0.005045, Val Loss: 0.002824
+[2025-03-27 20:48:55][INFO] Epoch 9, Train Loss: 0.005042, Val Loss: 0.002824
+[2025-03-27 20:48:58][INFO] Epoch 10, Train Loss: 0.005048, Val Loss: 0.002825
+[2025-03-27 20:49:02][INFO] Epoch 11, Train Loss: 0.005044, Val Loss: 0.002823
+[2025-03-27 20:49:02][INFO] New best validation loss: 0.002823
+[2025-03-27 20:49:02][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:49:05][INFO] Epoch 12, Train Loss: 0.005050, Val Loss: 0.002823
+[2025-03-27 20:49:08][INFO] Epoch 13, Train Loss: 0.005049, Val Loss: 0.002824
+[2025-03-27 20:49:11][INFO] Epoch 14, Train Loss: 0.005053, Val Loss: 0.002824
+[2025-03-27 20:49:15][INFO] Epoch 15, Train Loss: 0.005045, Val Loss: 0.002825
+[2025-03-27 20:49:18][INFO] Epoch 16, Train Loss: 0.005039, Val Loss: 0.002823
+[2025-03-27 20:49:21][INFO] Epoch 17, Train Loss: 0.005046, Val Loss: 0.002823
+[2025-03-27 20:49:24][INFO] Epoch 18, Train Loss: 0.005056, Val Loss: 0.002824
+[2025-03-27 20:49:28][INFO] Epoch 19, Train Loss: 0.005052, Val Loss: 0.002823
+[2025-03-27 20:49:31][INFO] Epoch 20, Train Loss: 0.005049, Val Loss: 0.002823
+[2025-03-27 20:49:34][INFO] Epoch 21, Train Loss: 0.005050, Val Loss: 0.002823
+[2025-03-27 20:49:34][INFO] New best validation loss: 0.002823
+[2025-03-27 20:49:34][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:49:38][INFO] Epoch 22, Train Loss: 0.005052, Val Loss: 0.002823
+[2025-03-27 20:49:38][INFO] New best validation loss: 0.002823
+[2025-03-27 20:49:38][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:49:41][INFO] Epoch 23, Train Loss: 0.005044, Val Loss: 0.002823
+[2025-03-27 20:49:44][INFO] Epoch 24, Train Loss: 0.005043, Val Loss: 0.002823
+[2025-03-27 20:49:47][INFO] Epoch 25, Train Loss: 0.005041, Val Loss: 0.002823
+[2025-03-27 20:49:51][INFO] Epoch 26, Train Loss: 0.005046, Val Loss: 0.002822
+[2025-03-27 20:49:51][INFO] New best validation loss: 0.002822
+[2025-03-27 20:49:51][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:49:54][INFO] Epoch 27, Train Loss: 0.005051, Val Loss: 0.002822
+[2025-03-27 20:49:57][INFO] Epoch 28, Train Loss: 0.005050, Val Loss: 0.002822
+[2025-03-27 20:50:00][INFO] Epoch 29, Train Loss: 0.005040, Val Loss: 0.002823
+[2025-03-27 20:50:04][INFO] Epoch 30, Train Loss: 0.005047, Val Loss: 0.002822
+[2025-03-27 20:50:04][INFO] New best validation loss: 0.002822
+[2025-03-27 20:50:04][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:50:07][INFO] Epoch 31, Train Loss: 0.005045, Val Loss: 0.002822
+[2025-03-27 20:50:10][INFO] Epoch 32, Train Loss: 0.005040, Val Loss: 0.002822
+[2025-03-27 20:50:10][INFO] New best validation loss: 0.002822
+[2025-03-27 20:50:10][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:50:14][INFO] Epoch 33, Train Loss: 0.005037, Val Loss: 0.002821
+[2025-03-27 20:50:14][INFO] New best validation loss: 0.002821
+[2025-03-27 20:50:14][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:50:17][INFO] Epoch 34, Train Loss: 0.005052, Val Loss: 0.002821
+[2025-03-27 20:50:20][INFO] Epoch 35, Train Loss: 0.005045, Val Loss: 0.002823
+[2025-03-27 20:50:23][INFO] Epoch 36, Train Loss: 0.005049, Val Loss: 0.002823
+[2025-03-27 20:50:27][INFO] Epoch 37, Train Loss: 0.005040, Val Loss: 0.002821
+[2025-03-27 20:50:27][INFO] New best validation loss: 0.002821
+[2025-03-27 20:50:27][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:50:30][INFO] Epoch 38, Train Loss: 0.005052, Val Loss: 0.002823
+[2025-03-27 20:50:33][INFO] Epoch 39, Train Loss: 0.005035, Val Loss: 0.002822
+[2025-03-27 20:50:36][INFO] Epoch 40, Train Loss: 0.005045, Val Loss: 0.002823
+[2025-03-27 20:50:40][INFO] Epoch 41, Train Loss: 0.005030, Val Loss: 0.002821
+[2025-03-27 20:50:43][INFO] Epoch 42, Train Loss: 0.005044, Val Loss: 0.002821
+[2025-03-27 20:50:46][INFO] Epoch 43, Train Loss: 0.005042, Val Loss: 0.002820
+[2025-03-27 20:50:46][INFO] New best validation loss: 0.002820
+[2025-03-27 20:50:46][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:50:50][INFO] Epoch 44, Train Loss: 0.005041, Val Loss: 0.002821
+[2025-03-27 20:50:53][INFO] Epoch 45, Train Loss: 0.005050, Val Loss: 0.002820
+[2025-03-27 20:50:53][INFO] New best validation loss: 0.002820
+[2025-03-27 20:50:53][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:50:56][INFO] Epoch 46, Train Loss: 0.005044, Val Loss: 0.002820
+[2025-03-27 20:50:56][INFO] New best validation loss: 0.002820
+[2025-03-27 20:50:56][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:50:59][INFO] Epoch 47, Train Loss: 0.005039, Val Loss: 0.002819
+[2025-03-27 20:50:59][INFO] New best validation loss: 0.002819
+[2025-03-27 20:50:59][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:51:03][INFO] Epoch 48, Train Loss: 0.005047, Val Loss: 0.002819
+[2025-03-27 20:51:03][INFO] New best validation loss: 0.002819
+[2025-03-27 20:51:03][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:51:06][INFO] Epoch 49, Train Loss: 0.005052, Val Loss: 0.002819
+[2025-03-27 20:51:09][INFO] Epoch 50, Train Loss: 0.005048, Val Loss: 0.002819
+[2025-03-27 20:51:09][INFO] New best validation loss: 0.002819
+[2025-03-27 20:51:09][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:51:12][INFO] Epoch 51, Train Loss: 0.005050, Val Loss: 0.002820
+[2025-03-27 20:51:16][INFO] Epoch 52, Train Loss: 0.005042, Val Loss: 0.002820
+[2025-03-27 20:51:19][INFO] Epoch 53, Train Loss: 0.005046, Val Loss: 0.002819
+[2025-03-27 20:51:22][INFO] Epoch 54, Train Loss: 0.005034, Val Loss: 0.002819
+[2025-03-27 20:51:25][INFO] Epoch 55, Train Loss: 0.005033, Val Loss: 0.002819
+[2025-03-27 20:51:29][INFO] Epoch 56, Train Loss: 0.005037, Val Loss: 0.002819
+[2025-03-27 20:51:32][INFO] Epoch 57, Train Loss: 0.005040, Val Loss: 0.002820
+[2025-03-27 20:51:35][INFO] Epoch 58, Train Loss: 0.005038, Val Loss: 0.002819
+[2025-03-27 20:51:38][INFO] Epoch 59, Train Loss: 0.005044, Val Loss: 0.002820
+[2025-03-27 20:51:42][INFO] Epoch 60, Train Loss: 0.005040, Val Loss: 0.002818
+[2025-03-27 20:51:42][INFO] New best validation loss: 0.002818
+[2025-03-27 20:51:42][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:51:45][INFO] Epoch 61, Train Loss: 0.005034, Val Loss: 0.002819
+[2025-03-27 20:51:48][INFO] Epoch 62, Train Loss: 0.005037, Val Loss: 0.002818
+[2025-03-27 20:51:48][INFO] New best validation loss: 0.002818
+[2025-03-27 20:51:48][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:51:51][INFO] Epoch 63, Train Loss: 0.005049, Val Loss: 0.002820
+[2025-03-27 20:51:55][INFO] Epoch 64, Train Loss: 0.005037, Val Loss: 0.002819
+[2025-03-27 20:51:58][INFO] Epoch 65, Train Loss: 0.005043, Val Loss: 0.002819
+[2025-03-27 20:52:01][INFO] Epoch 66, Train Loss: 0.005029, Val Loss: 0.002819
+[2025-03-27 20:52:04][INFO] Epoch 67, Train Loss: 0.005039, Val Loss: 0.002817
+[2025-03-27 20:52:04][INFO] New best validation loss: 0.002817
+[2025-03-27 20:52:04][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:52:08][INFO] Epoch 68, Train Loss: 0.005038, Val Loss: 0.002817
+[2025-03-27 20:52:11][INFO] Epoch 69, Train Loss: 0.005041, Val Loss: 0.002818
+[2025-03-27 20:52:14][INFO] Epoch 70, Train Loss: 0.005047, Val Loss: 0.002817
+[2025-03-27 20:52:17][INFO] Epoch 71, Train Loss: 0.005030, Val Loss: 0.002817
+[2025-03-27 20:52:21][INFO] Epoch 72, Train Loss: 0.005034, Val Loss: 0.002819
+[2025-03-27 20:52:24][INFO] Epoch 73, Train Loss: 0.005042, Val Loss: 0.002817
+[2025-03-27 20:52:24][INFO] New best validation loss: 0.002817
+[2025-03-27 20:52:24][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:52:27][INFO] Epoch 74, Train Loss: 0.005036, Val Loss: 0.002817
+[2025-03-27 20:52:27][INFO] New best validation loss: 0.002817
+[2025-03-27 20:52:27][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:52:31][INFO] Epoch 75, Train Loss: 0.005038, Val Loss: 0.002819
+[2025-03-27 20:52:34][INFO] Epoch 76, Train Loss: 0.005035, Val Loss: 0.002817
+[2025-03-27 20:52:34][INFO] New best validation loss: 0.002817
+[2025-03-27 20:52:34][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:52:37][INFO] Epoch 77, Train Loss: 0.005029, Val Loss: 0.002817
+[2025-03-27 20:52:40][INFO] Epoch 78, Train Loss: 0.005038, Val Loss: 0.002818
+[2025-03-27 20:52:44][INFO] Epoch 79, Train Loss: 0.005036, Val Loss: 0.002817
+[2025-03-27 20:52:47][INFO] Epoch 80, Train Loss: 0.005031, Val Loss: 0.002816
+[2025-03-27 20:52:47][INFO] New best validation loss: 0.002816
+[2025-03-27 20:52:47][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:52:50][INFO] Epoch 81, Train Loss: 0.005025, Val Loss: 0.002816
+[2025-03-27 20:52:53][INFO] Epoch 82, Train Loss: 0.005042, Val Loss: 0.002817
+[2025-03-27 20:52:57][INFO] Epoch 83, Train Loss: 0.005031, Val Loss: 0.002816
+[2025-03-27 20:52:57][INFO] New best validation loss: 0.002816
+[2025-03-27 20:52:57][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:53:00][INFO] Epoch 84, Train Loss: 0.005033, Val Loss: 0.002816
+[2025-03-27 20:53:03][INFO] Epoch 85, Train Loss: 0.005039, Val Loss: 0.002816
+[2025-03-27 20:53:06][INFO] Epoch 86, Train Loss: 0.005032, Val Loss: 0.002816
+[2025-03-27 20:53:10][INFO] Epoch 87, Train Loss: 0.005030, Val Loss: 0.002816
+[2025-03-27 20:53:13][INFO] Epoch 88, Train Loss: 0.005032, Val Loss: 0.002816
+[2025-03-27 20:53:16][INFO] Epoch 89, Train Loss: 0.005028, Val Loss: 0.002816
+[2025-03-27 20:53:19][INFO] Epoch 90, Train Loss: 0.005032, Val Loss: 0.002816
+[2025-03-27 20:53:19][INFO] New best validation loss: 0.002816
+[2025-03-27 20:53:19][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:53:23][INFO] Epoch 91, Train Loss: 0.005031, Val Loss: 0.002815
+[2025-03-27 20:53:23][INFO] New best validation loss: 0.002815
+[2025-03-27 20:53:23][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:53:26][INFO] Epoch 92, Train Loss: 0.005033, Val Loss: 0.002815
+[2025-03-27 20:53:29][INFO] Epoch 93, Train Loss: 0.005041, Val Loss: 0.002814
+[2025-03-27 20:53:29][INFO] New best validation loss: 0.002814
+[2025-03-27 20:53:29][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:53:32][INFO] Epoch 94, Train Loss: 0.005032, Val Loss: 0.002815
+[2025-03-27 20:53:36][INFO] Epoch 95, Train Loss: 0.005022, Val Loss: 0.002815
+[2025-03-27 20:53:39][INFO] Epoch 96, Train Loss: 0.005029, Val Loss: 0.002814
+[2025-03-27 20:53:42][INFO] Epoch 97, Train Loss: 0.005039, Val Loss: 0.002815
+[2025-03-27 20:53:46][INFO] Epoch 98, Train Loss: 0.005028, Val Loss: 0.002814
+[2025-03-27 20:53:49][INFO] Epoch 99, Train Loss: 0.005038, Val Loss: 0.002815
+[2025-03-27 20:53:52][INFO] Epoch 100, Train Loss: 0.005038, Val Loss: 0.002814
+[2025-03-27 20:53:52][INFO] New best validation loss: 0.002814
+[2025-03-27 20:53:52][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:53:52][INFO] Checkpoint saved to ./checkpoints_v0327enc/checkpoint_epoch_100.pt
+[2025-03-27 20:53:55][INFO] Epoch 101, Train Loss: 0.005035, Val Loss: 0.002814
+[2025-03-27 20:53:59][INFO] Epoch 102, Train Loss: 0.005035, Val Loss: 0.002814
+[2025-03-27 20:53:59][INFO] New best validation loss: 0.002814
+[2025-03-27 20:53:59][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:54:02][INFO] Epoch 103, Train Loss: 0.005026, Val Loss: 0.002813
+[2025-03-27 20:54:02][INFO] New best validation loss: 0.002813
+[2025-03-27 20:54:02][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:54:05][INFO] Epoch 104, Train Loss: 0.005032, Val Loss: 0.002815
+[2025-03-27 20:54:08][INFO] Epoch 105, Train Loss: 0.005028, Val Loss: 0.002813
+[2025-03-27 20:54:12][INFO] Epoch 106, Train Loss: 0.005028, Val Loss: 0.002814
+[2025-03-27 20:54:15][INFO] Epoch 107, Train Loss: 0.005029, Val Loss: 0.002813
+[2025-03-27 20:54:18][INFO] Epoch 108, Train Loss: 0.005034, Val Loss: 0.002814
+[2025-03-27 20:54:21][INFO] Epoch 109, Train Loss: 0.005032, Val Loss: 0.002815
+[2025-03-27 20:54:25][INFO] Epoch 110, Train Loss: 0.005036, Val Loss: 0.002813
+[2025-03-27 20:54:28][INFO] Epoch 111, Train Loss: 0.005036, Val Loss: 0.002813
+[2025-03-27 20:54:31][INFO] Epoch 112, Train Loss: 0.005026, Val Loss: 0.002812
+[2025-03-27 20:54:31][INFO] New best validation loss: 0.002812
+[2025-03-27 20:54:31][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:54:34][INFO] Epoch 113, Train Loss: 0.005024, Val Loss: 0.002812
+[2025-03-27 20:54:38][INFO] Epoch 114, Train Loss: 0.005041, Val Loss: 0.002813
+[2025-03-27 20:54:41][INFO] Epoch 115, Train Loss: 0.005034, Val Loss: 0.002813
+[2025-03-27 20:54:44][INFO] Epoch 116, Train Loss: 0.005028, Val Loss: 0.002812
+[2025-03-27 20:54:44][INFO] New best validation loss: 0.002812
+[2025-03-27 20:54:44][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:54:47][INFO] Epoch 117, Train Loss: 0.005028, Val Loss: 0.002813
+[2025-03-27 20:54:51][INFO] Epoch 118, Train Loss: 0.005030, Val Loss: 0.002813
+[2025-03-27 20:54:54][INFO] Epoch 119, Train Loss: 0.005030, Val Loss: 0.002812
+[2025-03-27 20:54:57][INFO] Epoch 120, Train Loss: 0.005024, Val Loss: 0.002812
+[2025-03-27 20:54:57][INFO] New best validation loss: 0.002812
+[2025-03-27 20:54:57][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:55:00][INFO] Epoch 121, Train Loss: 0.005027, Val Loss: 0.002812
+[2025-03-27 20:55:00][INFO] New best validation loss: 0.002812
+[2025-03-27 20:55:00][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:55:04][INFO] Epoch 122, Train Loss: 0.005025, Val Loss: 0.002811
+[2025-03-27 20:55:04][INFO] New best validation loss: 0.002811
+[2025-03-27 20:55:04][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:55:07][INFO] Epoch 123, Train Loss: 0.005029, Val Loss: 0.002812
+[2025-03-27 20:55:10][INFO] Epoch 124, Train Loss: 0.005038, Val Loss: 0.002811
+[2025-03-27 20:55:13][INFO] Epoch 125, Train Loss: 0.005026, Val Loss: 0.002812
+[2025-03-27 20:55:17][INFO] Epoch 126, Train Loss: 0.005032, Val Loss: 0.002811
+[2025-03-27 20:55:17][INFO] New best validation loss: 0.002811
+[2025-03-27 20:55:17][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:55:20][INFO] Epoch 127, Train Loss: 0.005036, Val Loss: 0.002811
+[2025-03-27 20:55:23][INFO] Epoch 128, Train Loss: 0.005025, Val Loss: 0.002811
+[2025-03-27 20:55:27][INFO] Epoch 129, Train Loss: 0.005015, Val Loss: 0.002810
+[2025-03-27 20:55:27][INFO] New best validation loss: 0.002810
+[2025-03-27 20:55:27][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:55:30][INFO] Epoch 130, Train Loss: 0.005035, Val Loss: 0.002811
+[2025-03-27 20:55:33][INFO] Epoch 131, Train Loss: 0.005032, Val Loss: 0.002811
+[2025-03-27 20:55:36][INFO] Epoch 132, Train Loss: 0.005029, Val Loss: 0.002810
+[2025-03-27 20:55:36][INFO] New best validation loss: 0.002810
+[2025-03-27 20:55:36][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:55:40][INFO] Epoch 133, Train Loss: 0.005022, Val Loss: 0.002811
+[2025-03-27 20:55:43][INFO] Epoch 134, Train Loss: 0.005028, Val Loss: 0.002811
+[2025-03-27 20:55:46][INFO] Epoch 135, Train Loss: 0.005025, Val Loss: 0.002812
+[2025-03-27 20:55:49][INFO] Epoch 136, Train Loss: 0.005027, Val Loss: 0.002810
+[2025-03-27 20:55:53][INFO] Epoch 137, Train Loss: 0.005028, Val Loss: 0.002810
+[2025-03-27 20:55:56][INFO] Epoch 138, Train Loss: 0.005024, Val Loss: 0.002810
+[2025-03-27 20:55:59][INFO] Epoch 139, Train Loss: 0.005023, Val Loss: 0.002810
+[2025-03-27 20:56:02][INFO] Epoch 140, Train Loss: 0.005022, Val Loss: 0.002811
+[2025-03-27 20:56:06][INFO] Epoch 141, Train Loss: 0.005021, Val Loss: 0.002810
+[2025-03-27 20:56:09][INFO] Epoch 142, Train Loss: 0.005031, Val Loss: 0.002810
+[2025-03-27 20:56:12][INFO] Epoch 143, Train Loss: 0.005024, Val Loss: 0.002810
+[2025-03-27 20:56:12][INFO] New best validation loss: 0.002810
+[2025-03-27 20:56:12][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:56:15][INFO] Epoch 144, Train Loss: 0.005023, Val Loss: 0.002810
+[2025-03-27 20:56:19][INFO] Epoch 145, Train Loss: 0.005018, Val Loss: 0.002810
+[2025-03-27 20:56:22][INFO] Epoch 146, Train Loss: 0.005022, Val Loss: 0.002811
+[2025-03-27 20:56:25][INFO] Epoch 147, Train Loss: 0.005030, Val Loss: 0.002809
+[2025-03-27 20:56:25][INFO] New best validation loss: 0.002809
+[2025-03-27 20:56:25][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:56:28][INFO] Epoch 148, Train Loss: 0.005024, Val Loss: 0.002810
+[2025-03-27 20:56:32][INFO] Epoch 149, Train Loss: 0.005028, Val Loss: 0.002809
+[2025-03-27 20:56:35][INFO] Epoch 150, Train Loss: 0.005018, Val Loss: 0.002809
+[2025-03-27 20:56:38][INFO] Epoch 151, Train Loss: 0.005032, Val Loss: 0.002809
+[2025-03-27 20:56:42][INFO] Epoch 152, Train Loss: 0.005021, Val Loss: 0.002809
+[2025-03-27 20:56:45][INFO] Epoch 153, Train Loss: 0.005018, Val Loss: 0.002809
+[2025-03-27 20:56:48][INFO] Epoch 154, Train Loss: 0.005017, Val Loss: 0.002808
+[2025-03-27 20:56:48][INFO] New best validation loss: 0.002808
+[2025-03-27 20:56:48][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:56:51][INFO] Epoch 155, Train Loss: 0.005013, Val Loss: 0.002807
+[2025-03-27 20:56:51][INFO] New best validation loss: 0.002807
+[2025-03-27 20:56:51][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:56:55][INFO] Epoch 156, Train Loss: 0.005020, Val Loss: 0.002809
+[2025-03-27 20:56:58][INFO] Epoch 157, Train Loss: 0.005021, Val Loss: 0.002808
+[2025-03-27 20:57:01][INFO] Epoch 158, Train Loss: 0.005021, Val Loss: 0.002809
+[2025-03-27 20:57:04][INFO] Epoch 159, Train Loss: 0.005027, Val Loss: 0.002809
+[2025-03-27 20:57:08][INFO] Epoch 160, Train Loss: 0.005015, Val Loss: 0.002809
+[2025-03-27 20:57:11][INFO] Epoch 161, Train Loss: 0.005017, Val Loss: 0.002808
+[2025-03-27 20:57:14][INFO] Epoch 162, Train Loss: 0.005022, Val Loss: 0.002807
+[2025-03-27 20:57:14][INFO] New best validation loss: 0.002807
+[2025-03-27 20:57:14][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:57:17][INFO] Epoch 163, Train Loss: 0.005024, Val Loss: 0.002808
+[2025-03-27 20:57:21][INFO] Epoch 164, Train Loss: 0.005023, Val Loss: 0.002808
+[2025-03-27 20:57:24][INFO] Epoch 165, Train Loss: 0.005023, Val Loss: 0.002806
+[2025-03-27 20:57:24][INFO] New best validation loss: 0.002806
+[2025-03-27 20:57:24][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:57:27][INFO] Epoch 166, Train Loss: 0.005020, Val Loss: 0.002807
+[2025-03-27 20:57:30][INFO] Epoch 167, Train Loss: 0.005015, Val Loss: 0.002807
+[2025-03-27 20:57:34][INFO] Epoch 168, Train Loss: 0.005020, Val Loss: 0.002807
+[2025-03-27 20:57:37][INFO] Epoch 169, Train Loss: 0.005022, Val Loss: 0.002808
+[2025-03-27 20:57:40][INFO] Epoch 170, Train Loss: 0.005024, Val Loss: 0.002807
+[2025-03-27 20:57:43][INFO] Epoch 171, Train Loss: 0.005020, Val Loss: 0.002807
+[2025-03-27 20:57:47][INFO] Epoch 172, Train Loss: 0.005020, Val Loss: 0.002806
+[2025-03-27 20:57:47][INFO] New best validation loss: 0.002806
+[2025-03-27 20:57:47][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:57:50][INFO] Epoch 173, Train Loss: 0.005022, Val Loss: 0.002806
+[2025-03-27 20:57:53][INFO] Epoch 174, Train Loss: 0.005020, Val Loss: 0.002806
+[2025-03-27 20:57:53][INFO] New best validation loss: 0.002806
+[2025-03-27 20:57:53][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:57:56][INFO] Epoch 175, Train Loss: 0.005023, Val Loss: 0.002806
+[2025-03-27 20:58:00][INFO] Epoch 176, Train Loss: 0.005031, Val Loss: 0.002806
+[2025-03-27 20:58:03][INFO] Epoch 177, Train Loss: 0.005014, Val Loss: 0.002807
+[2025-03-27 20:58:06][INFO] Epoch 178, Train Loss: 0.005018, Val Loss: 0.002806
+[2025-03-27 20:58:06][INFO] New best validation loss: 0.002806
+[2025-03-27 20:58:06][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:58:09][INFO] Epoch 179, Train Loss: 0.005016, Val Loss: 0.002806
+[2025-03-27 20:58:13][INFO] Epoch 180, Train Loss: 0.005013, Val Loss: 0.002805
+[2025-03-27 20:58:13][INFO] New best validation loss: 0.002805
+[2025-03-27 20:58:13][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:58:16][INFO] Epoch 181, Train Loss: 0.005015, Val Loss: 0.002806
+[2025-03-27 20:58:19][INFO] Epoch 182, Train Loss: 0.005014, Val Loss: 0.002807
+[2025-03-27 20:58:22][INFO] Epoch 183, Train Loss: 0.005016, Val Loss: 0.002806
+[2025-03-27 20:58:26][INFO] Epoch 184, Train Loss: 0.005014, Val Loss: 0.002805
+[2025-03-27 20:58:26][INFO] New best validation loss: 0.002805
+[2025-03-27 20:58:26][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:58:29][INFO] Epoch 185, Train Loss: 0.005014, Val Loss: 0.002805
+[2025-03-27 20:58:29][INFO] New best validation loss: 0.002805
+[2025-03-27 20:58:29][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:58:32][INFO] Epoch 186, Train Loss: 0.005021, Val Loss: 0.002805
+[2025-03-27 20:58:36][INFO] Epoch 187, Train Loss: 0.005019, Val Loss: 0.002805
+[2025-03-27 20:58:39][INFO] Epoch 188, Train Loss: 0.005029, Val Loss: 0.002805
+[2025-03-27 20:58:42][INFO] Epoch 189, Train Loss: 0.005021, Val Loss: 0.002805
+[2025-03-27 20:58:42][INFO] New best validation loss: 0.002805
+[2025-03-27 20:58:42][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:58:45][INFO] Epoch 190, Train Loss: 0.005024, Val Loss: 0.002804
+[2025-03-27 20:58:45][INFO] New best validation loss: 0.002804
+[2025-03-27 20:58:45][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:58:49][INFO] Epoch 191, Train Loss: 0.005006, Val Loss: 0.002805
+[2025-03-27 20:58:52][INFO] Epoch 192, Train Loss: 0.005018, Val Loss: 0.002806
+[2025-03-27 20:58:55][INFO] Epoch 193, Train Loss: 0.005024, Val Loss: 0.002805
+[2025-03-27 20:58:58][INFO] Epoch 194, Train Loss: 0.005019, Val Loss: 0.002805
+[2025-03-27 20:59:02][INFO] Epoch 195, Train Loss: 0.005018, Val Loss: 0.002804
+[2025-03-27 20:59:05][INFO] Epoch 196, Train Loss: 0.005013, Val Loss: 0.002805
+[2025-03-27 20:59:08][INFO] Epoch 197, Train Loss: 0.005022, Val Loss: 0.002804
+[2025-03-27 20:59:11][INFO] Epoch 198, Train Loss: 0.005024, Val Loss: 0.002804
+[2025-03-27 20:59:15][INFO] Epoch 199, Train Loss: 0.005022, Val Loss: 0.002804
+[2025-03-27 20:59:15][INFO] New best validation loss: 0.002804
+[2025-03-27 20:59:15][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:59:18][INFO] Epoch 200, Train Loss: 0.005012, Val Loss: 0.002804
+[2025-03-27 20:59:18][INFO] Checkpoint saved to ./checkpoints_v0327enc/checkpoint_epoch_200.pt
+[2025-03-27 20:59:21][INFO] Epoch 201, Train Loss: 0.005019, Val Loss: 0.002804
+[2025-03-27 20:59:21][INFO] New best validation loss: 0.002804
+[2025-03-27 20:59:21][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:59:25][INFO] Epoch 202, Train Loss: 0.005014, Val Loss: 0.002804
+[2025-03-27 20:59:28][INFO] Epoch 203, Train Loss: 0.005010, Val Loss: 0.002804
+[2025-03-27 20:59:31][INFO] Epoch 204, Train Loss: 0.005007, Val Loss: 0.002803
+[2025-03-27 20:59:31][INFO] New best validation loss: 0.002803
+[2025-03-27 20:59:31][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:59:34][INFO] Epoch 205, Train Loss: 0.005010, Val Loss: 0.002804
+[2025-03-27 20:59:38][INFO] Epoch 206, Train Loss: 0.005012, Val Loss: 0.002803
+[2025-03-27 20:59:41][INFO] Epoch 207, Train Loss: 0.005021, Val Loss: 0.002803
+[2025-03-27 20:59:44][INFO] Epoch 208, Train Loss: 0.005023, Val Loss: 0.002804
+[2025-03-27 20:59:47][INFO] Epoch 209, Train Loss: 0.005015, Val Loss: 0.002803
+[2025-03-27 20:59:47][INFO] New best validation loss: 0.002803
+[2025-03-27 20:59:47][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 20:59:51][INFO] Epoch 210, Train Loss: 0.005006, Val Loss: 0.002803
+[2025-03-27 20:59:54][INFO] Epoch 211, Train Loss: 0.005016, Val Loss: 0.002803
+[2025-03-27 20:59:57][INFO] Epoch 212, Train Loss: 0.005013, Val Loss: 0.002802
+[2025-03-27 20:59:57][INFO] New best validation loss: 0.002802
+[2025-03-27 20:59:57][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:00:01][INFO] Epoch 213, Train Loss: 0.005009, Val Loss: 0.002803
+[2025-03-27 21:00:04][INFO] Epoch 214, Train Loss: 0.005011, Val Loss: 0.002803
+[2025-03-27 21:00:07][INFO] Epoch 215, Train Loss: 0.005010, Val Loss: 0.002802
+[2025-03-27 21:00:10][INFO] Epoch 216, Train Loss: 0.005013, Val Loss: 0.002802
+[2025-03-27 21:00:10][INFO] New best validation loss: 0.002802
+[2025-03-27 21:00:10][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:00:14][INFO] Epoch 217, Train Loss: 0.005015, Val Loss: 0.002802
+[2025-03-27 21:00:14][INFO] New best validation loss: 0.002802
+[2025-03-27 21:00:14][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:00:17][INFO] Epoch 218, Train Loss: 0.005018, Val Loss: 0.002803
+[2025-03-27 21:00:20][INFO] Epoch 219, Train Loss: 0.005005, Val Loss: 0.002802
+[2025-03-27 21:00:23][INFO] Epoch 220, Train Loss: 0.005004, Val Loss: 0.002802
+[2025-03-27 21:00:23][INFO] New best validation loss: 0.002802
+[2025-03-27 21:00:23][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:00:27][INFO] Epoch 221, Train Loss: 0.005022, Val Loss: 0.002802
+[2025-03-27 21:00:30][INFO] Epoch 222, Train Loss: 0.005015, Val Loss: 0.002802
+[2025-03-27 21:00:30][INFO] New best validation loss: 0.002802
+[2025-03-27 21:00:30][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:00:33][INFO] Epoch 223, Train Loss: 0.005007, Val Loss: 0.002802
+[2025-03-27 21:00:36][INFO] Epoch 224, Train Loss: 0.005009, Val Loss: 0.002802
+[2025-03-27 21:00:40][INFO] Epoch 225, Train Loss: 0.005012, Val Loss: 0.002802
+[2025-03-27 21:00:43][INFO] Epoch 226, Train Loss: 0.005008, Val Loss: 0.002801
+[2025-03-27 21:00:43][INFO] New best validation loss: 0.002801
+[2025-03-27 21:00:43][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:00:46][INFO] Epoch 227, Train Loss: 0.005016, Val Loss: 0.002802
+[2025-03-27 21:00:49][INFO] Epoch 228, Train Loss: 0.005010, Val Loss: 0.002801
+[2025-03-27 21:00:49][INFO] New best validation loss: 0.002801
+[2025-03-27 21:00:49][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:00:53][INFO] Epoch 229, Train Loss: 0.005011, Val Loss: 0.002800
+[2025-03-27 21:00:53][INFO] New best validation loss: 0.002800
+[2025-03-27 21:00:53][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:00:56][INFO] Epoch 230, Train Loss: 0.005011, Val Loss: 0.002802
+[2025-03-27 21:00:59][INFO] Epoch 231, Train Loss: 0.005010, Val Loss: 0.002800
+[2025-03-27 21:00:59][INFO] New best validation loss: 0.002800
+[2025-03-27 21:00:59][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:01:02][INFO] Epoch 232, Train Loss: 0.005009, Val Loss: 0.002801
+[2025-03-27 21:01:06][INFO] Epoch 233, Train Loss: 0.005006, Val Loss: 0.002801
+[2025-03-27 21:01:09][INFO] Epoch 234, Train Loss: 0.005009, Val Loss: 0.002801
+[2025-03-27 21:01:12][INFO] Epoch 235, Train Loss: 0.005021, Val Loss: 0.002801
+[2025-03-27 21:01:15][INFO] Epoch 236, Train Loss: 0.005015, Val Loss: 0.002800
+[2025-03-27 21:01:15][INFO] New best validation loss: 0.002800
+[2025-03-27 21:01:15][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:01:19][INFO] Epoch 237, Train Loss: 0.005014, Val Loss: 0.002800
+[2025-03-27 21:01:19][INFO] New best validation loss: 0.002800
+[2025-03-27 21:01:19][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:01:22][INFO] Epoch 238, Train Loss: 0.005020, Val Loss: 0.002800
+[2025-03-27 21:01:25][INFO] Epoch 239, Train Loss: 0.005013, Val Loss: 0.002800
+[2025-03-27 21:01:25][INFO] New best validation loss: 0.002800
+[2025-03-27 21:01:25][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:01:29][INFO] Epoch 240, Train Loss: 0.005013, Val Loss: 0.002799
+[2025-03-27 21:01:29][INFO] New best validation loss: 0.002799
+[2025-03-27 21:01:29][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:01:32][INFO] Epoch 241, Train Loss: 0.005007, Val Loss: 0.002800
+[2025-03-27 21:01:35][INFO] Epoch 242, Train Loss: 0.005009, Val Loss: 0.002800
+[2025-03-27 21:01:38][INFO] Epoch 243, Train Loss: 0.004997, Val Loss: 0.002800
+[2025-03-27 21:01:42][INFO] Epoch 244, Train Loss: 0.005003, Val Loss: 0.002799
+[2025-03-27 21:01:42][INFO] New best validation loss: 0.002799
+[2025-03-27 21:01:42][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:01:45][INFO] Epoch 245, Train Loss: 0.005004, Val Loss: 0.002799
+[2025-03-27 21:01:48][INFO] Epoch 246, Train Loss: 0.005001, Val Loss: 0.002799
+[2025-03-27 21:01:51][INFO] Epoch 247, Train Loss: 0.005000, Val Loss: 0.002798
+[2025-03-27 21:01:51][INFO] New best validation loss: 0.002798
+[2025-03-27 21:01:51][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:01:55][INFO] Epoch 248, Train Loss: 0.005009, Val Loss: 0.002800
+[2025-03-27 21:01:58][INFO] Epoch 249, Train Loss: 0.005001, Val Loss: 0.002800
+[2025-03-27 21:02:01][INFO] Epoch 250, Train Loss: 0.005019, Val Loss: 0.002799
+[2025-03-27 21:02:04][INFO] Epoch 251, Train Loss: 0.005016, Val Loss: 0.002799
+[2025-03-27 21:02:08][INFO] Epoch 252, Train Loss: 0.004996, Val Loss: 0.002798
+[2025-03-27 21:02:11][INFO] Epoch 253, Train Loss: 0.005012, Val Loss: 0.002799
+[2025-03-27 21:02:14][INFO] Epoch 254, Train Loss: 0.005000, Val Loss: 0.002798
+[2025-03-27 21:02:14][INFO] New best validation loss: 0.002798
+[2025-03-27 21:02:14][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:02:17][INFO] Epoch 255, Train Loss: 0.005008, Val Loss: 0.002800
+[2025-03-27 21:02:21][INFO] Epoch 256, Train Loss: 0.005010, Val Loss: 0.002798
+[2025-03-27 21:02:24][INFO] Epoch 257, Train Loss: 0.005006, Val Loss: 0.002800
+[2025-03-27 21:02:27][INFO] Epoch 258, Train Loss: 0.004999, Val Loss: 0.002798
+[2025-03-27 21:02:30][INFO] Epoch 259, Train Loss: 0.004999, Val Loss: 0.002799
+[2025-03-27 21:02:34][INFO] Epoch 260, Train Loss: 0.005016, Val Loss: 0.002798
+[2025-03-27 21:02:37][INFO] Epoch 261, Train Loss: 0.005011, Val Loss: 0.002798
+[2025-03-27 21:02:40][INFO] Epoch 262, Train Loss: 0.005005, Val Loss: 0.002798
+[2025-03-27 21:02:43][INFO] Epoch 263, Train Loss: 0.005004, Val Loss: 0.002798
+[2025-03-27 21:02:47][INFO] Epoch 264, Train Loss: 0.005010, Val Loss: 0.002799
+[2025-03-27 21:02:50][INFO] Epoch 265, Train Loss: 0.005018, Val Loss: 0.002798
+[2025-03-27 21:02:50][INFO] New best validation loss: 0.002798
+[2025-03-27 21:02:50][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:02:53][INFO] Epoch 266, Train Loss: 0.005006, Val Loss: 0.002798
+[2025-03-27 21:02:53][INFO] New best validation loss: 0.002798
+[2025-03-27 21:02:53][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:02:56][INFO] Epoch 267, Train Loss: 0.005004, Val Loss: 0.002798
+[2025-03-27 21:03:00][INFO] Epoch 268, Train Loss: 0.005000, Val Loss: 0.002797
+[2025-03-27 21:03:00][INFO] New best validation loss: 0.002797
+[2025-03-27 21:03:00][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:03:03][INFO] Epoch 269, Train Loss: 0.005003, Val Loss: 0.002796
+[2025-03-27 21:03:03][INFO] New best validation loss: 0.002796
+[2025-03-27 21:03:03][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:03:06][INFO] Epoch 270, Train Loss: 0.005004, Val Loss: 0.002798
+[2025-03-27 21:03:09][INFO] Epoch 271, Train Loss: 0.005003, Val Loss: 0.002797
+[2025-03-27 21:03:13][INFO] Epoch 272, Train Loss: 0.005001, Val Loss: 0.002799
+[2025-03-27 21:03:16][INFO] Epoch 273, Train Loss: 0.004995, Val Loss: 0.002797
+[2025-03-27 21:03:19][INFO] Epoch 274, Train Loss: 0.005004, Val Loss: 0.002798
+[2025-03-27 21:03:22][INFO] Epoch 275, Train Loss: 0.005011, Val Loss: 0.002796
+[2025-03-27 21:03:22][INFO] New best validation loss: 0.002796
+[2025-03-27 21:03:22][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:03:26][INFO] Epoch 276, Train Loss: 0.005008, Val Loss: 0.002797
+[2025-03-27 21:03:29][INFO] Epoch 277, Train Loss: 0.005001, Val Loss: 0.002797
+[2025-03-27 21:03:32][INFO] Epoch 278, Train Loss: 0.005003, Val Loss: 0.002797
+[2025-03-27 21:03:35][INFO] Epoch 279, Train Loss: 0.004997, Val Loss: 0.002796
+[2025-03-27 21:03:35][INFO] New best validation loss: 0.002796
+[2025-03-27 21:03:36][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:03:39][INFO] Epoch 280, Train Loss: 0.005003, Val Loss: 0.002797
+[2025-03-27 21:03:42][INFO] Epoch 281, Train Loss: 0.005007, Val Loss: 0.002796
+[2025-03-27 21:03:45][INFO] Epoch 282, Train Loss: 0.005006, Val Loss: 0.002796
+[2025-03-27 21:03:49][INFO] Epoch 283, Train Loss: 0.005006, Val Loss: 0.002796
+[2025-03-27 21:03:52][INFO] Epoch 284, Train Loss: 0.004992, Val Loss: 0.002796
+[2025-03-27 21:03:52][INFO] New best validation loss: 0.002796
+[2025-03-27 21:03:52][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:03:55][INFO] Epoch 285, Train Loss: 0.005003, Val Loss: 0.002796
+[2025-03-27 21:03:58][INFO] Epoch 286, Train Loss: 0.005003, Val Loss: 0.002795
+[2025-03-27 21:03:58][INFO] New best validation loss: 0.002795
+[2025-03-27 21:03:58][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:04:02][INFO] Epoch 287, Train Loss: 0.004989, Val Loss: 0.002796
+[2025-03-27 21:04:05][INFO] Epoch 288, Train Loss: 0.004998, Val Loss: 0.002795
+[2025-03-27 21:04:08][INFO] Epoch 289, Train Loss: 0.005004, Val Loss: 0.002794
+[2025-03-27 21:04:08][INFO] New best validation loss: 0.002794
+[2025-03-27 21:04:08][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:04:11][INFO] Epoch 290, Train Loss: 0.004994, Val Loss: 0.002795
+[2025-03-27 21:04:15][INFO] Epoch 291, Train Loss: 0.004998, Val Loss: 0.002795
+[2025-03-27 21:04:18][INFO] Epoch 292, Train Loss: 0.004999, Val Loss: 0.002796
+[2025-03-27 21:04:21][INFO] Epoch 293, Train Loss: 0.005009, Val Loss: 0.002795
+[2025-03-27 21:04:25][INFO] Epoch 294, Train Loss: 0.004992, Val Loss: 0.002795
+[2025-03-27 21:04:28][INFO] Epoch 295, Train Loss: 0.004996, Val Loss: 0.002794
+[2025-03-27 21:04:28][INFO] New best validation loss: 0.002794
+[2025-03-27 21:04:28][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:04:31][INFO] Epoch 296, Train Loss: 0.004999, Val Loss: 0.002794
+[2025-03-27 21:04:31][INFO] New best validation loss: 0.002794
+[2025-03-27 21:04:31][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:04:34][INFO] Epoch 297, Train Loss: 0.005002, Val Loss: 0.002794
+[2025-03-27 21:04:34][INFO] New best validation loss: 0.002794
+[2025-03-27 21:04:34][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:04:38][INFO] Epoch 298, Train Loss: 0.005000, Val Loss: 0.002794
+[2025-03-27 21:04:38][INFO] New best validation loss: 0.002794
+[2025-03-27 21:04:38][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:04:41][INFO] Epoch 299, Train Loss: 0.005004, Val Loss: 0.002794
+[2025-03-27 21:04:41][INFO] New best validation loss: 0.002794
+[2025-03-27 21:04:41][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:04:44][INFO] Epoch 300, Train Loss: 0.005008, Val Loss: 0.002794
+[2025-03-27 21:04:44][INFO] Checkpoint saved to ./checkpoints_v0327enc/checkpoint_epoch_300.pt
+[2025-03-27 21:04:47][INFO] Epoch 301, Train Loss: 0.005001, Val Loss: 0.002794
+[2025-03-27 21:04:47][INFO] New best validation loss: 0.002794
+[2025-03-27 21:04:47][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:04:51][INFO] Epoch 302, Train Loss: 0.004993, Val Loss: 0.002793
+[2025-03-27 21:04:51][INFO] New best validation loss: 0.002793
+[2025-03-27 21:04:51][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:04:54][INFO] Epoch 303, Train Loss: 0.005005, Val Loss: 0.002794
+[2025-03-27 21:04:57][INFO] Epoch 304, Train Loss: 0.004997, Val Loss: 0.002794
+[2025-03-27 21:05:00][INFO] Epoch 305, Train Loss: 0.004997, Val Loss: 0.002795
+[2025-03-27 21:05:04][INFO] Epoch 306, Train Loss: 0.004994, Val Loss: 0.002793
+[2025-03-27 21:05:04][INFO] New best validation loss: 0.002793
+[2025-03-27 21:05:04][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:05:07][INFO] Epoch 307, Train Loss: 0.004996, Val Loss: 0.002793
+[2025-03-27 21:05:07][INFO] New best validation loss: 0.002793
+[2025-03-27 21:05:07][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:05:10][INFO] Epoch 308, Train Loss: 0.004998, Val Loss: 0.002793
+[2025-03-27 21:05:13][INFO] Epoch 309, Train Loss: 0.005006, Val Loss: 0.002794
+[2025-03-27 21:05:17][INFO] Epoch 310, Train Loss: 0.004999, Val Loss: 0.002793
+[2025-03-27 21:05:20][INFO] Epoch 311, Train Loss: 0.004994, Val Loss: 0.002794
+[2025-03-27 21:05:23][INFO] Epoch 312, Train Loss: 0.004993, Val Loss: 0.002792
+[2025-03-27 21:05:23][INFO] New best validation loss: 0.002792
+[2025-03-27 21:05:23][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:05:26][INFO] Epoch 313, Train Loss: 0.005008, Val Loss: 0.002793
+[2025-03-27 21:05:30][INFO] Epoch 314, Train Loss: 0.005005, Val Loss: 0.002792
+[2025-03-27 21:05:30][INFO] New best validation loss: 0.002792
+[2025-03-27 21:05:30][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:05:33][INFO] Epoch 315, Train Loss: 0.004994, Val Loss: 0.002792
+[2025-03-27 21:05:36][INFO] Epoch 316, Train Loss: 0.005009, Val Loss: 0.002794
+[2025-03-27 21:05:39][INFO] Epoch 317, Train Loss: 0.004999, Val Loss: 0.002793
+[2025-03-27 21:05:43][INFO] Epoch 318, Train Loss: 0.004990, Val Loss: 0.002792
+[2025-03-27 21:05:46][INFO] Epoch 319, Train Loss: 0.004994, Val Loss: 0.002792
+[2025-03-27 21:05:49][INFO] Epoch 320, Train Loss: 0.004996, Val Loss: 0.002791
+[2025-03-27 21:05:49][INFO] New best validation loss: 0.002791
+[2025-03-27 21:05:49][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:05:53][INFO] Epoch 321, Train Loss: 0.004993, Val Loss: 0.002791
+[2025-03-27 21:05:56][INFO] Epoch 322, Train Loss: 0.004995, Val Loss: 0.002793
+[2025-03-27 21:05:59][INFO] Epoch 323, Train Loss: 0.004986, Val Loss: 0.002793
+[2025-03-27 21:06:02][INFO] Epoch 324, Train Loss: 0.004994, Val Loss: 0.002791
+[2025-03-27 21:06:02][INFO] New best validation loss: 0.002791
+[2025-03-27 21:06:02][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:06:06][INFO] Epoch 325, Train Loss: 0.005004, Val Loss: 0.002791
+[2025-03-27 21:06:09][INFO] Epoch 326, Train Loss: 0.004996, Val Loss: 0.002792
+[2025-03-27 21:06:12][INFO] Epoch 327, Train Loss: 0.005008, Val Loss: 0.002791
+[2025-03-27 21:06:15][INFO] Epoch 328, Train Loss: 0.004993, Val Loss: 0.002792
+[2025-03-27 21:06:19][INFO] Epoch 329, Train Loss: 0.004996, Val Loss: 0.002791
+[2025-03-27 21:06:19][INFO] New best validation loss: 0.002791
+[2025-03-27 21:06:19][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:06:22][INFO] Epoch 330, Train Loss: 0.004997, Val Loss: 0.002792
+[2025-03-27 21:06:25][INFO] Epoch 331, Train Loss: 0.004994, Val Loss: 0.002790
+[2025-03-27 21:06:25][INFO] New best validation loss: 0.002790
+[2025-03-27 21:06:25][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:06:29][INFO] Epoch 332, Train Loss: 0.005002, Val Loss: 0.002791
+[2025-03-27 21:06:32][INFO] Epoch 333, Train Loss: 0.004991, Val Loss: 0.002792
+[2025-03-27 21:06:35][INFO] Epoch 334, Train Loss: 0.004997, Val Loss: 0.002791
+[2025-03-27 21:06:38][INFO] Epoch 335, Train Loss: 0.004999, Val Loss: 0.002791
+[2025-03-27 21:06:42][INFO] Epoch 336, Train Loss: 0.004993, Val Loss: 0.002791
+[2025-03-27 21:06:45][INFO] Epoch 337, Train Loss: 0.005002, Val Loss: 0.002790
+[2025-03-27 21:06:45][INFO] New best validation loss: 0.002790
+[2025-03-27 21:06:45][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:06:48][INFO] Epoch 338, Train Loss: 0.004999, Val Loss: 0.002790
+[2025-03-27 21:06:51][INFO] Epoch 339, Train Loss: 0.004994, Val Loss: 0.002791
+[2025-03-27 21:06:55][INFO] Epoch 340, Train Loss: 0.005003, Val Loss: 0.002791
+[2025-03-27 21:06:58][INFO] Epoch 341, Train Loss: 0.005004, Val Loss: 0.002791
+[2025-03-27 21:07:01][INFO] Epoch 342, Train Loss: 0.004993, Val Loss: 0.002790
+[2025-03-27 21:07:04][INFO] Epoch 343, Train Loss: 0.005001, Val Loss: 0.002791
+[2025-03-27 21:07:08][INFO] Epoch 344, Train Loss: 0.004999, Val Loss: 0.002790
+[2025-03-27 21:07:08][INFO] New best validation loss: 0.002790
+[2025-03-27 21:07:08][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:07:11][INFO] Epoch 345, Train Loss: 0.004991, Val Loss: 0.002790
+[2025-03-27 21:07:11][INFO] New best validation loss: 0.002790
+[2025-03-27 21:07:12][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:07:16][INFO] Epoch 346, Train Loss: 0.004991, Val Loss: 0.002790
+[2025-03-27 21:07:20][INFO] Epoch 347, Train Loss: 0.004985, Val Loss: 0.002789
+[2025-03-27 21:07:20][INFO] New best validation loss: 0.002789
+[2025-03-27 21:07:20][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:07:25][INFO] Epoch 348, Train Loss: 0.004991, Val Loss: 0.002789
+[2025-03-27 21:07:29][INFO] Epoch 349, Train Loss: 0.004979, Val Loss: 0.002789
+[2025-03-27 21:07:34][INFO] Epoch 350, Train Loss: 0.004986, Val Loss: 0.002790
+[2025-03-27 21:07:38][INFO] Epoch 351, Train Loss: 0.004995, Val Loss: 0.002788
+[2025-03-27 21:07:38][INFO] New best validation loss: 0.002788
+[2025-03-27 21:07:38][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:07:43][INFO] Epoch 352, Train Loss: 0.004985, Val Loss: 0.002788
+[2025-03-27 21:07:47][INFO] Epoch 353, Train Loss: 0.004978, Val Loss: 0.002789
+[2025-03-27 21:07:52][INFO] Epoch 354, Train Loss: 0.004993, Val Loss: 0.002789
+[2025-03-27 21:07:56][INFO] Epoch 355, Train Loss: 0.004994, Val Loss: 0.002790
+[2025-03-27 21:08:00][INFO] Epoch 356, Train Loss: 0.004998, Val Loss: 0.002789
+[2025-03-27 21:08:03][INFO] Epoch 357, Train Loss: 0.005005, Val Loss: 0.002788
+[2025-03-27 21:08:03][INFO] New best validation loss: 0.002788
+[2025-03-27 21:08:03][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:08:06][INFO] Epoch 358, Train Loss: 0.004988, Val Loss: 0.002790
+[2025-03-27 21:08:10][INFO] Epoch 359, Train Loss: 0.004986, Val Loss: 0.002788
+[2025-03-27 21:08:15][INFO] Epoch 360, Train Loss: 0.004990, Val Loss: 0.002788
+[2025-03-27 21:08:19][INFO] Epoch 361, Train Loss: 0.004992, Val Loss: 0.002788
+[2025-03-27 21:08:19][INFO] New best validation loss: 0.002788
+[2025-03-27 21:08:19][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:08:24][INFO] Epoch 362, Train Loss: 0.004974, Val Loss: 0.002788
+[2025-03-27 21:08:28][INFO] Epoch 363, Train Loss: 0.004984, Val Loss: 0.002789
+[2025-03-27 21:08:33][INFO] Epoch 364, Train Loss: 0.004994, Val Loss: 0.002788
+[2025-03-27 21:08:37][INFO] Epoch 365, Train Loss: 0.004996, Val Loss: 0.002788
+[2025-03-27 21:08:37][INFO] New best validation loss: 0.002788
+[2025-03-27 21:08:37][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:08:42][INFO] Epoch 366, Train Loss: 0.004998, Val Loss: 0.002788
+[2025-03-27 21:08:42][INFO] New best validation loss: 0.002788
+[2025-03-27 21:08:42][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:08:46][INFO] Epoch 367, Train Loss: 0.004993, Val Loss: 0.002787
+[2025-03-27 21:08:46][INFO] New best validation loss: 0.002787
+[2025-03-27 21:08:46][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:08:51][INFO] Epoch 368, Train Loss: 0.004999, Val Loss: 0.002788
+[2025-03-27 21:08:55][INFO] Epoch 369, Train Loss: 0.004990, Val Loss: 0.002788
+[2025-03-27 21:08:59][INFO] Epoch 370, Train Loss: 0.004988, Val Loss: 0.002789
+[2025-03-27 21:09:04][INFO] Epoch 371, Train Loss: 0.004987, Val Loss: 0.002787
+[2025-03-27 21:09:04][INFO] New best validation loss: 0.002787
+[2025-03-27 21:09:04][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:09:08][INFO] Epoch 372, Train Loss: 0.004992, Val Loss: 0.002786
+[2025-03-27 21:09:08][INFO] New best validation loss: 0.002786
+[2025-03-27 21:09:08][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:09:12][INFO] Epoch 373, Train Loss: 0.004985, Val Loss: 0.002787
+[2025-03-27 21:09:15][INFO] Epoch 374, Train Loss: 0.004990, Val Loss: 0.002787
+[2025-03-27 21:09:18][INFO] Epoch 375, Train Loss: 0.004991, Val Loss: 0.002788
+[2025-03-27 21:09:22][INFO] Epoch 376, Train Loss: 0.004992, Val Loss: 0.002787
+[2025-03-27 21:09:26][INFO] Epoch 377, Train Loss: 0.004995, Val Loss: 0.002787
+[2025-03-27 21:09:31][INFO] Epoch 378, Train Loss: 0.004986, Val Loss: 0.002787
+[2025-03-27 21:09:35][INFO] Epoch 379, Train Loss: 0.004983, Val Loss: 0.002788
+[2025-03-27 21:09:40][INFO] Epoch 380, Train Loss: 0.004988, Val Loss: 0.002787
+[2025-03-27 21:09:44][INFO] Epoch 381, Train Loss: 0.004978, Val Loss: 0.002786
+[2025-03-27 21:09:48][INFO] Epoch 382, Train Loss: 0.004985, Val Loss: 0.002786
+[2025-03-27 21:09:51][INFO] Epoch 383, Train Loss: 0.004976, Val Loss: 0.002786
+[2025-03-27 21:09:54][INFO] Epoch 384, Train Loss: 0.004987, Val Loss: 0.002786
+[2025-03-27 21:09:54][INFO] New best validation loss: 0.002786
+[2025-03-27 21:09:54][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:09:57][INFO] Epoch 385, Train Loss: 0.004981, Val Loss: 0.002787
+[2025-03-27 21:10:01][INFO] Epoch 386, Train Loss: 0.004993, Val Loss: 0.002786
+[2025-03-27 21:10:04][INFO] Epoch 387, Train Loss: 0.004993, Val Loss: 0.002787
+[2025-03-27 21:10:07][INFO] Epoch 388, Train Loss: 0.004986, Val Loss: 0.002786
+[2025-03-27 21:10:07][INFO] New best validation loss: 0.002786
+[2025-03-27 21:10:07][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:10:10][INFO] Epoch 389, Train Loss: 0.004992, Val Loss: 0.002785
+[2025-03-27 21:10:10][INFO] New best validation loss: 0.002785
+[2025-03-27 21:10:10][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:10:14][INFO] Epoch 390, Train Loss: 0.004981, Val Loss: 0.002786
+[2025-03-27 21:10:17][INFO] Epoch 391, Train Loss: 0.004991, Val Loss: 0.002785
+[2025-03-27 21:10:17][INFO] New best validation loss: 0.002785
+[2025-03-27 21:10:17][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:10:20][INFO] Epoch 392, Train Loss: 0.004989, Val Loss: 0.002786
+[2025-03-27 21:10:23][INFO] Epoch 393, Train Loss: 0.004982, Val Loss: 0.002785
+[2025-03-27 21:10:23][INFO] New best validation loss: 0.002785
+[2025-03-27 21:10:23][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:10:27][INFO] Epoch 394, Train Loss: 0.004984, Val Loss: 0.002786
+[2025-03-27 21:10:30][INFO] Epoch 395, Train Loss: 0.004982, Val Loss: 0.002785
+[2025-03-27 21:10:33][INFO] Epoch 396, Train Loss: 0.004988, Val Loss: 0.002785
+[2025-03-27 21:10:36][INFO] Epoch 397, Train Loss: 0.004980, Val Loss: 0.002785
+[2025-03-27 21:10:40][INFO] Epoch 398, Train Loss: 0.004983, Val Loss: 0.002784
+[2025-03-27 21:10:40][INFO] New best validation loss: 0.002784
+[2025-03-27 21:10:40][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:10:43][INFO] Epoch 399, Train Loss: 0.004989, Val Loss: 0.002785
+[2025-03-27 21:10:46][INFO] Epoch 400, Train Loss: 0.004979, Val Loss: 0.002785
+[2025-03-27 21:10:46][INFO] Checkpoint saved to ./checkpoints_v0327enc/checkpoint_epoch_400.pt
+[2025-03-27 21:10:50][INFO] Epoch 401, Train Loss: 0.004976, Val Loss: 0.002784
+[2025-03-27 21:10:50][INFO] New best validation loss: 0.002784
+[2025-03-27 21:10:50][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:10:53][INFO] Epoch 402, Train Loss: 0.004990, Val Loss: 0.002784
+[2025-03-27 21:10:53][INFO] New best validation loss: 0.002784
+[2025-03-27 21:10:53][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:10:56][INFO] Epoch 403, Train Loss: 0.004989, Val Loss: 0.002784
+[2025-03-27 21:10:56][INFO] New best validation loss: 0.002784
+[2025-03-27 21:10:56][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:10:59][INFO] Epoch 404, Train Loss: 0.004981, Val Loss: 0.002784
+[2025-03-27 21:11:04][INFO] Epoch 405, Train Loss: 0.004976, Val Loss: 0.002784
+[2025-03-27 21:11:08][INFO] Epoch 406, Train Loss: 0.004987, Val Loss: 0.002784
+[2025-03-27 21:11:13][INFO] Epoch 407, Train Loss: 0.004985, Val Loss: 0.002785
+[2025-03-27 21:11:17][INFO] Epoch 408, Train Loss: 0.004977, Val Loss: 0.002784
+[2025-03-27 21:11:22][INFO] Epoch 409, Train Loss: 0.004985, Val Loss: 0.002785
+[2025-03-27 21:11:25][INFO] Epoch 410, Train Loss: 0.004990, Val Loss: 0.002784
+[2025-03-27 21:11:30][INFO] Epoch 411, Train Loss: 0.004982, Val Loss: 0.002784
+[2025-03-27 21:11:34][INFO] Epoch 412, Train Loss: 0.004989, Val Loss: 0.002785
+[2025-03-27 21:11:39][INFO] Epoch 413, Train Loss: 0.004977, Val Loss: 0.002785
+[2025-03-27 21:11:43][INFO] Epoch 414, Train Loss: 0.004976, Val Loss: 0.002785
+[2025-03-27 21:11:47][INFO] Epoch 415, Train Loss: 0.004979, Val Loss: 0.002783
+[2025-03-27 21:11:47][INFO] New best validation loss: 0.002783
+[2025-03-27 21:11:47][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:11:51][INFO] Epoch 416, Train Loss: 0.004979, Val Loss: 0.002783
+[2025-03-27 21:11:51][INFO] New best validation loss: 0.002783
+[2025-03-27 21:11:51][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:11:56][INFO] Epoch 417, Train Loss: 0.004978, Val Loss: 0.002783
+[2025-03-27 21:11:59][INFO] Epoch 418, Train Loss: 0.004987, Val Loss: 0.002783
+[2025-03-27 21:12:02][INFO] Epoch 419, Train Loss: 0.004979, Val Loss: 0.002783
+[2025-03-27 21:12:06][INFO] Epoch 420, Train Loss: 0.004983, Val Loss: 0.002783
+[2025-03-27 21:12:09][INFO] Epoch 421, Train Loss: 0.004989, Val Loss: 0.002783
+[2025-03-27 21:12:13][INFO] Epoch 422, Train Loss: 0.004984, Val Loss: 0.002782
+[2025-03-27 21:12:13][INFO] New best validation loss: 0.002782
+[2025-03-27 21:12:13][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:12:17][INFO] Epoch 423, Train Loss: 0.004977, Val Loss: 0.002782
+[2025-03-27 21:12:22][INFO] Epoch 424, Train Loss: 0.004985, Val Loss: 0.002782
+[2025-03-27 21:12:22][INFO] New best validation loss: 0.002782
+[2025-03-27 21:12:22][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:12:26][INFO] Epoch 425, Train Loss: 0.004980, Val Loss: 0.002782
+[2025-03-27 21:12:30][INFO] Epoch 426, Train Loss: 0.004974, Val Loss: 0.002782
+[2025-03-27 21:12:33][INFO] Epoch 427, Train Loss: 0.004985, Val Loss: 0.002782
+[2025-03-27 21:12:33][INFO] New best validation loss: 0.002782
+[2025-03-27 21:12:33][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:12:36][INFO] Epoch 428, Train Loss: 0.004977, Val Loss: 0.002783
+[2025-03-27 21:12:39][INFO] Epoch 429, Train Loss: 0.004980, Val Loss: 0.002783
+[2025-03-27 21:12:43][INFO] Epoch 430, Train Loss: 0.004972, Val Loss: 0.002782
+[2025-03-27 21:12:43][INFO] New best validation loss: 0.002782
+[2025-03-27 21:12:43][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:12:46][INFO] Epoch 431, Train Loss: 0.004983, Val Loss: 0.002782
+[2025-03-27 21:12:49][INFO] Epoch 432, Train Loss: 0.004974, Val Loss: 0.002780
+[2025-03-27 21:12:49][INFO] New best validation loss: 0.002780
+[2025-03-27 21:12:49][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:12:52][INFO] Epoch 433, Train Loss: 0.004976, Val Loss: 0.002782
+[2025-03-27 21:12:56][INFO] Epoch 434, Train Loss: 0.004983, Val Loss: 0.002781
+[2025-03-27 21:12:59][INFO] Epoch 435, Train Loss: 0.004975, Val Loss: 0.002781
+[2025-03-27 21:13:02][INFO] Epoch 436, Train Loss: 0.004979, Val Loss: 0.002781
+[2025-03-27 21:13:06][INFO] Epoch 437, Train Loss: 0.004981, Val Loss: 0.002781
+[2025-03-27 21:13:09][INFO] Epoch 438, Train Loss: 0.004974, Val Loss: 0.002781
+[2025-03-27 21:13:12][INFO] Epoch 439, Train Loss: 0.004969, Val Loss: 0.002781
+[2025-03-27 21:13:16][INFO] Epoch 440, Train Loss: 0.004994, Val Loss: 0.002781
+[2025-03-27 21:13:19][INFO] Epoch 441, Train Loss: 0.004981, Val Loss: 0.002781
+[2025-03-27 21:13:22][INFO] Epoch 442, Train Loss: 0.004980, Val Loss: 0.002781
+[2025-03-27 21:13:25][INFO] Epoch 443, Train Loss: 0.004971, Val Loss: 0.002782
+[2025-03-27 21:13:29][INFO] Epoch 444, Train Loss: 0.004975, Val Loss: 0.002780
+[2025-03-27 21:13:29][INFO] New best validation loss: 0.002780
+[2025-03-27 21:13:29][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:13:32][INFO] Epoch 445, Train Loss: 0.004959, Val Loss: 0.002781
+[2025-03-27 21:13:35][INFO] Epoch 446, Train Loss: 0.004971, Val Loss: 0.002780
+[2025-03-27 21:13:38][INFO] Epoch 447, Train Loss: 0.004971, Val Loss: 0.002780
+[2025-03-27 21:13:38][INFO] New best validation loss: 0.002780
+[2025-03-27 21:13:38][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:13:42][INFO] Epoch 448, Train Loss: 0.004977, Val Loss: 0.002780
+[2025-03-27 21:13:45][INFO] Epoch 449, Train Loss: 0.004975, Val Loss: 0.002780
+[2025-03-27 21:13:48][INFO] Epoch 450, Train Loss: 0.004978, Val Loss: 0.002780
+[2025-03-27 21:13:51][INFO] Epoch 451, Train Loss: 0.004980, Val Loss: 0.002778
+[2025-03-27 21:13:51][INFO] New best validation loss: 0.002778
+[2025-03-27 21:13:51][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:13:55][INFO] Epoch 452, Train Loss: 0.004977, Val Loss: 0.002780
+[2025-03-27 21:13:58][INFO] Epoch 453, Train Loss: 0.004966, Val Loss: 0.002779
+[2025-03-27 21:14:01][INFO] Epoch 454, Train Loss: 0.004971, Val Loss: 0.002780
+[2025-03-27 21:14:04][INFO] Epoch 455, Train Loss: 0.004966, Val Loss: 0.002779
+[2025-03-27 21:14:08][INFO] Epoch 456, Train Loss: 0.004968, Val Loss: 0.002779
+[2025-03-27 21:14:11][INFO] Epoch 457, Train Loss: 0.004985, Val Loss: 0.002779
+[2025-03-27 21:14:14][INFO] Epoch 458, Train Loss: 0.004975, Val Loss: 0.002778
+[2025-03-27 21:14:14][INFO] New best validation loss: 0.002778
+[2025-03-27 21:14:14][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:14:17][INFO] Epoch 459, Train Loss: 0.004970, Val Loss: 0.002779
+[2025-03-27 21:14:21][INFO] Epoch 460, Train Loss: 0.004969, Val Loss: 0.002778
+[2025-03-27 21:14:24][INFO] Epoch 461, Train Loss: 0.004965, Val Loss: 0.002778
+[2025-03-27 21:14:27][INFO] Epoch 462, Train Loss: 0.004977, Val Loss: 0.002778
+[2025-03-27 21:14:31][INFO] Epoch 463, Train Loss: 0.004975, Val Loss: 0.002779
+[2025-03-27 21:14:34][INFO] Epoch 464, Train Loss: 0.004984, Val Loss: 0.002779
+[2025-03-27 21:14:37][INFO] Epoch 465, Train Loss: 0.004970, Val Loss: 0.002778
+[2025-03-27 21:14:40][INFO] Epoch 466, Train Loss: 0.004971, Val Loss: 0.002779
+[2025-03-27 21:14:44][INFO] Epoch 467, Train Loss: 0.004972, Val Loss: 0.002777
+[2025-03-27 21:14:44][INFO] New best validation loss: 0.002777
+[2025-03-27 21:14:44][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:14:47][INFO] Epoch 468, Train Loss: 0.004974, Val Loss: 0.002780
+[2025-03-27 21:14:50][INFO] Epoch 469, Train Loss: 0.004967, Val Loss: 0.002778
+[2025-03-27 21:14:53][INFO] Epoch 470, Train Loss: 0.004976, Val Loss: 0.002777
+[2025-03-27 21:14:57][INFO] Epoch 471, Train Loss: 0.004974, Val Loss: 0.002777
+[2025-03-27 21:14:57][INFO] New best validation loss: 0.002777
+[2025-03-27 21:14:57][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:15:00][INFO] Epoch 472, Train Loss: 0.004971, Val Loss: 0.002779
+[2025-03-27 21:15:03][INFO] Epoch 473, Train Loss: 0.004976, Val Loss: 0.002777
+[2025-03-27 21:15:06][INFO] Epoch 474, Train Loss: 0.004977, Val Loss: 0.002777
+[2025-03-27 21:15:10][INFO] Epoch 475, Train Loss: 0.004971, Val Loss: 0.002778
+[2025-03-27 21:15:13][INFO] Epoch 476, Train Loss: 0.004971, Val Loss: 0.002778
+[2025-03-27 21:15:16][INFO] Epoch 477, Train Loss: 0.004977, Val Loss: 0.002778
+[2025-03-27 21:15:20][INFO] Epoch 478, Train Loss: 0.004968, Val Loss: 0.002778
+[2025-03-27 21:15:23][INFO] Epoch 479, Train Loss: 0.004970, Val Loss: 0.002778
+[2025-03-27 21:15:26][INFO] Epoch 480, Train Loss: 0.004968, Val Loss: 0.002777
+[2025-03-27 21:15:29][INFO] Epoch 481, Train Loss: 0.004965, Val Loss: 0.002776
+[2025-03-27 21:15:29][INFO] New best validation loss: 0.002776
+[2025-03-27 21:15:29][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:15:33][INFO] Epoch 482, Train Loss: 0.004967, Val Loss: 0.002776
+[2025-03-27 21:15:36][INFO] Epoch 483, Train Loss: 0.004971, Val Loss: 0.002777
+[2025-03-27 21:15:39][INFO] Epoch 484, Train Loss: 0.004964, Val Loss: 0.002777
+[2025-03-27 21:15:42][INFO] Epoch 485, Train Loss: 0.004969, Val Loss: 0.002777
+[2025-03-27 21:15:46][INFO] Epoch 486, Train Loss: 0.004974, Val Loss: 0.002777
+[2025-03-27 21:15:49][INFO] Epoch 487, Train Loss: 0.004964, Val Loss: 0.002777
+[2025-03-27 21:15:52][INFO] Epoch 488, Train Loss: 0.004969, Val Loss: 0.002777
+[2025-03-27 21:15:55][INFO] Epoch 489, Train Loss: 0.004973, Val Loss: 0.002777
+[2025-03-27 21:15:59][INFO] Epoch 490, Train Loss: 0.004966, Val Loss: 0.002778
+[2025-03-27 21:16:02][INFO] Epoch 491, Train Loss: 0.004966, Val Loss: 0.002776
+[2025-03-27 21:16:05][INFO] Epoch 492, Train Loss: 0.004964, Val Loss: 0.002776
+[2025-03-27 21:16:05][INFO] New best validation loss: 0.002776
+[2025-03-27 21:16:05][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:16:08][INFO] Epoch 493, Train Loss: 0.004973, Val Loss: 0.002776
+[2025-03-27 21:16:12][INFO] Epoch 494, Train Loss: 0.004966, Val Loss: 0.002775
+[2025-03-27 21:16:12][INFO] New best validation loss: 0.002775
+[2025-03-27 21:16:12][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:16:15][INFO] Epoch 495, Train Loss: 0.004965, Val Loss: 0.002776
+[2025-03-27 21:16:18][INFO] Epoch 496, Train Loss: 0.004967, Val Loss: 0.002776
+[2025-03-27 21:16:22][INFO] Epoch 497, Train Loss: 0.004966, Val Loss: 0.002775
+[2025-03-27 21:16:22][INFO] New best validation loss: 0.002775
+[2025-03-27 21:16:22][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:16:25][INFO] Epoch 498, Train Loss: 0.004973, Val Loss: 0.002775
+[2025-03-27 21:16:28][INFO] Epoch 499, Train Loss: 0.004951, Val Loss: 0.002776
+[2025-03-27 21:16:31][INFO] Epoch 500, Train Loss: 0.004975, Val Loss: 0.002775
+[2025-03-27 21:16:31][INFO] New best validation loss: 0.002775
+[2025-03-27 21:16:31][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:16:31][INFO] Checkpoint saved to ./checkpoints_v0327enc/checkpoint_epoch_500.pt
+[2025-03-27 21:16:35][INFO] Epoch 501, Train Loss: 0.004958, Val Loss: 0.002776
+[2025-03-27 21:16:38][INFO] Epoch 502, Train Loss: 0.004973, Val Loss: 0.002775
+[2025-03-27 21:16:41][INFO] Epoch 503, Train Loss: 0.004965, Val Loss: 0.002776
+[2025-03-27 21:16:44][INFO] Epoch 504, Train Loss: 0.004963, Val Loss: 0.002774
+[2025-03-27 21:16:44][INFO] New best validation loss: 0.002774
+[2025-03-27 21:16:44][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:16:48][INFO] Epoch 505, Train Loss: 0.004967, Val Loss: 0.002774
+[2025-03-27 21:16:51][INFO] Epoch 506, Train Loss: 0.004954, Val Loss: 0.002775
+[2025-03-27 21:16:54][INFO] Epoch 507, Train Loss: 0.004969, Val Loss: 0.002774
+[2025-03-27 21:16:54][INFO] New best validation loss: 0.002774
+[2025-03-27 21:16:54][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:16:58][INFO] Epoch 508, Train Loss: 0.004966, Val Loss: 0.002775
+[2025-03-27 21:17:01][INFO] Epoch 509, Train Loss: 0.004961, Val Loss: 0.002774
+[2025-03-27 21:17:01][INFO] New best validation loss: 0.002774
+[2025-03-27 21:17:01][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:17:04][INFO] Epoch 510, Train Loss: 0.004968, Val Loss: 0.002775
+[2025-03-27 21:17:07][INFO] Epoch 511, Train Loss: 0.004969, Val Loss: 0.002773
+[2025-03-27 21:17:07][INFO] New best validation loss: 0.002773
+[2025-03-27 21:17:07][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:17:11][INFO] Epoch 512, Train Loss: 0.004970, Val Loss: 0.002774
+[2025-03-27 21:17:14][INFO] Epoch 513, Train Loss: 0.004970, Val Loss: 0.002775
+[2025-03-27 21:17:18][INFO] Epoch 514, Train Loss: 0.004968, Val Loss: 0.002774
+[2025-03-27 21:17:22][INFO] Epoch 515, Train Loss: 0.004970, Val Loss: 0.002773
+[2025-03-27 21:17:25][INFO] Epoch 516, Train Loss: 0.004969, Val Loss: 0.002773
+[2025-03-27 21:17:25][INFO] New best validation loss: 0.002773
+[2025-03-27 21:17:25][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:17:28][INFO] Epoch 517, Train Loss: 0.004957, Val Loss: 0.002773
+[2025-03-27 21:17:31][INFO] Epoch 518, Train Loss: 0.004967, Val Loss: 0.002774
+[2025-03-27 21:17:35][INFO] Epoch 519, Train Loss: 0.004973, Val Loss: 0.002774
+[2025-03-27 21:17:38][INFO] Epoch 520, Train Loss: 0.004974, Val Loss: 0.002773
+[2025-03-27 21:17:42][INFO] Epoch 521, Train Loss: 0.004962, Val Loss: 0.002773
+[2025-03-27 21:17:47][INFO] Epoch 522, Train Loss: 0.004957, Val Loss: 0.002773
+[2025-03-27 21:17:51][INFO] Epoch 523, Train Loss: 0.004968, Val Loss: 0.002773
+[2025-03-27 21:17:56][INFO] Epoch 524, Train Loss: 0.004966, Val Loss: 0.002772
+[2025-03-27 21:17:56][INFO] New best validation loss: 0.002772
+[2025-03-27 21:17:56][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:17:59][INFO] Epoch 525, Train Loss: 0.004964, Val Loss: 0.002773
+[2025-03-27 21:18:02][INFO] Epoch 526, Train Loss: 0.004963, Val Loss: 0.002773
+[2025-03-27 21:18:06][INFO] Epoch 527, Train Loss: 0.004964, Val Loss: 0.002773
+[2025-03-27 21:18:09][INFO] Epoch 528, Train Loss: 0.004966, Val Loss: 0.002772
+[2025-03-27 21:18:09][INFO] New best validation loss: 0.002772
+[2025-03-27 21:18:09][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:18:12][INFO] Epoch 529, Train Loss: 0.004962, Val Loss: 0.002773
+[2025-03-27 21:18:16][INFO] Epoch 530, Train Loss: 0.004958, Val Loss: 0.002773
+[2025-03-27 21:18:19][INFO] Epoch 531, Train Loss: 0.004963, Val Loss: 0.002773
+[2025-03-27 21:18:22][INFO] Epoch 532, Train Loss: 0.004966, Val Loss: 0.002773
+[2025-03-27 21:18:25][INFO] Epoch 533, Train Loss: 0.004971, Val Loss: 0.002772
+[2025-03-27 21:18:29][INFO] Epoch 534, Train Loss: 0.004963, Val Loss: 0.002772
+[2025-03-27 21:18:32][INFO] Epoch 535, Train Loss: 0.004963, Val Loss: 0.002772
+[2025-03-27 21:18:35][INFO] Epoch 536, Train Loss: 0.004968, Val Loss: 0.002773
+[2025-03-27 21:18:38][INFO] Epoch 537, Train Loss: 0.004962, Val Loss: 0.002772
+[2025-03-27 21:18:42][INFO] Epoch 538, Train Loss: 0.004961, Val Loss: 0.002771
+[2025-03-27 21:18:42][INFO] New best validation loss: 0.002771
+[2025-03-27 21:18:42][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:18:45][INFO] Epoch 539, Train Loss: 0.004956, Val Loss: 0.002771
+[2025-03-27 21:18:48][INFO] Epoch 540, Train Loss: 0.004953, Val Loss: 0.002771
+[2025-03-27 21:18:48][INFO] New best validation loss: 0.002771
+[2025-03-27 21:18:48][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:18:53][INFO] Epoch 541, Train Loss: 0.004960, Val Loss: 0.002770
+[2025-03-27 21:18:53][INFO] New best validation loss: 0.002770
+[2025-03-27 21:18:53][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:18:56][INFO] Epoch 542, Train Loss: 0.004957, Val Loss: 0.002770
+[2025-03-27 21:18:56][INFO] New best validation loss: 0.002770
+[2025-03-27 21:18:56][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:18:59][INFO] Epoch 543, Train Loss: 0.004959, Val Loss: 0.002771
+[2025-03-27 21:19:02][INFO] Epoch 544, Train Loss: 0.004966, Val Loss: 0.002771
+[2025-03-27 21:19:06][INFO] Epoch 545, Train Loss: 0.004954, Val Loss: 0.002771
+[2025-03-27 21:19:09][INFO] Epoch 546, Train Loss: 0.004970, Val Loss: 0.002771
+[2025-03-27 21:19:12][INFO] Epoch 547, Train Loss: 0.004955, Val Loss: 0.002771
+[2025-03-27 21:19:15][INFO] Epoch 548, Train Loss: 0.004963, Val Loss: 0.002771
+[2025-03-27 21:19:19][INFO] Epoch 549, Train Loss: 0.004967, Val Loss: 0.002770
+[2025-03-27 21:19:19][INFO] New best validation loss: 0.002770
+[2025-03-27 21:19:19][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:19:22][INFO] Epoch 550, Train Loss: 0.004965, Val Loss: 0.002770
+[2025-03-27 21:19:25][INFO] Epoch 551, Train Loss: 0.004961, Val Loss: 0.002771
+[2025-03-27 21:19:28][INFO] Epoch 552, Train Loss: 0.004960, Val Loss: 0.002771
+[2025-03-27 21:19:32][INFO] Epoch 553, Train Loss: 0.004956, Val Loss: 0.002770
+[2025-03-27 21:19:32][INFO] New best validation loss: 0.002770
+[2025-03-27 21:19:32][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:19:35][INFO] Epoch 554, Train Loss: 0.004955, Val Loss: 0.002770
+[2025-03-27 21:19:35][INFO] New best validation loss: 0.002770
+[2025-03-27 21:19:35][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:19:39][INFO] Epoch 555, Train Loss: 0.004961, Val Loss: 0.002771
+[2025-03-27 21:19:44][INFO] Epoch 556, Train Loss: 0.004945, Val Loss: 0.002770
+[2025-03-27 21:19:44][INFO] New best validation loss: 0.002770
+[2025-03-27 21:19:44][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:19:48][INFO] Epoch 557, Train Loss: 0.004962, Val Loss: 0.002771
+[2025-03-27 21:19:53][INFO] Epoch 558, Train Loss: 0.004960, Val Loss: 0.002770
+[2025-03-27 21:19:53][INFO] New best validation loss: 0.002770
+[2025-03-27 21:19:53][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:19:57][INFO] Epoch 559, Train Loss: 0.004963, Val Loss: 0.002770
+[2025-03-27 21:19:57][INFO] New best validation loss: 0.002770
+[2025-03-27 21:19:57][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:20:02][INFO] Epoch 560, Train Loss: 0.004959, Val Loss: 0.002770
+[2025-03-27 21:20:06][INFO] Epoch 561, Train Loss: 0.004956, Val Loss: 0.002769
+[2025-03-27 21:20:06][INFO] New best validation loss: 0.002769
+[2025-03-27 21:20:06][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:20:11][INFO] Epoch 562, Train Loss: 0.004957, Val Loss: 0.002770
+[2025-03-27 21:20:15][INFO] Epoch 563, Train Loss: 0.004955, Val Loss: 0.002770
+[2025-03-27 21:20:20][INFO] Epoch 564, Train Loss: 0.004962, Val Loss: 0.002770
+[2025-03-27 21:20:24][INFO] Epoch 565, Train Loss: 0.004956, Val Loss: 0.002769
+[2025-03-27 21:20:24][INFO] New best validation loss: 0.002769
+[2025-03-27 21:20:24][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:20:29][INFO] Epoch 566, Train Loss: 0.004953, Val Loss: 0.002768
+[2025-03-27 21:20:29][INFO] New best validation loss: 0.002768
+[2025-03-27 21:20:29][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:20:33][INFO] Epoch 567, Train Loss: 0.004966, Val Loss: 0.002769
+[2025-03-27 21:20:38][INFO] Epoch 568, Train Loss: 0.004953, Val Loss: 0.002769
+[2025-03-27 21:20:42][INFO] Epoch 569, Train Loss: 0.004968, Val Loss: 0.002769
+[2025-03-27 21:20:47][INFO] Epoch 570, Train Loss: 0.004964, Val Loss: 0.002769
+[2025-03-27 21:20:51][INFO] Epoch 571, Train Loss: 0.004951, Val Loss: 0.002769
+[2025-03-27 21:20:56][INFO] Epoch 572, Train Loss: 0.004960, Val Loss: 0.002769
+[2025-03-27 21:21:00][INFO] Epoch 573, Train Loss: 0.004951, Val Loss: 0.002769
+[2025-03-27 21:21:04][INFO] Epoch 574, Train Loss: 0.004958, Val Loss: 0.002768
+[2025-03-27 21:21:07][INFO] Epoch 575, Train Loss: 0.004961, Val Loss: 0.002768
+[2025-03-27 21:21:07][INFO] New best validation loss: 0.002768
+[2025-03-27 21:21:07][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:21:10][INFO] Epoch 576, Train Loss: 0.004958, Val Loss: 0.002768
+[2025-03-27 21:21:14][INFO] Epoch 577, Train Loss: 0.004963, Val Loss: 0.002768
+[2025-03-27 21:21:14][INFO] New best validation loss: 0.002768
+[2025-03-27 21:21:14][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:21:17][INFO] Epoch 578, Train Loss: 0.004962, Val Loss: 0.002768
+[2025-03-27 21:21:20][INFO] Epoch 579, Train Loss: 0.004955, Val Loss: 0.002768
+[2025-03-27 21:21:20][INFO] New best validation loss: 0.002768
+[2025-03-27 21:21:20][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:21:23][INFO] Epoch 580, Train Loss: 0.004956, Val Loss: 0.002767
+[2025-03-27 21:21:23][INFO] New best validation loss: 0.002767
+[2025-03-27 21:21:23][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:21:27][INFO] Epoch 581, Train Loss: 0.004960, Val Loss: 0.002769
+[2025-03-27 21:21:30][INFO] Epoch 582, Train Loss: 0.004955, Val Loss: 0.002767
+[2025-03-27 21:21:33][INFO] Epoch 583, Train Loss: 0.004952, Val Loss: 0.002768
+[2025-03-27 21:21:37][INFO] Epoch 584, Train Loss: 0.004957, Val Loss: 0.002768
+[2025-03-27 21:21:40][INFO] Epoch 585, Train Loss: 0.004953, Val Loss: 0.002768
+[2025-03-27 21:21:43][INFO] Epoch 586, Train Loss: 0.004958, Val Loss: 0.002768
+[2025-03-27 21:21:46][INFO] Epoch 587, Train Loss: 0.004952, Val Loss: 0.002767
+[2025-03-27 21:21:50][INFO] Epoch 588, Train Loss: 0.004957, Val Loss: 0.002768
+[2025-03-27 21:21:53][INFO] Epoch 589, Train Loss: 0.004945, Val Loss: 0.002767
+[2025-03-27 21:21:53][INFO] New best validation loss: 0.002767
+[2025-03-27 21:21:53][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:21:56][INFO] Epoch 590, Train Loss: 0.004952, Val Loss: 0.002766
+[2025-03-27 21:21:56][INFO] New best validation loss: 0.002766
+[2025-03-27 21:21:56][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:21:59][INFO] Epoch 591, Train Loss: 0.004958, Val Loss: 0.002768
+[2025-03-27 21:22:03][INFO] Epoch 592, Train Loss: 0.004960, Val Loss: 0.002767
+[2025-03-27 21:22:06][INFO] Epoch 593, Train Loss: 0.004953, Val Loss: 0.002767
+[2025-03-27 21:22:09][INFO] Epoch 594, Train Loss: 0.004949, Val Loss: 0.002766
+[2025-03-27 21:22:12][INFO] Epoch 595, Train Loss: 0.004946, Val Loss: 0.002767
+[2025-03-27 21:22:16][INFO] Epoch 596, Train Loss: 0.004954, Val Loss: 0.002767
+[2025-03-27 21:22:19][INFO] Epoch 597, Train Loss: 0.004950, Val Loss: 0.002766
+[2025-03-27 21:22:19][INFO] New best validation loss: 0.002766
+[2025-03-27 21:22:19][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:22:22][INFO] Epoch 598, Train Loss: 0.004949, Val Loss: 0.002766
+[2025-03-27 21:22:25][INFO] Epoch 599, Train Loss: 0.004955, Val Loss: 0.002765
+[2025-03-27 21:22:25][INFO] New best validation loss: 0.002765
+[2025-03-27 21:22:25][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:22:29][INFO] Epoch 600, Train Loss: 0.004948, Val Loss: 0.002766
+[2025-03-27 21:22:29][INFO] Checkpoint saved to ./checkpoints_v0327enc/checkpoint_epoch_600.pt
+[2025-03-27 21:22:32][INFO] Epoch 601, Train Loss: 0.004961, Val Loss: 0.002766
+[2025-03-27 21:22:35][INFO] Epoch 602, Train Loss: 0.004967, Val Loss: 0.002768
+[2025-03-27 21:22:38][INFO] Epoch 603, Train Loss: 0.004958, Val Loss: 0.002766
+[2025-03-27 21:22:42][INFO] Epoch 604, Train Loss: 0.004944, Val Loss: 0.002766
+[2025-03-27 21:22:45][INFO] Epoch 605, Train Loss: 0.004953, Val Loss: 0.002764
+[2025-03-27 21:22:45][INFO] New best validation loss: 0.002764
+[2025-03-27 21:22:45][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:22:48][INFO] Epoch 606, Train Loss: 0.004948, Val Loss: 0.002765
+[2025-03-27 21:22:51][INFO] Epoch 607, Train Loss: 0.004960, Val Loss: 0.002765
+[2025-03-27 21:22:55][INFO] Epoch 608, Train Loss: 0.004952, Val Loss: 0.002766
+[2025-03-27 21:22:58][INFO] Epoch 609, Train Loss: 0.004949, Val Loss: 0.002766
+[2025-03-27 21:23:01][INFO] Epoch 610, Train Loss: 0.004952, Val Loss: 0.002766
+[2025-03-27 21:23:04][INFO] Epoch 611, Train Loss: 0.004948, Val Loss: 0.002765
+[2025-03-27 21:23:08][INFO] Epoch 612, Train Loss: 0.004949, Val Loss: 0.002765
+[2025-03-27 21:23:11][INFO] Epoch 613, Train Loss: 0.004956, Val Loss: 0.002765
+[2025-03-27 21:23:14][INFO] Epoch 614, Train Loss: 0.004940, Val Loss: 0.002765
+[2025-03-27 21:23:18][INFO] Epoch 615, Train Loss: 0.004947, Val Loss: 0.002765
+[2025-03-27 21:23:21][INFO] Epoch 616, Train Loss: 0.004955, Val Loss: 0.002764
+[2025-03-27 21:23:24][INFO] Epoch 617, Train Loss: 0.004949, Val Loss: 0.002764
+[2025-03-27 21:23:24][INFO] New best validation loss: 0.002764
+[2025-03-27 21:23:24][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:23:27][INFO] Epoch 618, Train Loss: 0.004951, Val Loss: 0.002765
+[2025-03-27 21:23:31][INFO] Epoch 619, Train Loss: 0.004952, Val Loss: 0.002764
+[2025-03-27 21:23:34][INFO] Epoch 620, Train Loss: 0.004944, Val Loss: 0.002765
+[2025-03-27 21:23:38][INFO] Epoch 621, Train Loss: 0.004954, Val Loss: 0.002765
+[2025-03-27 21:23:43][INFO] Epoch 622, Train Loss: 0.004955, Val Loss: 0.002764
+[2025-03-27 21:23:47][INFO] Epoch 623, Train Loss: 0.004955, Val Loss: 0.002765
+[2025-03-27 21:23:52][INFO] Epoch 624, Train Loss: 0.004951, Val Loss: 0.002763
+[2025-03-27 21:23:52][INFO] New best validation loss: 0.002763
+[2025-03-27 21:23:52][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:23:56][INFO] Epoch 625, Train Loss: 0.004953, Val Loss: 0.002764
+[2025-03-27 21:24:01][INFO] Epoch 626, Train Loss: 0.004950, Val Loss: 0.002764
+[2025-03-27 21:24:05][INFO] Epoch 627, Train Loss: 0.004941, Val Loss: 0.002764
+[2025-03-27 21:24:10][INFO] Epoch 628, Train Loss: 0.004951, Val Loss: 0.002765
+[2025-03-27 21:24:13][INFO] Epoch 629, Train Loss: 0.004947, Val Loss: 0.002763
+[2025-03-27 21:24:16][INFO] Epoch 630, Train Loss: 0.004945, Val Loss: 0.002764
+[2025-03-27 21:24:19][INFO] Epoch 631, Train Loss: 0.004945, Val Loss: 0.002763
+[2025-03-27 21:24:23][INFO] Epoch 632, Train Loss: 0.004939, Val Loss: 0.002763
+[2025-03-27 21:24:23][INFO] New best validation loss: 0.002763
+[2025-03-27 21:24:23][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:24:26][INFO] Epoch 633, Train Loss: 0.004947, Val Loss: 0.002763
+[2025-03-27 21:24:29][INFO] Epoch 634, Train Loss: 0.004953, Val Loss: 0.002763
+[2025-03-27 21:24:32][INFO] Epoch 635, Train Loss: 0.004948, Val Loss: 0.002764
+[2025-03-27 21:24:36][INFO] Epoch 636, Train Loss: 0.004940, Val Loss: 0.002763
+[2025-03-27 21:24:39][INFO] Epoch 637, Train Loss: 0.004945, Val Loss: 0.002763
+[2025-03-27 21:24:42][INFO] Epoch 638, Train Loss: 0.004959, Val Loss: 0.002763
+[2025-03-27 21:24:45][INFO] Epoch 639, Train Loss: 0.004944, Val Loss: 0.002764
+[2025-03-27 21:24:49][INFO] Epoch 640, Train Loss: 0.004944, Val Loss: 0.002763
+[2025-03-27 21:24:52][INFO] Epoch 641, Train Loss: 0.004940, Val Loss: 0.002763
+[2025-03-27 21:24:55][INFO] Epoch 642, Train Loss: 0.004942, Val Loss: 0.002762
+[2025-03-27 21:24:55][INFO] New best validation loss: 0.002762
+[2025-03-27 21:24:55][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:24:58][INFO] Epoch 643, Train Loss: 0.004943, Val Loss: 0.002763
+[2025-03-27 21:25:02][INFO] Epoch 644, Train Loss: 0.004939, Val Loss: 0.002762
+[2025-03-27 21:25:05][INFO] Epoch 645, Train Loss: 0.004944, Val Loss: 0.002763
+[2025-03-27 21:25:08][INFO] Epoch 646, Train Loss: 0.004944, Val Loss: 0.002763
+[2025-03-27 21:25:11][INFO] Epoch 647, Train Loss: 0.004951, Val Loss: 0.002763
+[2025-03-27 21:25:15][INFO] Epoch 648, Train Loss: 0.004948, Val Loss: 0.002762
+[2025-03-27 21:25:15][INFO] New best validation loss: 0.002762
+[2025-03-27 21:25:15][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:25:18][INFO] Epoch 649, Train Loss: 0.004946, Val Loss: 0.002762
+[2025-03-27 21:25:21][INFO] Epoch 650, Train Loss: 0.004946, Val Loss: 0.002762
+[2025-03-27 21:25:24][INFO] Epoch 651, Train Loss: 0.004952, Val Loss: 0.002762
+[2025-03-27 21:25:24][INFO] New best validation loss: 0.002762
+[2025-03-27 21:25:24][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:25:28][INFO] Epoch 652, Train Loss: 0.004939, Val Loss: 0.002762
+[2025-03-27 21:25:31][INFO] Epoch 653, Train Loss: 0.004957, Val Loss: 0.002763
+[2025-03-27 21:25:34][INFO] Epoch 654, Train Loss: 0.004942, Val Loss: 0.002761
+[2025-03-27 21:25:34][INFO] New best validation loss: 0.002761
+[2025-03-27 21:25:34][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:25:37][INFO] Epoch 655, Train Loss: 0.004941, Val Loss: 0.002761
+[2025-03-27 21:25:37][INFO] New best validation loss: 0.002761
+[2025-03-27 21:25:37][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:25:41][INFO] Epoch 656, Train Loss: 0.004949, Val Loss: 0.002761
+[2025-03-27 21:25:44][INFO] Epoch 657, Train Loss: 0.004944, Val Loss: 0.002760
+[2025-03-27 21:25:44][INFO] New best validation loss: 0.002760
+[2025-03-27 21:25:44][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:25:47][INFO] Epoch 658, Train Loss: 0.004946, Val Loss: 0.002761
+[2025-03-27 21:25:51][INFO] Epoch 659, Train Loss: 0.004946, Val Loss: 0.002761
+[2025-03-27 21:25:55][INFO] Epoch 660, Train Loss: 0.004948, Val Loss: 0.002762
+[2025-03-27 21:25:59][INFO] Epoch 661, Train Loss: 0.004945, Val Loss: 0.002760
+[2025-03-27 21:26:04][INFO] Epoch 662, Train Loss: 0.004936, Val Loss: 0.002762
+[2025-03-27 21:26:08][INFO] Epoch 663, Train Loss: 0.004948, Val Loss: 0.002761
+[2025-03-27 21:26:13][INFO] Epoch 664, Train Loss: 0.004933, Val Loss: 0.002760
+[2025-03-27 21:26:17][INFO] Epoch 665, Train Loss: 0.004947, Val Loss: 0.002761
+[2025-03-27 21:26:22][INFO] Epoch 666, Train Loss: 0.004953, Val Loss: 0.002760
+[2025-03-27 21:26:26][INFO] Epoch 667, Train Loss: 0.004941, Val Loss: 0.002761
+[2025-03-27 21:26:31][INFO] Epoch 668, Train Loss: 0.004942, Val Loss: 0.002761
+[2025-03-27 21:26:34][INFO] Epoch 669, Train Loss: 0.004946, Val Loss: 0.002760
+[2025-03-27 21:26:39][INFO] Epoch 670, Train Loss: 0.004934, Val Loss: 0.002761
+[2025-03-27 21:26:43][INFO] Epoch 671, Train Loss: 0.004939, Val Loss: 0.002762
+[2025-03-27 21:26:48][INFO] Epoch 672, Train Loss: 0.004942, Val Loss: 0.002759
+[2025-03-27 21:26:48][INFO] New best validation loss: 0.002759
+[2025-03-27 21:26:48][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:26:52][INFO] Epoch 673, Train Loss: 0.004937, Val Loss: 0.002760
+[2025-03-27 21:26:57][INFO] Epoch 674, Train Loss: 0.004944, Val Loss: 0.002759
+[2025-03-27 21:26:57][INFO] New best validation loss: 0.002759
+[2025-03-27 21:26:57][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:27:01][INFO] Epoch 675, Train Loss: 0.004947, Val Loss: 0.002759
+[2025-03-27 21:27:01][INFO] New best validation loss: 0.002759
+[2025-03-27 21:27:01][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:27:06][INFO] Epoch 676, Train Loss: 0.004933, Val Loss: 0.002759
+[2025-03-27 21:27:10][INFO] Epoch 677, Train Loss: 0.004940, Val Loss: 0.002759
+[2025-03-27 21:27:15][INFO] Epoch 678, Train Loss: 0.004939, Val Loss: 0.002759
+[2025-03-27 21:27:19][INFO] Epoch 679, Train Loss: 0.004935, Val Loss: 0.002759
+[2025-03-27 21:27:24][INFO] Epoch 680, Train Loss: 0.004933, Val Loss: 0.002760
+[2025-03-27 21:27:28][INFO] Epoch 681, Train Loss: 0.004939, Val Loss: 0.002759
+[2025-03-27 21:27:33][INFO] Epoch 682, Train Loss: 0.004940, Val Loss: 0.002759
+[2025-03-27 21:27:37][INFO] Epoch 683, Train Loss: 0.004940, Val Loss: 0.002759
+[2025-03-27 21:27:41][INFO] Epoch 684, Train Loss: 0.004938, Val Loss: 0.002759
+[2025-03-27 21:27:46][INFO] Epoch 685, Train Loss: 0.004933, Val Loss: 0.002760
+[2025-03-27 21:27:50][INFO] Epoch 686, Train Loss: 0.004940, Val Loss: 0.002760
+[2025-03-27 21:27:54][INFO] Epoch 687, Train Loss: 0.004943, Val Loss: 0.002758
+[2025-03-27 21:27:54][INFO] New best validation loss: 0.002758
+[2025-03-27 21:27:54][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:27:57][INFO] Epoch 688, Train Loss: 0.004936, Val Loss: 0.002758
+[2025-03-27 21:28:00][INFO] Epoch 689, Train Loss: 0.004936, Val Loss: 0.002757
+[2025-03-27 21:28:00][INFO] New best validation loss: 0.002757
+[2025-03-27 21:28:00][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:28:04][INFO] Epoch 690, Train Loss: 0.004943, Val Loss: 0.002758
+[2025-03-27 21:28:07][INFO] Epoch 691, Train Loss: 0.004939, Val Loss: 0.002759
+[2025-03-27 21:28:10][INFO] Epoch 692, Train Loss: 0.004946, Val Loss: 0.002758
+[2025-03-27 21:28:13][INFO] Epoch 693, Train Loss: 0.004947, Val Loss: 0.002757
+[2025-03-27 21:28:13][INFO] New best validation loss: 0.002757
+[2025-03-27 21:28:13][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:28:17][INFO] Epoch 694, Train Loss: 0.004941, Val Loss: 0.002757
+[2025-03-27 21:28:17][INFO] New best validation loss: 0.002757
+[2025-03-27 21:28:17][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:28:20][INFO] Epoch 695, Train Loss: 0.004941, Val Loss: 0.002758
+[2025-03-27 21:28:23][INFO] Epoch 696, Train Loss: 0.004934, Val Loss: 0.002759
+[2025-03-27 21:28:26][INFO] Epoch 697, Train Loss: 0.004940, Val Loss: 0.002757
+[2025-03-27 21:28:30][INFO] Epoch 698, Train Loss: 0.004942, Val Loss: 0.002757
+[2025-03-27 21:28:33][INFO] Epoch 699, Train Loss: 0.004940, Val Loss: 0.002758
+[2025-03-27 21:28:36][INFO] Epoch 700, Train Loss: 0.004940, Val Loss: 0.002758
+[2025-03-27 21:28:36][INFO] Checkpoint saved to ./checkpoints_v0327enc/checkpoint_epoch_700.pt
+[2025-03-27 21:28:39][INFO] Epoch 701, Train Loss: 0.004940, Val Loss: 0.002757
+[2025-03-27 21:28:43][INFO] Epoch 702, Train Loss: 0.004939, Val Loss: 0.002757
+[2025-03-27 21:28:46][INFO] Epoch 703, Train Loss: 0.004937, Val Loss: 0.002757
+[2025-03-27 21:28:49][INFO] Epoch 704, Train Loss: 0.004941, Val Loss: 0.002757
+[2025-03-27 21:28:53][INFO] Epoch 705, Train Loss: 0.004937, Val Loss: 0.002758
+[2025-03-27 21:28:56][INFO] Epoch 706, Train Loss: 0.004939, Val Loss: 0.002758
+[2025-03-27 21:28:59][INFO] Epoch 707, Train Loss: 0.004944, Val Loss: 0.002757
+[2025-03-27 21:29:02][INFO] Epoch 708, Train Loss: 0.004937, Val Loss: 0.002757
+[2025-03-27 21:29:06][INFO] Epoch 709, Train Loss: 0.004935, Val Loss: 0.002756
+[2025-03-27 21:29:06][INFO] New best validation loss: 0.002756
+[2025-03-27 21:29:06][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:29:10][INFO] Epoch 710, Train Loss: 0.004934, Val Loss: 0.002757
+[2025-03-27 21:29:15][INFO] Epoch 711, Train Loss: 0.004940, Val Loss: 0.002757
+[2025-03-27 21:29:19][INFO] Epoch 712, Train Loss: 0.004938, Val Loss: 0.002755
+[2025-03-27 21:29:19][INFO] New best validation loss: 0.002755
+[2025-03-27 21:29:19][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:29:24][INFO] Epoch 713, Train Loss: 0.004934, Val Loss: 0.002756
+[2025-03-27 21:29:28][INFO] Epoch 714, Train Loss: 0.004937, Val Loss: 0.002755
+[2025-03-27 21:29:28][INFO] New best validation loss: 0.002755
+[2025-03-27 21:29:28][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:29:31][INFO] Epoch 715, Train Loss: 0.004942, Val Loss: 0.002757
+[2025-03-27 21:29:34][INFO] Epoch 716, Train Loss: 0.004945, Val Loss: 0.002756
+[2025-03-27 21:29:38][INFO] Epoch 717, Train Loss: 0.004933, Val Loss: 0.002756
+[2025-03-27 21:29:41][INFO] Epoch 718, Train Loss: 0.004940, Val Loss: 0.002756
+[2025-03-27 21:29:44][INFO] Epoch 719, Train Loss: 0.004928, Val Loss: 0.002755
+[2025-03-27 21:29:44][INFO] New best validation loss: 0.002755
+[2025-03-27 21:29:44][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:29:48][INFO] Epoch 720, Train Loss: 0.004943, Val Loss: 0.002756
+[2025-03-27 21:29:51][INFO] Epoch 721, Train Loss: 0.004937, Val Loss: 0.002757
+[2025-03-27 21:29:54][INFO] Epoch 722, Train Loss: 0.004941, Val Loss: 0.002755
+[2025-03-27 21:29:58][INFO] Epoch 723, Train Loss: 0.004939, Val Loss: 0.002755
+[2025-03-27 21:30:01][INFO] Epoch 724, Train Loss: 0.004940, Val Loss: 0.002755
+[2025-03-27 21:30:01][INFO] New best validation loss: 0.002755
+[2025-03-27 21:30:01][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:30:04][INFO] Epoch 725, Train Loss: 0.004936, Val Loss: 0.002756
+[2025-03-27 21:30:07][INFO] Epoch 726, Train Loss: 0.004943, Val Loss: 0.002755
+[2025-03-27 21:30:11][INFO] Epoch 727, Train Loss: 0.004924, Val Loss: 0.002755
+[2025-03-27 21:30:14][INFO] Epoch 728, Train Loss: 0.004937, Val Loss: 0.002754
+[2025-03-27 21:30:14][INFO] New best validation loss: 0.002754
+[2025-03-27 21:30:14][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:30:17][INFO] Epoch 729, Train Loss: 0.004933, Val Loss: 0.002754
+[2025-03-27 21:30:20][INFO] Epoch 730, Train Loss: 0.004935, Val Loss: 0.002755
+[2025-03-27 21:30:24][INFO] Epoch 731, Train Loss: 0.004935, Val Loss: 0.002755
+[2025-03-27 21:30:27][INFO] Epoch 732, Train Loss: 0.004924, Val Loss: 0.002755
+[2025-03-27 21:30:30][INFO] Epoch 733, Train Loss: 0.004929, Val Loss: 0.002755
+[2025-03-27 21:30:33][INFO] Epoch 734, Train Loss: 0.004932, Val Loss: 0.002754
+[2025-03-27 21:30:33][INFO] New best validation loss: 0.002754
+[2025-03-27 21:30:33][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:30:37][INFO] Epoch 735, Train Loss: 0.004937, Val Loss: 0.002754
+[2025-03-27 21:30:37][INFO] New best validation loss: 0.002754
+[2025-03-27 21:30:37][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:30:40][INFO] Epoch 736, Train Loss: 0.004931, Val Loss: 0.002755
+[2025-03-27 21:30:43][INFO] Epoch 737, Train Loss: 0.004933, Val Loss: 0.002755
+[2025-03-27 21:30:46][INFO] Epoch 738, Train Loss: 0.004929, Val Loss: 0.002753
+[2025-03-27 21:30:46][INFO] New best validation loss: 0.002753
+[2025-03-27 21:30:46][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:30:50][INFO] Epoch 739, Train Loss: 0.004929, Val Loss: 0.002754
+[2025-03-27 21:30:53][INFO] Epoch 740, Train Loss: 0.004934, Val Loss: 0.002754
+[2025-03-27 21:30:56][INFO] Epoch 741, Train Loss: 0.004935, Val Loss: 0.002755
+[2025-03-27 21:30:59][INFO] Epoch 742, Train Loss: 0.004935, Val Loss: 0.002754
+[2025-03-27 21:31:03][INFO] Epoch 743, Train Loss: 0.004939, Val Loss: 0.002754
+[2025-03-27 21:31:06][INFO] Epoch 744, Train Loss: 0.004934, Val Loss: 0.002755
+[2025-03-27 21:31:09][INFO] Epoch 745, Train Loss: 0.004928, Val Loss: 0.002754
+[2025-03-27 21:31:12][INFO] Epoch 746, Train Loss: 0.004928, Val Loss: 0.002753
+[2025-03-27 21:31:12][INFO] New best validation loss: 0.002753
+[2025-03-27 21:31:12][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:31:16][INFO] Epoch 747, Train Loss: 0.004923, Val Loss: 0.002752
+[2025-03-27 21:31:16][INFO] New best validation loss: 0.002752
+[2025-03-27 21:31:16][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:31:19][INFO] Epoch 748, Train Loss: 0.004941, Val Loss: 0.002755
+[2025-03-27 21:31:22][INFO] Epoch 749, Train Loss: 0.004933, Val Loss: 0.002753
+[2025-03-27 21:31:26][INFO] Epoch 750, Train Loss: 0.004931, Val Loss: 0.002753
+[2025-03-27 21:31:29][INFO] Epoch 751, Train Loss: 0.004934, Val Loss: 0.002753
+[2025-03-27 21:31:32][INFO] Epoch 752, Train Loss: 0.004940, Val Loss: 0.002752
+[2025-03-27 21:31:32][INFO] New best validation loss: 0.002752
+[2025-03-27 21:31:32][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:31:36][INFO] Epoch 753, Train Loss: 0.004933, Val Loss: 0.002753
+[2025-03-27 21:31:39][INFO] Epoch 754, Train Loss: 0.004936, Val Loss: 0.002753
+[2025-03-27 21:31:43][INFO] Epoch 755, Train Loss: 0.004930, Val Loss: 0.002753
+[2025-03-27 21:31:46][INFO] Epoch 756, Train Loss: 0.004933, Val Loss: 0.002752
+[2025-03-27 21:31:49][INFO] Epoch 757, Train Loss: 0.004928, Val Loss: 0.002753
+[2025-03-27 21:31:52][INFO] Epoch 758, Train Loss: 0.004939, Val Loss: 0.002752
+[2025-03-27 21:31:56][INFO] Epoch 759, Train Loss: 0.004921, Val Loss: 0.002753
+[2025-03-27 21:31:59][INFO] Epoch 760, Train Loss: 0.004934, Val Loss: 0.002753
+[2025-03-27 21:32:02][INFO] Epoch 761, Train Loss: 0.004923, Val Loss: 0.002751
+[2025-03-27 21:32:02][INFO] New best validation loss: 0.002751
+[2025-03-27 21:32:02][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:32:05][INFO] Epoch 762, Train Loss: 0.004935, Val Loss: 0.002752
+[2025-03-27 21:32:09][INFO] Epoch 763, Train Loss: 0.004938, Val Loss: 0.002752
+[2025-03-27 21:32:12][INFO] Epoch 764, Train Loss: 0.004926, Val Loss: 0.002753
+[2025-03-27 21:32:15][INFO] Epoch 765, Train Loss: 0.004939, Val Loss: 0.002752
+[2025-03-27 21:32:19][INFO] Epoch 766, Train Loss: 0.004926, Val Loss: 0.002752
+[2025-03-27 21:32:22][INFO] Epoch 767, Train Loss: 0.004927, Val Loss: 0.002752
+[2025-03-27 21:32:25][INFO] Epoch 768, Train Loss: 0.004924, Val Loss: 0.002751
+[2025-03-27 21:32:25][INFO] New best validation loss: 0.002751
+[2025-03-27 21:32:25][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:32:28][INFO] Epoch 769, Train Loss: 0.004921, Val Loss: 0.002751
+[2025-03-27 21:32:32][INFO] Epoch 770, Train Loss: 0.004922, Val Loss: 0.002752
+[2025-03-27 21:32:35][INFO] Epoch 771, Train Loss: 0.004929, Val Loss: 0.002752
+[2025-03-27 21:32:38][INFO] Epoch 772, Train Loss: 0.004927, Val Loss: 0.002753
+[2025-03-27 21:32:41][INFO] Epoch 773, Train Loss: 0.004919, Val Loss: 0.002751
+[2025-03-27 21:32:46][INFO] Epoch 774, Train Loss: 0.004930, Val Loss: 0.002751
+[2025-03-27 21:32:46][INFO] New best validation loss: 0.002751
+[2025-03-27 21:32:46][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:32:50][INFO] Epoch 775, Train Loss: 0.004931, Val Loss: 0.002751
+[2025-03-27 21:32:55][INFO] Epoch 776, Train Loss: 0.004933, Val Loss: 0.002750
+[2025-03-27 21:32:55][INFO] New best validation loss: 0.002750
+[2025-03-27 21:32:55][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:33:00][INFO] Epoch 777, Train Loss: 0.004929, Val Loss: 0.002750
+[2025-03-27 21:33:00][INFO] New best validation loss: 0.002750
+[2025-03-27 21:33:00][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:33:04][INFO] Epoch 778, Train Loss: 0.004929, Val Loss: 0.002750
+[2025-03-27 21:33:08][INFO] Epoch 779, Train Loss: 0.004933, Val Loss: 0.002750
+[2025-03-27 21:33:13][INFO] Epoch 780, Train Loss: 0.004932, Val Loss: 0.002749
+[2025-03-27 21:33:13][INFO] New best validation loss: 0.002749
+[2025-03-27 21:33:13][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:33:17][INFO] Epoch 781, Train Loss: 0.004931, Val Loss: 0.002749
+[2025-03-27 21:33:17][INFO] New best validation loss: 0.002749
+[2025-03-27 21:33:17][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:33:20][INFO] Epoch 782, Train Loss: 0.004933, Val Loss: 0.002751
+[2025-03-27 21:33:23][INFO] Epoch 783, Train Loss: 0.004928, Val Loss: 0.002751
+[2025-03-27 21:33:27][INFO] Epoch 784, Train Loss: 0.004926, Val Loss: 0.002750
+[2025-03-27 21:33:30][INFO] Epoch 785, Train Loss: 0.004928, Val Loss: 0.002751
+[2025-03-27 21:33:34][INFO] Epoch 786, Train Loss: 0.004927, Val Loss: 0.002750
+[2025-03-27 21:33:39][INFO] Epoch 787, Train Loss: 0.004931, Val Loss: 0.002750
+[2025-03-27 21:33:43][INFO] Epoch 788, Train Loss: 0.004929, Val Loss: 0.002750
+[2025-03-27 21:33:48][INFO] Epoch 789, Train Loss: 0.004930, Val Loss: 0.002750
+[2025-03-27 21:33:52][INFO] Epoch 790, Train Loss: 0.004927, Val Loss: 0.002750
+[2025-03-27 21:33:57][INFO] Epoch 791, Train Loss: 0.004925, Val Loss: 0.002749
+[2025-03-27 21:34:01][INFO] Epoch 792, Train Loss: 0.004930, Val Loss: 0.002750
+[2025-03-27 21:34:06][INFO] Epoch 793, Train Loss: 0.004927, Val Loss: 0.002750
+[2025-03-27 21:34:09][INFO] Epoch 794, Train Loss: 0.004930, Val Loss: 0.002749
+[2025-03-27 21:34:13][INFO] Epoch 795, Train Loss: 0.004927, Val Loss: 0.002749
+[2025-03-27 21:34:13][INFO] New best validation loss: 0.002749
+[2025-03-27 21:34:13][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:34:16][INFO] Epoch 796, Train Loss: 0.004931, Val Loss: 0.002749
+[2025-03-27 21:34:20][INFO] Epoch 797, Train Loss: 0.004928, Val Loss: 0.002748
+[2025-03-27 21:34:20][INFO] New best validation loss: 0.002748
+[2025-03-27 21:34:20][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:34:23][INFO] Epoch 798, Train Loss: 0.004921, Val Loss: 0.002749
+[2025-03-27 21:34:26][INFO] Epoch 799, Train Loss: 0.004926, Val Loss: 0.002748
+[2025-03-27 21:34:30][INFO] Epoch 800, Train Loss: 0.004928, Val Loss: 0.002749
+[2025-03-27 21:34:30][INFO] Checkpoint saved to ./checkpoints_v0327enc/checkpoint_epoch_800.pt
+[2025-03-27 21:34:33][INFO] Epoch 801, Train Loss: 0.004923, Val Loss: 0.002750
+[2025-03-27 21:34:36][INFO] Epoch 802, Train Loss: 0.004940, Val Loss: 0.002749
+[2025-03-27 21:34:40][INFO] Epoch 803, Train Loss: 0.004925, Val Loss: 0.002749
+[2025-03-27 21:34:45][INFO] Epoch 804, Train Loss: 0.004926, Val Loss: 0.002749
+[2025-03-27 21:34:48][INFO] Epoch 805, Train Loss: 0.004916, Val Loss: 0.002749
+[2025-03-27 21:34:51][INFO] Epoch 806, Train Loss: 0.004920, Val Loss: 0.002749
+[2025-03-27 21:34:55][INFO] Epoch 807, Train Loss: 0.004927, Val Loss: 0.002748
+[2025-03-27 21:34:58][INFO] Epoch 808, Train Loss: 0.004918, Val Loss: 0.002748
+[2025-03-27 21:35:01][INFO] Epoch 809, Train Loss: 0.004931, Val Loss: 0.002750
+[2025-03-27 21:35:04][INFO] Epoch 810, Train Loss: 0.004924, Val Loss: 0.002748
+[2025-03-27 21:35:08][INFO] Epoch 811, Train Loss: 0.004921, Val Loss: 0.002748
+[2025-03-27 21:35:08][INFO] New best validation loss: 0.002748
+[2025-03-27 21:35:08][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:35:11][INFO] Epoch 812, Train Loss: 0.004925, Val Loss: 0.002748
+[2025-03-27 21:35:14][INFO] Epoch 813, Train Loss: 0.004922, Val Loss: 0.002748
+[2025-03-27 21:35:14][INFO] New best validation loss: 0.002748
+[2025-03-27 21:35:14][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:35:18][INFO] Epoch 814, Train Loss: 0.004922, Val Loss: 0.002748
+[2025-03-27 21:35:21][INFO] Epoch 815, Train Loss: 0.004922, Val Loss: 0.002747
+[2025-03-27 21:35:21][INFO] New best validation loss: 0.002747
+[2025-03-27 21:35:21][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:35:24][INFO] Epoch 816, Train Loss: 0.004925, Val Loss: 0.002748
+[2025-03-27 21:35:27][INFO] Epoch 817, Train Loss: 0.004924, Val Loss: 0.002747
+[2025-03-27 21:35:27][INFO] New best validation loss: 0.002747
+[2025-03-27 21:35:27][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:35:31][INFO] Epoch 818, Train Loss: 0.004923, Val Loss: 0.002747
+[2025-03-27 21:35:34][INFO] Epoch 819, Train Loss: 0.004920, Val Loss: 0.002748
+[2025-03-27 21:35:37][INFO] Epoch 820, Train Loss: 0.004924, Val Loss: 0.002747
+[2025-03-27 21:35:41][INFO] Epoch 821, Train Loss: 0.004925, Val Loss: 0.002747
+[2025-03-27 21:35:45][INFO] Epoch 822, Train Loss: 0.004934, Val Loss: 0.002747
+[2025-03-27 21:35:49][INFO] Epoch 823, Train Loss: 0.004926, Val Loss: 0.002747
+[2025-03-27 21:35:49][INFO] New best validation loss: 0.002747
+[2025-03-27 21:35:50][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:35:54][INFO] Epoch 824, Train Loss: 0.004916, Val Loss: 0.002748
+[2025-03-27 21:35:58][INFO] Epoch 825, Train Loss: 0.004915, Val Loss: 0.002747
+[2025-03-27 21:36:02][INFO] Epoch 826, Train Loss: 0.004922, Val Loss: 0.002747
+[2025-03-27 21:36:07][INFO] Epoch 827, Train Loss: 0.004913, Val Loss: 0.002746
+[2025-03-27 21:36:07][INFO] New best validation loss: 0.002746
+[2025-03-27 21:36:07][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:36:11][INFO] Epoch 828, Train Loss: 0.004917, Val Loss: 0.002746
+[2025-03-27 21:36:16][INFO] Epoch 829, Train Loss: 0.004912, Val Loss: 0.002746
+[2025-03-27 21:36:20][INFO] Epoch 830, Train Loss: 0.004918, Val Loss: 0.002746
+[2025-03-27 21:36:20][INFO] New best validation loss: 0.002746
+[2025-03-27 21:36:20][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:36:25][INFO] Epoch 831, Train Loss: 0.004916, Val Loss: 0.002745
+[2025-03-27 21:36:25][INFO] New best validation loss: 0.002745
+[2025-03-27 21:36:25][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:36:28][INFO] Epoch 832, Train Loss: 0.004922, Val Loss: 0.002745
+[2025-03-27 21:36:31][INFO] Epoch 833, Train Loss: 0.004916, Val Loss: 0.002746
+[2025-03-27 21:36:34][INFO] Epoch 834, Train Loss: 0.004911, Val Loss: 0.002745
+[2025-03-27 21:36:38][INFO] Epoch 835, Train Loss: 0.004933, Val Loss: 0.002746
+[2025-03-27 21:36:41][INFO] Epoch 836, Train Loss: 0.004920, Val Loss: 0.002746
+[2025-03-27 21:36:44][INFO] Epoch 837, Train Loss: 0.004909, Val Loss: 0.002746
+[2025-03-27 21:36:47][INFO] Epoch 838, Train Loss: 0.004918, Val Loss: 0.002745
+[2025-03-27 21:36:47][INFO] New best validation loss: 0.002745
+[2025-03-27 21:36:47][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:36:51][INFO] Epoch 839, Train Loss: 0.004926, Val Loss: 0.002746
+[2025-03-27 21:36:55][INFO] Epoch 840, Train Loss: 0.004919, Val Loss: 0.002745
+[2025-03-27 21:37:00][INFO] Epoch 841, Train Loss: 0.004914, Val Loss: 0.002745
+[2025-03-27 21:37:04][INFO] Epoch 842, Train Loss: 0.004920, Val Loss: 0.002745
+[2025-03-27 21:37:08][INFO] Epoch 843, Train Loss: 0.004909, Val Loss: 0.002744
+[2025-03-27 21:37:08][INFO] New best validation loss: 0.002744
+[2025-03-27 21:37:08][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:37:13][INFO] Epoch 844, Train Loss: 0.004906, Val Loss: 0.002745
+[2025-03-27 21:37:18][INFO] Epoch 845, Train Loss: 0.004921, Val Loss: 0.002744
+[2025-03-27 21:37:18][INFO] New best validation loss: 0.002744
+[2025-03-27 21:37:18][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:37:21][INFO] Epoch 846, Train Loss: 0.004919, Val Loss: 0.002745
+[2025-03-27 21:37:24][INFO] Epoch 847, Train Loss: 0.004925, Val Loss: 0.002745
+[2025-03-27 21:37:27][INFO] Epoch 848, Train Loss: 0.004915, Val Loss: 0.002745
+[2025-03-27 21:37:31][INFO] Epoch 849, Train Loss: 0.004922, Val Loss: 0.002745
+[2025-03-27 21:37:35][INFO] Epoch 850, Train Loss: 0.004918, Val Loss: 0.002745
+[2025-03-27 21:37:40][INFO] Epoch 851, Train Loss: 0.004909, Val Loss: 0.002746
+[2025-03-27 21:37:44][INFO] Epoch 852, Train Loss: 0.004917, Val Loss: 0.002744
+[2025-03-27 21:37:44][INFO] New best validation loss: 0.002744
+[2025-03-27 21:37:44][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:37:48][INFO] Epoch 853, Train Loss: 0.004921, Val Loss: 0.002745
+[2025-03-27 21:37:53][INFO] Epoch 854, Train Loss: 0.004920, Val Loss: 0.002744
+[2025-03-27 21:37:53][INFO] New best validation loss: 0.002744
+[2025-03-27 21:37:53][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:37:58][INFO] Epoch 855, Train Loss: 0.004920, Val Loss: 0.002744
+[2025-03-27 21:38:02][INFO] Epoch 856, Train Loss: 0.004915, Val Loss: 0.002744
+[2025-03-27 21:38:06][INFO] Epoch 857, Train Loss: 0.004922, Val Loss: 0.002745
+[2025-03-27 21:38:11][INFO] Epoch 858, Train Loss: 0.004913, Val Loss: 0.002745
+[2025-03-27 21:38:15][INFO] Epoch 859, Train Loss: 0.004910, Val Loss: 0.002744
+[2025-03-27 21:38:18][INFO] Epoch 860, Train Loss: 0.004916, Val Loss: 0.002744
+[2025-03-27 21:38:18][INFO] New best validation loss: 0.002744
+[2025-03-27 21:38:18][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:38:21][INFO] Epoch 861, Train Loss: 0.004917, Val Loss: 0.002744
+[2025-03-27 21:38:25][INFO] Epoch 862, Train Loss: 0.004911, Val Loss: 0.002744
+[2025-03-27 21:38:28][INFO] Epoch 863, Train Loss: 0.004920, Val Loss: 0.002744
+[2025-03-27 21:38:31][INFO] Epoch 864, Train Loss: 0.004912, Val Loss: 0.002744
+[2025-03-27 21:38:31][INFO] New best validation loss: 0.002744
+[2025-03-27 21:38:31][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:38:34][INFO] Epoch 865, Train Loss: 0.004909, Val Loss: 0.002745
+[2025-03-27 21:38:38][INFO] Epoch 866, Train Loss: 0.004914, Val Loss: 0.002744
+[2025-03-27 21:38:38][INFO] New best validation loss: 0.002744
+[2025-03-27 21:38:38][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:38:41][INFO] Epoch 867, Train Loss: 0.004914, Val Loss: 0.002744
+[2025-03-27 21:38:44][INFO] Epoch 868, Train Loss: 0.004925, Val Loss: 0.002743
+[2025-03-27 21:38:44][INFO] New best validation loss: 0.002743
+[2025-03-27 21:38:44][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:38:47][INFO] Epoch 869, Train Loss: 0.004912, Val Loss: 0.002744
+[2025-03-27 21:38:51][INFO] Epoch 870, Train Loss: 0.004907, Val Loss: 0.002742
+[2025-03-27 21:38:51][INFO] New best validation loss: 0.002742
+[2025-03-27 21:38:51][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:38:54][INFO] Epoch 871, Train Loss: 0.004919, Val Loss: 0.002743
+[2025-03-27 21:38:57][INFO] Epoch 872, Train Loss: 0.004919, Val Loss: 0.002743
+[2025-03-27 21:39:00][INFO] Epoch 873, Train Loss: 0.004914, Val Loss: 0.002743
+[2025-03-27 21:39:04][INFO] Epoch 874, Train Loss: 0.004917, Val Loss: 0.002743
+[2025-03-27 21:39:07][INFO] Epoch 875, Train Loss: 0.004909, Val Loss: 0.002743
+[2025-03-27 21:39:10][INFO] Epoch 876, Train Loss: 0.004914, Val Loss: 0.002743
+[2025-03-27 21:39:13][INFO] Epoch 877, Train Loss: 0.004915, Val Loss: 0.002742
+[2025-03-27 21:39:17][INFO] Epoch 878, Train Loss: 0.004910, Val Loss: 0.002743
+[2025-03-27 21:39:20][INFO] Epoch 879, Train Loss: 0.004915, Val Loss: 0.002742
+[2025-03-27 21:39:20][INFO] New best validation loss: 0.002742
+[2025-03-27 21:39:20][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:39:23][INFO] Epoch 880, Train Loss: 0.004915, Val Loss: 0.002742
+[2025-03-27 21:39:26][INFO] Epoch 881, Train Loss: 0.004917, Val Loss: 0.002743
+[2025-03-27 21:39:30][INFO] Epoch 882, Train Loss: 0.004910, Val Loss: 0.002742
+[2025-03-27 21:39:33][INFO] Epoch 883, Train Loss: 0.004916, Val Loss: 0.002742
+[2025-03-27 21:39:36][INFO] Epoch 884, Train Loss: 0.004917, Val Loss: 0.002741
+[2025-03-27 21:39:36][INFO] New best validation loss: 0.002741
+[2025-03-27 21:39:36][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:39:40][INFO] Epoch 885, Train Loss: 0.004908, Val Loss: 0.002742
+[2025-03-27 21:39:43][INFO] Epoch 886, Train Loss: 0.004907, Val Loss: 0.002742
+[2025-03-27 21:39:46][INFO] Epoch 887, Train Loss: 0.004920, Val Loss: 0.002742
+[2025-03-27 21:39:51][INFO] Epoch 888, Train Loss: 0.004911, Val Loss: 0.002742
+[2025-03-27 21:39:55][INFO] Epoch 889, Train Loss: 0.004918, Val Loss: 0.002741
+[2025-03-27 21:39:59][INFO] Epoch 890, Train Loss: 0.004915, Val Loss: 0.002742
+[2025-03-27 21:40:04][INFO] Epoch 891, Train Loss: 0.004911, Val Loss: 0.002742
+[2025-03-27 21:40:09][INFO] Epoch 892, Train Loss: 0.004910, Val Loss: 0.002741
+[2025-03-27 21:40:09][INFO] New best validation loss: 0.002741
+[2025-03-27 21:40:09][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:40:12][INFO] Epoch 893, Train Loss: 0.004917, Val Loss: 0.002741
+[2025-03-27 21:40:12][INFO] New best validation loss: 0.002741
+[2025-03-27 21:40:12][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:40:15][INFO] Epoch 894, Train Loss: 0.004916, Val Loss: 0.002741
+[2025-03-27 21:40:18][INFO] Epoch 895, Train Loss: 0.004915, Val Loss: 0.002742
+[2025-03-27 21:40:23][INFO] Epoch 896, Train Loss: 0.004905, Val Loss: 0.002741
+[2025-03-27 21:40:27][INFO] Epoch 897, Train Loss: 0.004904, Val Loss: 0.002741
+[2025-03-27 21:40:30][INFO] Epoch 898, Train Loss: 0.004915, Val Loss: 0.002741
+[2025-03-27 21:40:34][INFO] Epoch 899, Train Loss: 0.004915, Val Loss: 0.002741
+[2025-03-27 21:40:37][INFO] Epoch 900, Train Loss: 0.004911, Val Loss: 0.002740
+[2025-03-27 21:40:37][INFO] New best validation loss: 0.002740
+[2025-03-27 21:40:37][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:40:37][INFO] Checkpoint saved to ./checkpoints_v0327enc/checkpoint_epoch_900.pt
+[2025-03-27 21:40:40][INFO] Epoch 901, Train Loss: 0.004913, Val Loss: 0.002741
+[2025-03-27 21:40:44][INFO] Epoch 902, Train Loss: 0.004907, Val Loss: 0.002740
+[2025-03-27 21:40:44][INFO] New best validation loss: 0.002740
+[2025-03-27 21:40:44][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:40:47][INFO] Epoch 903, Train Loss: 0.004913, Val Loss: 0.002740
+[2025-03-27 21:40:47][INFO] New best validation loss: 0.002740
+[2025-03-27 21:40:47][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:40:50][INFO] Epoch 904, Train Loss: 0.004917, Val Loss: 0.002741
+[2025-03-27 21:40:53][INFO] Epoch 905, Train Loss: 0.004913, Val Loss: 0.002741
+[2025-03-27 21:40:57][INFO] Epoch 906, Train Loss: 0.004918, Val Loss: 0.002741
+[2025-03-27 21:41:00][INFO] Epoch 907, Train Loss: 0.004911, Val Loss: 0.002740
+[2025-03-27 21:41:03][INFO] Epoch 908, Train Loss: 0.004914, Val Loss: 0.002740
+[2025-03-27 21:41:03][INFO] New best validation loss: 0.002740
+[2025-03-27 21:41:03][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:41:06][INFO] Epoch 909, Train Loss: 0.004907, Val Loss: 0.002739
+[2025-03-27 21:41:06][INFO] New best validation loss: 0.002739
+[2025-03-27 21:41:06][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:41:10][INFO] Epoch 910, Train Loss: 0.004908, Val Loss: 0.002740
+[2025-03-27 21:41:13][INFO] Epoch 911, Train Loss: 0.004906, Val Loss: 0.002739
+[2025-03-27 21:41:13][INFO] New best validation loss: 0.002739
+[2025-03-27 21:41:13][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:41:16][INFO] Epoch 912, Train Loss: 0.004911, Val Loss: 0.002739
+[2025-03-27 21:41:16][INFO] New best validation loss: 0.002739
+[2025-03-27 21:41:16][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:41:20][INFO] Epoch 913, Train Loss: 0.004901, Val Loss: 0.002740
+[2025-03-27 21:41:23][INFO] Epoch 914, Train Loss: 0.004909, Val Loss: 0.002740
+[2025-03-27 21:41:26][INFO] Epoch 915, Train Loss: 0.004909, Val Loss: 0.002741
+[2025-03-27 21:41:29][INFO] Epoch 916, Train Loss: 0.004905, Val Loss: 0.002739
+[2025-03-27 21:41:33][INFO] Epoch 917, Train Loss: 0.004914, Val Loss: 0.002740
+[2025-03-27 21:41:36][INFO] Epoch 918, Train Loss: 0.004911, Val Loss: 0.002739
+[2025-03-27 21:41:40][INFO] Epoch 919, Train Loss: 0.004916, Val Loss: 0.002739
+[2025-03-27 21:41:45][INFO] Epoch 920, Train Loss: 0.004916, Val Loss: 0.002738
+[2025-03-27 21:41:45][INFO] New best validation loss: 0.002738
+[2025-03-27 21:41:45][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:41:49][INFO] Epoch 921, Train Loss: 0.004909, Val Loss: 0.002739
+[2025-03-27 21:41:54][INFO] Epoch 922, Train Loss: 0.004901, Val Loss: 0.002739
+[2025-03-27 21:41:58][INFO] Epoch 923, Train Loss: 0.004904, Val Loss: 0.002739
+[2025-03-27 21:42:03][INFO] Epoch 924, Train Loss: 0.004914, Val Loss: 0.002739
+[2025-03-27 21:42:07][INFO] Epoch 925, Train Loss: 0.004907, Val Loss: 0.002737
+[2025-03-27 21:42:07][INFO] New best validation loss: 0.002737
+[2025-03-27 21:42:07][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:42:12][INFO] Epoch 926, Train Loss: 0.004902, Val Loss: 0.002738
+[2025-03-27 21:42:16][INFO] Epoch 927, Train Loss: 0.004913, Val Loss: 0.002739
+[2025-03-27 21:42:20][INFO] Epoch 928, Train Loss: 0.004911, Val Loss: 0.002739
+[2025-03-27 21:42:23][INFO] Epoch 929, Train Loss: 0.004908, Val Loss: 0.002739
+[2025-03-27 21:42:26][INFO] Epoch 930, Train Loss: 0.004902, Val Loss: 0.002740
+[2025-03-27 21:42:29][INFO] Epoch 931, Train Loss: 0.004909, Val Loss: 0.002739
+[2025-03-27 21:42:33][INFO] Epoch 932, Train Loss: 0.004902, Val Loss: 0.002739
+[2025-03-27 21:42:36][INFO] Epoch 933, Train Loss: 0.004898, Val Loss: 0.002738
+[2025-03-27 21:42:39][INFO] Epoch 934, Train Loss: 0.004915, Val Loss: 0.002737
+[2025-03-27 21:42:39][INFO] New best validation loss: 0.002737
+[2025-03-27 21:42:39][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:42:42][INFO] Epoch 935, Train Loss: 0.004903, Val Loss: 0.002738
+[2025-03-27 21:42:46][INFO] Epoch 936, Train Loss: 0.004912, Val Loss: 0.002738
+[2025-03-27 21:42:49][INFO] Epoch 937, Train Loss: 0.004903, Val Loss: 0.002738
+[2025-03-27 21:42:52][INFO] Epoch 938, Train Loss: 0.004908, Val Loss: 0.002738
+[2025-03-27 21:42:56][INFO] Epoch 939, Train Loss: 0.004897, Val Loss: 0.002738
+[2025-03-27 21:42:59][INFO] Epoch 940, Train Loss: 0.004899, Val Loss: 0.002739
+[2025-03-27 21:43:02][INFO] Epoch 941, Train Loss: 0.004907, Val Loss: 0.002737
+[2025-03-27 21:43:02][INFO] New best validation loss: 0.002737
+[2025-03-27 21:43:02][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:43:05][INFO] Epoch 942, Train Loss: 0.004913, Val Loss: 0.002738
+[2025-03-27 21:43:09][INFO] Epoch 943, Train Loss: 0.004906, Val Loss: 0.002737
+[2025-03-27 21:43:12][INFO] Epoch 944, Train Loss: 0.004905, Val Loss: 0.002737
+[2025-03-27 21:43:15][INFO] Epoch 945, Train Loss: 0.004901, Val Loss: 0.002737
+[2025-03-27 21:43:18][INFO] Epoch 946, Train Loss: 0.004904, Val Loss: 0.002737
+[2025-03-27 21:43:22][INFO] Epoch 947, Train Loss: 0.004912, Val Loss: 0.002737
+[2025-03-27 21:43:22][INFO] New best validation loss: 0.002737
+[2025-03-27 21:43:22][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:43:25][INFO] Epoch 948, Train Loss: 0.004899, Val Loss: 0.002736
+[2025-03-27 21:43:25][INFO] New best validation loss: 0.002736
+[2025-03-27 21:43:25][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:43:28][INFO] Epoch 949, Train Loss: 0.004904, Val Loss: 0.002737
+[2025-03-27 21:43:31][INFO] Epoch 950, Train Loss: 0.004907, Val Loss: 0.002737
+[2025-03-27 21:43:35][INFO] Epoch 951, Train Loss: 0.004901, Val Loss: 0.002737
+[2025-03-27 21:43:38][INFO] Epoch 952, Train Loss: 0.004902, Val Loss: 0.002737
+[2025-03-27 21:43:41][INFO] Epoch 953, Train Loss: 0.004906, Val Loss: 0.002736
+[2025-03-27 21:43:41][INFO] New best validation loss: 0.002736
+[2025-03-27 21:43:41][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:43:45][INFO] Epoch 954, Train Loss: 0.004902, Val Loss: 0.002737
+[2025-03-27 21:43:48][INFO] Epoch 955, Train Loss: 0.004907, Val Loss: 0.002736
+[2025-03-27 21:43:51][INFO] Epoch 956, Train Loss: 0.004900, Val Loss: 0.002737
+[2025-03-27 21:43:55][INFO] Epoch 957, Train Loss: 0.004905, Val Loss: 0.002736
+[2025-03-27 21:44:00][INFO] Epoch 958, Train Loss: 0.004902, Val Loss: 0.002736
+[2025-03-27 21:44:00][INFO] New best validation loss: 0.002736
+[2025-03-27 21:44:00][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:44:04][INFO] Epoch 959, Train Loss: 0.004901, Val Loss: 0.002736
+[2025-03-27 21:44:04][INFO] New best validation loss: 0.002736
+[2025-03-27 21:44:04][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:44:09][INFO] Epoch 960, Train Loss: 0.004905, Val Loss: 0.002735
+[2025-03-27 21:44:09][INFO] New best validation loss: 0.002735
+[2025-03-27 21:44:09][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:44:13][INFO] Epoch 961, Train Loss: 0.004897, Val Loss: 0.002736
+[2025-03-27 21:44:18][INFO] Epoch 962, Train Loss: 0.004902, Val Loss: 0.002736
+[2025-03-27 21:44:22][INFO] Epoch 963, Train Loss: 0.004893, Val Loss: 0.002736
+[2025-03-27 21:44:26][INFO] Epoch 964, Train Loss: 0.004903, Val Loss: 0.002735
+[2025-03-27 21:44:30][INFO] Epoch 965, Train Loss: 0.004904, Val Loss: 0.002735
+[2025-03-27 21:44:30][INFO] New best validation loss: 0.002735
+[2025-03-27 21:44:30][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:44:33][INFO] Epoch 966, Train Loss: 0.004891, Val Loss: 0.002736
+[2025-03-27 21:44:36][INFO] Epoch 967, Train Loss: 0.004905, Val Loss: 0.002735
+[2025-03-27 21:44:39][INFO] Epoch 968, Train Loss: 0.004890, Val Loss: 0.002735
+[2025-03-27 21:44:43][INFO] Epoch 969, Train Loss: 0.004899, Val Loss: 0.002735
+[2025-03-27 21:44:46][INFO] Epoch 970, Train Loss: 0.004903, Val Loss: 0.002735
+[2025-03-27 21:44:49][INFO] Epoch 971, Train Loss: 0.004897, Val Loss: 0.002735
+[2025-03-27 21:44:52][INFO] Epoch 972, Train Loss: 0.004900, Val Loss: 0.002735
+[2025-03-27 21:44:52][INFO] New best validation loss: 0.002735
+[2025-03-27 21:44:52][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:44:56][INFO] Epoch 973, Train Loss: 0.004896, Val Loss: 0.002735
+[2025-03-27 21:44:59][INFO] Epoch 974, Train Loss: 0.004909, Val Loss: 0.002736
+[2025-03-27 21:45:03][INFO] Epoch 975, Train Loss: 0.004898, Val Loss: 0.002734
+[2025-03-27 21:45:03][INFO] New best validation loss: 0.002734
+[2025-03-27 21:45:03][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:45:07][INFO] Epoch 976, Train Loss: 0.004902, Val Loss: 0.002735
+[2025-03-27 21:45:10][INFO] Epoch 977, Train Loss: 0.004902, Val Loss: 0.002736
+[2025-03-27 21:45:14][INFO] Epoch 978, Train Loss: 0.004892, Val Loss: 0.002734
+[2025-03-27 21:45:14][INFO] New best validation loss: 0.002734
+[2025-03-27 21:45:14][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:45:18][INFO] Epoch 979, Train Loss: 0.004907, Val Loss: 0.002735
+[2025-03-27 21:45:22][INFO] Epoch 980, Train Loss: 0.004900, Val Loss: 0.002734
+[2025-03-27 21:45:22][INFO] New best validation loss: 0.002734
+[2025-03-27 21:45:22][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:45:25][INFO] Epoch 981, Train Loss: 0.004901, Val Loss: 0.002734
+[2025-03-27 21:45:29][INFO] Epoch 982, Train Loss: 0.004896, Val Loss: 0.002734
+[2025-03-27 21:45:32][INFO] Epoch 983, Train Loss: 0.004904, Val Loss: 0.002734
+[2025-03-27 21:45:35][INFO] Epoch 984, Train Loss: 0.004908, Val Loss: 0.002734
+[2025-03-27 21:45:35][INFO] New best validation loss: 0.002734
+[2025-03-27 21:45:35][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:45:39][INFO] Epoch 985, Train Loss: 0.004898, Val Loss: 0.002734
+[2025-03-27 21:45:42][INFO] Epoch 986, Train Loss: 0.004902, Val Loss: 0.002733
+[2025-03-27 21:45:42][INFO] New best validation loss: 0.002733
+[2025-03-27 21:45:42][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:45:45][INFO] Epoch 987, Train Loss: 0.004897, Val Loss: 0.002733
+[2025-03-27 21:45:45][INFO] New best validation loss: 0.002733
+[2025-03-27 21:45:45][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:45:48][INFO] Epoch 988, Train Loss: 0.004897, Val Loss: 0.002733
+[2025-03-27 21:45:48][INFO] New best validation loss: 0.002733
+[2025-03-27 21:45:49][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:45:52][INFO] Epoch 989, Train Loss: 0.004901, Val Loss: 0.002733
+[2025-03-27 21:45:56][INFO] Epoch 990, Train Loss: 0.004901, Val Loss: 0.002733
+[2025-03-27 21:45:59][INFO] Epoch 991, Train Loss: 0.004906, Val Loss: 0.002734
+[2025-03-27 21:46:02][INFO] Epoch 992, Train Loss: 0.004897, Val Loss: 0.002733
+[2025-03-27 21:46:06][INFO] Epoch 993, Train Loss: 0.004900, Val Loss: 0.002733
+[2025-03-27 21:46:09][INFO] Epoch 994, Train Loss: 0.004907, Val Loss: 0.002734
+[2025-03-27 21:46:13][INFO] Epoch 995, Train Loss: 0.004899, Val Loss: 0.002733
+[2025-03-27 21:46:13][INFO] New best validation loss: 0.002733
+[2025-03-27 21:46:13][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:46:18][INFO] Epoch 996, Train Loss: 0.004898, Val Loss: 0.002733
+[2025-03-27 21:46:21][INFO] Epoch 997, Train Loss: 0.004898, Val Loss: 0.002734
+[2025-03-27 21:46:24][INFO] Epoch 998, Train Loss: 0.004889, Val Loss: 0.002733
+[2025-03-27 21:46:27][INFO] Epoch 999, Train Loss: 0.004901, Val Loss: 0.002733
+[2025-03-27 21:46:27][INFO] New best validation loss: 0.002733
+[2025-03-27 21:46:27][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:46:31][INFO] Epoch 1000, Train Loss: 0.004898, Val Loss: 0.002732
+[2025-03-27 21:46:31][INFO] New best validation loss: 0.002732
+[2025-03-27 21:46:31][INFO] Checkpoint saved to ./checkpoints_v0327enc/best_model.pt
+[2025-03-27 21:46:31][INFO] Checkpoint saved to ./checkpoints_v0327enc/checkpoint_epoch_1000.pt
+[2025-03-27 21:46:31][INFO] Checkpoint saved to ./checkpoints_v0327enc/final_model.pt
+[2025-03-27 21:46:31][INFO] Training completed!
