@@ -11,7 +11,7 @@ from datetime import datetime
 from torch.utils.tensorboard import SummaryWriter
 from model import AtmosphereNet, AtmosphereNetMLP, AtmosphereNetMLPtau
 from physics import hydro_equilibrium_loss
-from train import get_scheduler, setup_logger
+from utils import get_scheduler, setup_logger
 from dataset import KuruczDataset, load_dataset_file, create_dataloader_from_saved
 # =============================================================================
 # Training Functions
@@ -177,9 +177,6 @@ def train(model, train_loader, val_loader, optimizer, scheduler, device, start_e
     best_loss = float('inf')
     patience_counter = 0
     
-    # Set train_loader attribute for scheduler creation
-    args.train_loader = train_loader
-    
     # Initialize TensorBoard writer
     writer = SummaryWriter(os.path.join(args.log_dir, 'tensorboard'))
     
@@ -211,10 +208,7 @@ def train(model, train_loader, val_loader, optimizer, scheduler, device, start_e
             outputs = model(inputs)
             # 在train函数中
             loss, param_losses = custom_loss(outputs, targets, dataset, model, inputs, True, args.physics_weight, None, True)
-            
-            # 在validate函数中
-            loss, batch_param_losses = custom_loss(outputs, targets, dataset, model, inputs, True, args.physics_weight, None, False)
-            
+                        
             # 记录每个批次的物理损失和批次大小
             physics_losses.append(param_losses['physics'].item())
             batch_sizes.append(inputs.size(0))
@@ -337,7 +331,7 @@ def main():
     parser.add_argument('--physics_weight', type=float, default=1e-3, help='Weight for physics-informed loss component')
     
     # Learning rate scheduler parameters
-    parser.add_argument('--scheduler', type=str, default='plateau', 
+    parser.add_argument('--scheduler', type=str, default='none', 
                         choices=['none', 'step', 'multistep', 'exponential', 'cosine', 'plateau', 'cyclic', 'onecycle'],
                         help='Learning rate scheduler type')
     parser.add_argument('--lr_gamma', type=float, default=0.1, 
@@ -347,7 +341,7 @@ def main():
     parser.add_argument('--lr_milestones', type=str, default='200,400,600', 
                         help='Epochs at which to decay learning rate (comma-separated)')
     parser.add_argument('--lr_min', type=float, default=1e-7, 
-                        help='Minimum learning rate')
+                        help='Minimum learning rate') 
     parser.add_argument('--lr_patience', type=int, default=5, 
                         help='Epochs with no improvement after which learning rate will be reduced')
     parser.add_argument('--lr_cycles', type=int, default=4, 
@@ -441,3 +435,4 @@ if __name__ == "__main__":
     main()
     # Example usage:
     # python train_hydro.py --dataset data/kurucz_vturb_0p5_tau_v3.pt --gpu --epochs 1000 --lr 1e-4 --batch_size 256 --output_dir ./checkpoints_v0327enc_hydro --physics_weight 1e-1 --scheduler plateau --lr_patience 10 --patience 50 --checkpoint_freq 50 --log_freq 10 --hidden_size 128 --validation_split 0.1 --num_workers 4 --log_dir ./logs_v0327enc_hydro
+    # python train_hydro.py --dataset data/kurucz_vturb_0p5_tau_v3.pt --gpu --epochs 1000 --lr 1e-5 --batch_size 256 --output_dir ./checkpoints_v0327enc_hydro   --scheduler plateau --lr_patience 10 --patience 50 --checkpoint_freq 50 --log_freq 10 --hidden_size 128 --validation_split 0.1  --log_dir ./logs_v0327enc_hydro --resume ./checkpoints_v0327enc/best_model.pt --physics_weight 10.0

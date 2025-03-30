@@ -5,6 +5,139 @@ import torch
 import numpy as np
 from physics import calculate_gradient_torch
 from matplotlib import pyplot as plt
+from datetime import datetime
+import os
+import logging
+import sys
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend for saving plots
+
+
+# =============================================================================
+# Learning Rate Schedulers
+# =============================================================================
+def get_scheduler(scheduler_type, optimizer, args, logger):
+    """Create a learning rate scheduler based on specified type"""
+    if scheduler_type == 'step':
+        # Step decay: lr = lr * gamma^(epoch // step_size)
+        scheduler = torch.optim.lr_scheduler.StepLR(
+            optimizer,
+            step_size=args.lr_step_size,
+            gamma=args.lr_gamma
+        )
+        logger.info(f"Created StepLR scheduler with step_size={args.lr_step_size}, gamma={args.lr_gamma}")
+    elif scheduler_type == 'multistep':
+        # Multi-step decay: lr decays by gamma at specified milestones
+        milestones = [int(m) for m in args.lr_milestones.split(',')]
+        scheduler = torch.optim.lr_scheduler.MultiStepLR(
+            optimizer,
+            milestones=milestones,
+            gamma=args.lr_gamma
+        )
+        logger.info(f"Created MultiStepLR scheduler with milestones={milestones}, gamma={args.lr_gamma}")
+    elif scheduler_type == 'exponential':
+        # Exponential decay: lr = lr * gamma^epoch
+        scheduler = torch.optim.lr_scheduler.ExponentialLR(
+            optimizer,
+            gamma=args.lr_gamma
+        )
+        logger.info(f"Created ExponentialLR scheduler with gamma={args.lr_gamma}")
+    elif scheduler_type == 'cosine':
+        # Cosine annealing: cosine function from initial lr to eta_min
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer,
+            T_max=args.epochs,
+            eta_min=args.lr_min
+        )
+        logger.info(f"Created CosineAnnealingLR scheduler with T_max={args.epochs}, eta_min={args.lr_min}")
+    elif scheduler_type == 'plateau':
+        # Reduce on plateau: reduce lr when metric plateaus
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode='min',
+            factor=args.lr_gamma,
+            patience=args.lr_patience,
+            verbose=True,
+            min_lr=args.lr_min
+        )
+        logger.info(f"Created ReduceLROnPlateau scheduler with mode='min', factor={args.lr_gamma}, patience={args.lr_patience}, min_lr={args.lr_min}")
+    elif scheduler_type == 'cyclic':
+        # Cyclic LR: cycles between base_lr and max_lr
+        step_size_up = int(args.epochs * len(args.train_loader) / args.lr_cycles / 2)
+        scheduler = torch.optim.lr_scheduler.CyclicLR(
+            optimizer,
+            base_lr=args.lr_min,
+            max_lr=args.lr,
+            step_size_up=step_size_up,
+            mode=args.lr_cycle_mode,
+            cycle_momentum=False
+        )
+        logger.info(f"Created CyclicLR scheduler with base_lr={args.lr_min}, max_lr={args.lr}, step_size_up={step_size_up}, mode={args.lr_cycle_mode}")
+    elif scheduler_type == 'onecycle':
+        # One Cycle LR: one cycle with cosine annealing
+        steps_per_epoch = len(args.train_loader)
+        scheduler = torch.optim.lr_scheduler.OneCycleLR(
+            optimizer,
+            max_lr=args.lr,
+            epochs=args.epochs,
+            steps_per_epoch=steps_per_epoch,
+            pct_start=args.lr_warmup_pct,
+            anneal_strategy='cos',
+            div_factor=args.lr_div_factor,
+            final_div_factor=args.lr_final_div_factor
+        )
+        logger.info(f"Created OneCycleLR scheduler with max_lr={args.lr}, epochs={args.epochs}, steps_per_epoch={steps_per_epoch}, pct_start={args.lr_warmup_pct}, div_factor={args.lr_div_factor}, final_div_factor={args.lr_final_div_factor}")
+    else:
+        # No scheduler
+        scheduler = None
+        
+    # Add debug info for each scheduler type
+    if scheduler is None:
+        logger.info("No scheduler selected, using constant learning rate")
+    
+    return scheduler
+
+# =============================================================================
+# Logging
+# =============================================================================
+def setup_logger(log_dir):
+    """Set up logger to write to file and console"""
+    os.makedirs(log_dir, exist_ok=True)
+    
+    # Create timestamp for the log file
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = os.path.join(log_dir, f"training_{timestamp}.log")
+    
+    # Configure logger
+    logger = logging.getLogger("AtmosphereModel")
+    logger.setLevel(logging.INFO)
+    
+    # Remove any existing handlers
+    for handler in logger.handlers[:]:
+        logger.removeHandler(handler)
+    
+    # Create file handler
+    file_handler = logging.FileHandler(log_file)
+    file_handler.setLevel(logging.INFO)
+    
+    # Create console handler
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    
+    # Create formatter and add it to the handlers
+    formatter = logging.Formatter('[%(asctime)s][%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    file_handler.setFormatter(formatter)
+    console_handler.setFormatter(formatter)
+    
+    # Add handlers to logger
+    logger.addHandler(file_handler)
+    logger.addHandler(console_handler)
+    
+    logger.info(f"Logging to {log_file}")
+    return logger
+
 
 def calculate_dP_dtau_ground_truth(dataset, sample_indices=None, device='cpu'):
     """
