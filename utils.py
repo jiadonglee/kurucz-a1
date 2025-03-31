@@ -2,6 +2,9 @@
 #!/usr/bin/env python
 # utils.py
 import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
 import numpy as np
 from physics import calculate_gradient_torch
 from matplotlib import pyplot as plt
@@ -558,3 +561,130 @@ def plot_comprehensive_comparison(dP_dtau_predicted, dP_dtau_ground_truth, sampl
     plt.subplots_adjust(top=0.93)  # Adjust for suptitle
     
     return fig
+
+def hydro_equilibrium_loss(outputs, inputs, dataset, model, is_training=True):
+    """
+    Calculate hydrostatic equilibrium physics-informed loss
+    
+    Args:
+        outputs (torch.Tensor): Model outputs (normalized)
+        inputs (torch.Tensor): Model inputs
+        dataset (KuruczDataset): Dataset object containing normalization parameters
+        model (nn.Module): The neural network model
+        is_training (bool): Whether we're in training mode
+    
+    Returns:
+        torch.Tensor: Computed physics loss
+    """
+    # Constants for numerical stability and gradient clipping
+    GRAD_CLIP = 1e3
+    SAFE_LOG = 1e-30
+    
+    # ===== Parameter indices =====
+    P_idx = 2        # Pressure index in output (3rd parameter)
+    ABROSS_idx = 4    # ABROSS index in output (5th parameter)
+    TAU_START = 4     # Starting index of tau parameters in input
+
+    # ===== 1. Data Preparation =====
+    p_params = dataset.norm_params['P']
+    tau_params = dataset.norm_params['TAU']
+    
+    # Create inputs that require gradients
+    grad_inputs = inputs.detach().clone()
+    grad_inputs.requires_grad_(True)
+
+    # ===== 2. Gradient Calculation =====
+    # Temporarily set model to eval/train mode as needed
+    original_training = model.training
+    if is_training:
+        model.train()
+    else:
+        model.eval()
+        
+    # Forward pass through the model
+    model_outputs = model(grad_inputs)  # Output shape: (n_batch, 6, 80)
+    P_norm = model_outputs[:, :, P_idx]  # [batch, depth]
+
+    # Compute gradients
+    grad_outputs = torch.ones_like(P_norm)
+    try:
+        gradients = torch.autograd.grad(
+            outputs=P_norm,
+            inputs=grad_inputs,
+            grad_outputs=grad_outputs,
+            create_graph=is_training,
+            retain_graph=True,
+            allow_unused=False
+        )[0]
+    
+        # Extract tau gradients and clamp
+        dlogP_norm_dlogtau_norm = gradients[:, TAU_START:TAU_START+80]
+        dlogP_norm_dlogtau_norm = torch.clamp(dlogP_norm_dlogtau_norm, -GRAD_CLIP, GRAD_CLIP)
+
+        # ===== 3. Physical Conversion =====
+        logtau = (grad_inputs[:, TAU_START:TAU_START+80] * tau_params['scale'] 
+                + (tau_params['min'] + tau_params['max'])/2)
+        logP = (P_norm * p_params['scale'] 
+            + (p_params['min'] + p_params['max'])/2)
+        
+        scale_ratio = p_params['scale'] / tau_params['scale']
+        dlogP_dlogtau = dlogP_norm_dlogtau_norm * scale_ratio
+        
+        # Improved numerical stability in logarithm
+        eps_mask = dlogP_dlogtau.abs() < SAFE_LOG
+        safe_dlogP = dlogP_dlogtau.clone()
+        safe_dlogP[eps_mask] = torch.sign(safe_dlogP[eps_mask]) * SAFE_LOG
+        log_dP_dtau = logP - logtau + torch.log10(safe_dlogP.abs())
+
+    except RuntimeError as e:
+        if is_training:
+            # During training, re-raise the error for debugging
+            raise RuntimeError(f"Gradient calculation failed during training: {e}")
+        else:
+            # During validation/inference, log warning and return zero loss
+            print(f"[WARNING] d(logP)/d(tau) gradient calculation failed: {e}")
+            # Restore model state and return zero loss
+            model.train(original_training)
+            return torch.tensor(0.0, device=outputs.device)
+
+    # ===== 4. Equilibrium Condition =====
+    ABROSS_norm = torch.clamp(outputs[:, :, ABROSS_idx], -5.0, 5.0)
+    kappa = dataset.denormalize('ABROSS', ABROSS_norm)
+    log_kappa = torch.log10(torch.clamp(kappa, min=SAFE_LOG))
+    
+    logg = dataset.denormalize('gravity', inputs[:, 1])
+    logg = torch.clamp(logg, -1, 6).unsqueeze(-1)
+
+    term_left = log_dP_dtau     # (n_batch, 80)
+    term_right = logg - log_kappa  # (n_batch, 80)
+
+    # ===== 5. Modified Loss Calculation =====
+    valid_mask = torch.isfinite(term_left) & torch.isfinite(term_right)
+    
+    # Create depth exclusion mask
+    depth_mask = torch.ones_like(term_left, dtype=torch.bool)
+    depth_mask[:, :1] = False    # Exclude first 1 depth points
+    depth_mask[:, -21] = False   # Exclude last  1 depth points
+    final_mask = valid_mask & depth_mask
+
+    # Handle empty masks properly
+    if not final_mask.any():
+        # Restore model state
+        model.train(original_training)
+        # Return a small non-zero loss to maintain gradient flow
+        return torch.tensor(1e-6, device=outputs.device, requires_grad=True)
+    
+    # Main MSE loss between terms
+    mse_loss = F.mse_loss(term_left[final_mask], term_right[final_mask])
+    
+    # Reinclude physics sign constraint (gradient should have correct sign)
+    # Pressure should increase with optical depth
+    sign_loss = F.relu(-dlogP_dlogtau * torch.sign(term_right.detach())).mean()
+    
+    # Combine losses
+    total_loss = mse_loss + 0.1 * sign_loss
+    
+    # Restore original model state
+    model.train(original_training)
+    
+    return total_loss, term_left.detach(), term_right.detach()

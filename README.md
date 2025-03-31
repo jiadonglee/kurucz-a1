@@ -1,4 +1,4 @@
-# Kurucz1 Stellar Atmospheric Model Neural Emulator
+# Kurucz1: Stellar Atmospheric Model Neural Emulator
 
 ## Overview
 
@@ -7,6 +7,7 @@ This project implements a Physics-Informed Neural Network (PINN) to emulate Kuru
 ## Importance
 
 Kurucz stellar atmospheric models are crucial in astrophysics but computationally expensive. Our PINN approach:
+
 - Accelerates predictions by 1000x over traditional methods
 - Maintains physical consistency across optical depth
 - Enables accurate interpolation between model grid points
@@ -40,7 +41,7 @@ import torch
 from model import AtmosphereNet
 
 # Load pre-trained model
-model = AtmosphereNet.load_from_checkpoint("checkpoints/best_model.pt")
+model = AtmosphereNet.load_from_checkpoint("checkpoints_v0327enc_hydro/best_model.pt")
 
 # Create stellar parameter inputs
 stellar_params = torch.tensor([[5000.0, 4.5, -0.5, 0.0]])  # Teff, log(g), [Fe/H], [α/Fe]
