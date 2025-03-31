@@ -38,10 +38,11 @@ pip install -r requirements.txt
 
 ```python
 import torch
-from model import AtmosphereNet
+from kuruczone import emulator
+
 
 # Load pre-trained model
-model = AtmosphereNet.load_from_checkpoint("checkpoints_v0327enc_hydro/best_model.pt")
+model = emulator.load_from_checkpoint("checkpoints_v0327enc_hydro/best_model.pt")
 
 # Create stellar parameter inputs
 stellar_params = torch.tensor([[5000.0, 4.5, -0.5, 0.0]])  # Teff, log(g), [Fe/H], [α/Fe]
