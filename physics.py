@@ -34,7 +34,7 @@ def hydro_equilibrium_loss(outputs, inputs, dataset, model, is_training=True):
     # ===== Parameter indices =====
     P_idx = 2        # Pressure index in output (3rd parameter)
     ABROSS_idx = 4    # ABROSS index in output (5th parameter)
-    TAU_START = 4     # Starting index of tau parameters in input
+    TAU_START = 2     # Starting index of tau parameters in input
 
     # ===== 1. Data Preparation =====
     p_params = dataset.norm_params['P']

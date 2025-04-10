@@ -702,4 +702,4 @@ def main():
 if __name__ == "__main__":
     main()
     # Example usage:
-    # python train.py --dataset data/kurucz_dataset.pt --gpu --scheduler cosine --epochs 500 --lr 0.001 --batch_size 128
+    # python train.py --dataset data/kurucz_v4.pt --gpu --scheduler cosine --epochs 1000 --lr 1e-3 --batch_size 512 --log_freq 10 --validation_split 0.1 --patience 20 --output_dir checkpoints_0409 --log_dir logs_0409
