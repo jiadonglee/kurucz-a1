@@ -1,1 +1,11 @@
 data/
+tape/
+checkpoints_*/
+a1/
+SME/
+*.ipynb_checkpoints
+*.pyc
+physics_test/
+logs/
+fig/
+CLAUDE.md

@@ -8,7 +8,7 @@ import re
 def read_kurucz_model(file_path):
     """
     Reads a Kurucz stellar atmospheric model grid file and returns a dictionary with parsed data.
-    Extracts [Fe/H] and [α/Fe] values from the filename.
+    Calculates [Fe/H] and [α/Fe] values from the file content instead of the filename.
     
     Parameters:
     file_path (str): Path to the Kurucz model file.
@@ -16,18 +16,24 @@ def read_kurucz_model(file_path):
     Returns:
     dict: A dictionary containing the parsed header, abundance data, and atmospheric structure.
     """
-    # Parse [Fe/H] and [α/Fe] from filename
+    # Get filename for reference
     filename = file_path.split('/')[-1]
     
-    # More robust regex patterns for metal content values
-    feh_pattern = r'feh([+-]?\d+\.?\d*)'
-    afe_pattern = r'afe([+-]?\d+\.?\d*)'
+    # Initialize [Fe/H] and [α/Fe] values
+    feh = None
+    afe = 0.0
     
-    feh_match = re.search(feh_pattern, filename)
-    afe_match = re.search(afe_pattern, filename)
-    
-    feh = float(feh_match.group(1)) if feh_match else None
-    afe = float(afe_match.group(1)) if afe_match else None
+    # Alpha elements and their solar abundances (log(N_X/N_H), Asplund et al., 2009)
+    alpha_elements = {
+        8: -3.31,  # O
+        12: -4.51, # Mg
+        14: -4.49, # Si
+        20: -5.68, # Ca
+        22: -7.05  # Ti
+    }
+    alpha_abundances = {}
+    fe_abundance = None
+    solar_fe = -4.50  # Solar Fe abundance
     
     model = {
         'teff': None,
@@ -99,9 +105,20 @@ def read_kurucz_model(file_path):
         while line.startswith('ABUNDANCE CHANGE'):
             parts = line.split()
             for i in range(2, len(parts), 2):
-                elem_num = int(parts[i])
-                abundance = float(parts[i+1])
-                model['abundance_changes'][elem_num] = abundance
+                try:
+                    elem_num = int(parts[i])
+                    if i + 1 < len(parts):
+                        abundance = float(parts[i+1])
+                        model['abundance_changes'][elem_num] = abundance
+                        
+                        # Track Fe and alpha element abundances for [Fe/H] and [α/Fe] calculation
+                        if elem_num == 26:  # Iron
+                            fe_abundance = abundance
+                        elif elem_num in alpha_elements:
+                            alpha_abundances[elem_num] = abundance
+                except ValueError:
+                    # If we can't convert to int, skip this part
+                    pass
             line = f.readline().strip()
         
         # Skip until READ DECK6 line
@@ -141,19 +158,49 @@ def read_kurucz_model(file_path):
                         model['extra_columns'] = []
                     model['extra_columns'].append(values[7:])
     
+    # Calculate [Fe/H] from iron abundance
+    if fe_abundance is not None:
+        feh = fe_abundance - solar_fe
+        model['feh'] = feh
+    
+    # Calculate [α/Fe] from alpha element abundances
+    if fe_abundance is not None and alpha_abundances:
+        alpha_h = []
+        for elem, abund in alpha_abundances.items():
+            solar_alpha = alpha_elements[elem]
+            alpha_h.append(abund - solar_alpha)  # [α/H] for each element
+        avg_alpha_h = sum(alpha_h) / len(alpha_h)
+        afe = avg_alpha_h - feh
+        model['afe'] = afe
+    
     return model
 
 
 class KuruczDataset(Dataset):
     """
     Dataset for Kurucz stellar atmosphere models with standardized [-1, 1] normalization.
+    
+    Parameters:
+        data_dir (str or list): Path to directory or list of directories containing Kurucz model files
+        file_pattern (str): Glob pattern to match model files (default: '*.atm')
+        max_depth_points (int): Maximum number of depth points to include (default: 80)
+        device (str): Device to store tensors on ('cpu' or 'cuda', default: 'cpu')
     """
     def __init__(self, data_dir, file_pattern='*.atm', max_depth_points=80, device='cpu'):
         self.data_dir = data_dir
-        self.file_paths = glob.glob(os.path.join(data_dir, file_pattern))
         self.max_depth_points = max_depth_points
         self.device = device
         self.norm_params = {}
+        
+        # Handle both single directory and list of directories
+        if isinstance(data_dir, list):
+            # Collect files from multiple directories
+            self.file_paths = []
+            for directory in data_dir:
+                self.file_paths.extend(glob.glob(os.path.join(directory, file_pattern)))
+        else:
+            # Single directory case (original behavior)
+            self.file_paths = glob.glob(os.path.join(data_dir, file_pattern))
         
         # Load and process all files
         self.models = []
@@ -167,7 +214,11 @@ class KuruczDataset(Dataset):
                 print(f"Error loading {file_path}: {e}")
         
         if len(self.models) == 0:
-            raise ValueError(f"No valid model files found in {data_dir} with pattern {file_pattern}")
+            if isinstance(data_dir, list):
+                dirs_str = ", ".join(data_dir)
+                raise ValueError(f"No valid model files found in directories [{dirs_str}] with pattern {file_pattern}")
+            else:
+                raise ValueError(f"No valid model files found in {data_dir} with pattern {file_pattern}")
         
         # Extract input and output features
         self.prepare_data()
@@ -271,7 +322,9 @@ class KuruczDataset(Dataset):
 
     def setup_normalization(self):
         """Calculate normalization parameters for each feature"""
-        log_params = ['teff', 'RHOX', 'P', 'XNE', 'ABROSS', 'ACCRAD', 'TAU']
+        # log_params = ['teff', 'RHOX', 'P', 'XNE', 'ABROSS', 'ACCRAD', 'TAU']
+        # 2025.05.27: T should be log
+        log_params = ['teff', 'RHOX', 'P', 'XNE', 'ABROSS', 'ACCRAD', 'TAU', 'T']
         
         for param_name, data in self.original.items():
             if param_name in log_params:

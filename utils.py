@@ -6,7 +6,6 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
-from physics import calculate_gradient_torch
 from matplotlib import pyplot as plt
 from datetime import datetime
 import os
@@ -688,3 +687,36 @@ def hydro_equilibrium_loss(outputs, inputs, dataset, model, is_training=True):
     model.train(original_training)
     
     return total_loss, term_left.detach(), term_right.detach()
+
+
+
+def calculate_gradient_torch(x, y):
+    """    
+    参数:
+    - x: (batch_size, n_points)
+    - y:  batch_size, n_points)
+    
+    返回:
+    - gradient: dy/dx (batch_size, n_points)
+    """
+    batch_size, n_points = x.shape
+    
+    # 初始化梯度张量
+    gradient = torch.zeros_like(y)
+    
+    if n_points < 2:
+        return gradient
+    
+    # 前向差分（第一个点）
+    gradient[:, 0] = (y[:, 1] - y[:, 0]) / (x[:, 1] - x[:, 0] + 1e-15)
+    
+    # 中心差分（中间点）
+    if n_points > 2:
+        dx = x[:, 2:] - x[:, :-2]
+        dy = y[:, 2:] - y[:, :-2]
+        gradient[:, 1:-1] = dy / (dx + 1e-15)
+    
+    # 后向差分（最后一个点）
+    gradient[:, -1] = (y[:, -1] - y[:, -2]) / (x[:, -1] - x[:, -2] + 1e-15)
+    
+    return gradient
