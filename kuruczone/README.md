@@ -1,4 +1,4 @@
-# KurucZone: Kurucz Stellar Atmosphere Emulator
+# Kurucz-a1: Kurucz Stellar Atmosphere Emulator
 
 KurucZone is a Python package that provides a fast neural network-based emulator for Kurucz stellar atmosphere models. It allows you to quickly generate atmospheric structures based on stellar parameters (effective temperature, surface gravity, metallicity, and alpha enhancement).
 
@@ -19,7 +19,7 @@ import torch
 from kuruczone import emulator
 
 # Load pre-trained model
-model = emulator.load_from_checkpoint("checkpoints/best_model.pt")
+model = emulator.load_from_checkpoint("model/a_one_weights.pt")
 
 # Create stellar parameter inputs
 stellar_params = torch.tensor([[5000.0, 4.5, -0.5, 0.0]])  # Teff, log(g), [Fe/H], [α/Fe]
@@ -74,11 +74,12 @@ temperature_model2 = atmospheres['T'][1]  # Second model
 Loads a pre-trained model from a checkpoint file.
 
 - **Parameters:**
+
   - `checkpoint_path` (str): Path to the checkpoint file
   - `dataset_path` (str, optional): Path to the dataset file. If None, tries to infer from common locations
   - `device` (str): Device to load the model on ('cpu' or 'cuda')
-
 - **Returns:**
+
   - `AtmosphereEmulator`: Initialized emulator object
 
 ### `AtmosphereEmulator.predict(stellar_params, tau_grid=None)`
@@ -86,12 +87,13 @@ Loads a pre-trained model from a checkpoint file.
 Predicts atmospheric structure for given stellar parameters and optical depth grid.
 
 - **Parameters:**
+
   - `stellar_params` (torch.Tensor or array-like): Stellar parameters [Teff, log(g), [Fe/H], [α/Fe]]
     - Shape: [batch_size, 4] or [4]
   - `tau_grid` (torch.Tensor or array-like, optional): Optical depth grid
     - Shape: [batch_size, n_depth_points] or [n_depth_points]
     - If None, uses the default grid from the dataset
-
 - **Returns:**
+
   - `dict`: Dictionary containing atmospheric parameters for each depth point
     - Keys: 'T', 'P', 'RHOX', 'XNE', 'ABROSS', 'ACCRAD', 'TAU'
