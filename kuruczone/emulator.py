@@ -7,9 +7,8 @@ import os
 import sys
 from pathlib import Path
 
-# Import from parent directory if needed
-sys.path.append(str(Path(__file__).parent.parent))
-from model import AtmosphereNetMLPtau
+# Import the model class from the local module
+from .model import AtmosphereNetMLPtau
 from .normalization import NormalizationHelper, load_norm_params
 
 

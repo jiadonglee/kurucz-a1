@@ -1,4 +1,4 @@
-# Kurucz1: Kurucz Stellar Atmosphere Emulator
+# Kurucz-a1:  Kurucz Stellar Atmosphere Emulator
 
 KurucZone is a Python package that provides a fast neural network-based emulator for Kurucz stellar atmosphere models. It allows you to quickly generate atmospheric structures based on stellar parameters (effective temperature, surface gravity, metallicity, and alpha enhancement).
 

@@ -5,3 +5,4 @@ __version__ = '0.1.0'
 
 from .emulator import load_from_checkpoint, AtmosphereEmulator
 from .visualization import plot_atmosphere, plot_hydrostatic_equilibrium, plot_temperature_profile
+from .model import AtmosphereNet, AtmosphereNetMLP, AtmosphereNetMLPtau

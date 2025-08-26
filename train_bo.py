@@ -9,7 +9,7 @@ import time
 import logging
 from datetime import datetime
 from torch.utils.tensorboard import SummaryWriter
-from model import AtmosphereNet, AtmosphereNetMLP, AtmosphereNetMLPtau
+from kuruczone.model import AtmosphereNet, AtmosphereNetMLP, AtmosphereNetMLPtau
 from physics import hydro_equilibrium_loss
 from utils import get_scheduler, setup_logger
 from dataset import KuruczDataset, load_dataset_file, create_dataloader_from_saved

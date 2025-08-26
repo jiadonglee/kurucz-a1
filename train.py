@@ -10,7 +10,7 @@ import logging
 import math
 from datetime import datetime
 from torch.utils.tensorboard import SummaryWriter
-from model import AtmosphereNet, AtmosphereNetMLP, AtmosphereNetMLPtau
+from kuruczone.model import AtmosphereNet, AtmosphereNetMLP, AtmosphereNetMLPtau
 from dataset import KuruczDataset, load_dataset_file, create_dataloader_from_saved
 
 # =============================================================================

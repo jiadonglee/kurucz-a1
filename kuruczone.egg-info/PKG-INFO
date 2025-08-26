@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: kuruczone
+Version: 0.1.0
+Summary: Emulator for stellar atmosphere models
+Author: Jiadong Li
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Python: >=3.7
+License-File: LICENSE
+Requires-Dist: torch>=1.7.0
+Requires-Dist: numpy>=1.19.0
+Requires-Dist: matplotlib>=3.3.0
