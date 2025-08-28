@@ -143,7 +143,6 @@ class AtmosphereEmulator:
             'P': self.normalizer.denormalize('P', predictions[:, :, 2]),
             'XNE': self.normalizer.denormalize('XNE', predictions[:, :, 3]),
             'ABROSS': self.normalizer.denormalize('ABROSS', predictions[:, :, 4]),
-            'ACCRAD': self.normalizer.denormalize('ACCRAD', predictions[:, :, 5])
         }
         
         # Add tau values to output (original, not normalized)
@@ -151,8 +150,34 @@ class AtmosphereEmulator:
         
         # Convert to numpy arrays if on CPU
         if self.device == 'cpu':
-            output_features = {k: v.cpu().numpy() for k, v in output_features.items()}
+            output_features = {k: v.cpu().numpy()[0] for k, v in output_features.items()}
         
+        output_features['teff'] = teff.item()
+        output_features['logg'] = logg.item()  
+        output_features['feh'] = feh.item()
+        output_features['afe'] = afe.item()
+        output_features['vturb'] = 2.0
+        output_features['lonh'] = 1.25
+        output_features['geom'] = 'PP'
+        output_features['citation_info'] = r'''
+            @ARTICLE{2025arXiv250706357L,
+            author = {{Li}, Jiadong and {Jian}, Mingjie and {Ting}, Yuan-Sen and {Green}, Gregory M.},
+            title = "{Differentiable Stellar Atmospheres with Physics-Informed Neural Networks}",
+            journal = {arXiv e-prints},
+            keywords = {Solar and Stellar Astrophysics, Earth and Planetary Astrophysics, Astrophysics of Galaxies, Instrumentation and Methods for Astrophysics},
+            year = 2025,
+            month = jul,
+            eid = {arXiv:2507.06357},
+            pages = {arXiv:2507.06357},
+            doi = {10.48550/arXiv.2507.06357},
+            archivePrefix = {arXiv},
+            eprint = {2507.06357},
+            primaryClass = {astro-ph.SR},
+            adsurl = {https://ui.adsabs.harvard.edu/abs/2025arXiv250706357L},
+            adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+            }
+            '''
+
         return output_features
 
 
@@ -202,7 +227,7 @@ def load_from_checkpoint(checkpoint_path, hidden_size=512, norm_params_path=None
             stellar_embed_dim=hidden_size, tau_embed_dim=hidden_size
         ).to(device)
         
-        checkpoint = torch.load(checkpoint_path, map_location=device)
+        checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=True)
         model.load_state_dict(checkpoint['model_state_dict'])
         model.eval()  # Set to evaluation mode
         
@@ -268,7 +293,7 @@ def load_from_checkpoint_with_dataset(checkpoint_path, hidden_size=512, dataset_
             stellar_embed_dim=hidden_size, tau_embed_dim=hidden_size
         ).to(device)
         
-        checkpoint = torch.load(checkpoint_path, map_location=device)
+        checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=True)
         model.load_state_dict(checkpoint['model_state_dict'])
         model.eval()  # Set to evaluation mode
         

@@ -19,7 +19,7 @@ def extract_norm_params_from_dataset(dataset_path):
     Returns:
         dict: Normalization parameters
     """
-    dataset = torch.load(dataset_path, map_location='cpu')
+    dataset = torch.load(dataset_path, map_location='cpu', weights_only=True)
     return dataset['norm_params']
 
 
@@ -45,7 +45,7 @@ def load_norm_params(norm_params_path):
     Returns:
         dict: Normalization parameters
     """
-    return torch.load(norm_params_path, map_location='cpu')
+    return torch.load(norm_params_path, map_location='cpu', weights_only=True)
 
 
 class NormalizationHelper:
